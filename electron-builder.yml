@@ -1,0 +1,25 @@
+
+appId: "com.aicharactercreator.app"
+productName: "AI Character Creator"
+directories:
+  output: "release/"
+  buildResources: "public/"
+files:
+  - "dist/**/*"
+  - "electron.js"
+mac:
+  category: "public.app-category.entertainment"
+  icon: "public/favicon.ico"
+win:
+  target: 
+    - "portable"
+    - "nsis"
+  icon: "public/favicon.ico"
+linux:
+  target: 
+    - "AppImage"
+    - "deb"
+  icon: "public/favicon.ico"
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true

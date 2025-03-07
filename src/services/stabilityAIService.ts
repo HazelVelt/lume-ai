@@ -1,7 +1,7 @@
 
 import { toast } from "sonner";
 
-const DEFAULT_MODEL = 'stable-diffusion-v1-5';
+const DEFAULT_MODEL = 'stable-diffusion-xl-1024-v1-0';
 const API_HOST = 'https://api.stability.ai';
 
 export class StabilityAIService {
@@ -28,7 +28,10 @@ export class StabilityAIService {
     }
 
     try {
-      const response = await fetch(`${API_HOST}/v1/generation/${this.model}/text-to-image`, {
+      const endpoint = `${API_HOST}/v1/generation/${this.model}/text-to-image`;
+      console.log(`Using endpoint: ${endpoint}`);
+      
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -43,8 +46,8 @@ export class StabilityAIService {
             }
           ],
           cfg_scale: 7,
-          height: 512,
-          width: 512,
+          height: 1024,
+          width: 1024,
           samples: 1,
           steps: 30,
         }),
@@ -74,8 +77,15 @@ export class StabilityAIService {
   }
 
   async listModels(): Promise<string[]> {
+    // Include SDXL models along with default models
+    const defaultModels = [
+      'stable-diffusion-xl-1024-v1-0',
+      'stable-diffusion-v1-5',
+      'stable-diffusion-512-v2-1'
+    ];
+    
     if (!this.apiKey) {
-      return [DEFAULT_MODEL];
+      return defaultModels;
     }
 
     try {
@@ -87,14 +97,15 @@ export class StabilityAIService {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to list models');
+        console.warn('Failed to list models, using defaults');
+        return defaultModels;
       }
 
       const responseJSON = await response.json();
       return responseJSON.map((engine: any) => engine.id);
     } catch (error) {
       console.error('Error listing models:', error);
-      return [DEFAULT_MODEL];
+      return defaultModels;
     }
   }
 }

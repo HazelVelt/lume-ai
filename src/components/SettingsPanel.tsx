@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ollamaService from '@/services/ollamaService';
 import stabilityAIService from '@/services/stabilityAIService';
 import { Loader2 } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface SettingsPanelProps {
   isOpen: boolean;
@@ -22,22 +23,29 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
   const [ollamaEndpoint, setOllamaEndpoint] = useState(modelConfig.llm.endpoint);
   const [ollamaModel, setOllamaModel] = useState(modelConfig.llm.name);
   const [stabilityApiKey, setStabilityApiKey] = useState(modelConfig.imageGen.apiKey || '');
+  const [stabilityModel, setStabilityModel] = useState(modelConfig.imageGen.name || 'stable-diffusion-xl-1024-v1-0');
   
   const [availableOllamaModels, setAvailableOllamaModels] = useState<string[]>([]);
-  const [isLoadingModels, setIsLoadingModels] = useState(false);
+  const [availableStabilityModels, setAvailableStabilityModels] = useState<string[]>([]);
+  const [isLoadingOllamaModels, setIsLoadingOllamaModels] = useState(false);
+  const [isLoadingStabilityModels, setIsLoadingStabilityModels] = useState(false);
   
   useEffect(() => {
     if (isOpen) {
       setOllamaEndpoint(modelConfig.llm.endpoint);
       setOllamaModel(modelConfig.llm.name);
       setStabilityApiKey(modelConfig.imageGen.apiKey || '');
+      setStabilityModel(modelConfig.imageGen.name || 'stable-diffusion-xl-1024-v1-0');
       
       loadOllamaModels();
+      if (modelConfig.imageGen.apiKey) {
+        loadStabilityModels();
+      }
     }
   }, [isOpen, modelConfig]);
   
   const loadOllamaModels = async () => {
-    setIsLoadingModels(true);
+    setIsLoadingOllamaModels(true);
     try {
       const models = await ollamaService.listModels();
       setAvailableOllamaModels(models.length > 0 ? models : ['mistral', 'llama2', 'mixtral']);
@@ -45,7 +53,25 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
       console.error('Error loading models:', error);
       setAvailableOllamaModels(['mistral', 'llama2', 'mixtral']);
     } finally {
-      setIsLoadingModels(false);
+      setIsLoadingOllamaModels(false);
+    }
+  };
+  
+  const loadStabilityModels = async () => {
+    setIsLoadingStabilityModels(true);
+    try {
+      stabilityAIService.setApiKey(stabilityApiKey);
+      const models = await stabilityAIService.listModels();
+      setAvailableStabilityModels(models);
+    } catch (error) {
+      console.error('Error loading Stability models:', error);
+      setAvailableStabilityModels([
+        'stable-diffusion-xl-1024-v1-0',
+        'stable-diffusion-v1-5',
+        'stable-diffusion-512-v2-1'
+      ]);
+    } finally {
+      setIsLoadingStabilityModels(false);
     }
   };
   
@@ -59,6 +85,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
     // Update image generation settings
     updateModelConfig('imageGen', {
       apiKey: stabilityApiKey,
+      name: stabilityModel
     });
     
     toast.success('Settings saved successfully');
@@ -109,10 +136,10 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
                 <Button 
                   onClick={loadOllamaModels} 
                   variant="outline" 
-                  disabled={isLoadingModels}
+                  disabled={isLoadingOllamaModels}
                   className="glass-morphism"
                 >
-                  {isLoadingModels ? (
+                  {isLoadingOllamaModels ? (
                     <>
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                       Loading...
@@ -182,6 +209,47 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
                 >
                   Stability AI platform
                 </a>
+              </p>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="stabilityModel">Stability AI Model</Label>
+              <div className="grid grid-cols-2 gap-2">
+                <Select 
+                  value={stabilityModel} 
+                  onValueChange={setStabilityModel}
+                >
+                  <SelectTrigger className="glass-morphism">
+                    <SelectValue placeholder="Select a model" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {availableStabilityModels.map((model) => (
+                      <SelectItem key={model} value={model}>
+                        {model}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                
+                <Button 
+                  onClick={loadStabilityModels} 
+                  variant="outline" 
+                  disabled={isLoadingStabilityModels || !stabilityApiKey}
+                  className="glass-morphism"
+                >
+                  {isLoadingStabilityModels ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Loading...
+                    </>
+                  ) : (
+                    'Refresh Models'
+                  )}
+                </Button>
+              </div>
+              
+              <p className="text-xs text-muted-foreground mt-2">
+                Recommended model: stable-diffusion-xl-1024-v1-0
               </p>
             </div>
           </TabsContent>
