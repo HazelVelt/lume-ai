@@ -35,7 +35,6 @@ const PersonalitySlider: React.FC<PersonalitySliderProps> = ({
         step={step}
         value={[value]}
         onValueChange={(values) => onChange(values[0])}
-        trackClassName={cn('h-2', color)}
       />
       <div className="flex justify-between text-xs text-white/40">
         <span>Low</span>
