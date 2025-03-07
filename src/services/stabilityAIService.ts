@@ -3,6 +3,7 @@ import { toast } from "sonner";
 
 const DEFAULT_MODEL = 'stable-diffusion-xl-1024-v1-0';
 const API_HOST = 'https://api.stability.ai';
+const API_ENDPOINT = 'https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image';
 
 export class StabilityAIService {
   private apiKey: string;
@@ -28,7 +29,8 @@ export class StabilityAIService {
     }
 
     try {
-      const endpoint = `${API_HOST}/v1/generation/${this.model}/text-to-image`;
+      // Always use the SDXL endpoint as specified
+      const endpoint = API_ENDPOINT;
       console.log(`Using endpoint: ${endpoint}`);
       
       const response = await fetch(endpoint, {

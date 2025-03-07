@@ -7,9 +7,13 @@ directories:
 files:
   - "dist/**/*"
   - "electron.js"
+  - "package.json"
 mac:
   category: "public.app-category.entertainment"
   icon: "public/favicon.ico"
+  target: 
+    - "dmg"
+    - "zip"
 win:
   target: 
     - "portable"
@@ -23,3 +27,7 @@ linux:
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: "AI Character Creator"
+artifactName: "${productName}-${version}-${os}-${arch}.${ext}"

@@ -1,7 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const url = require('url');
-const fs = require('fs');
 const isDev = process.env.NODE_ENV !== 'production';
 
 // Keep a global reference of the window object
@@ -18,11 +17,12 @@ function createWindow() {
     },
     icon: path.join(__dirname, 'public/favicon.ico'),
     backgroundColor: '#13111C',
+    title: 'AI Character Creator',
   });
 
   // Load the app
   const startUrl = isDev
-    ? 'http://localhost:5173' // Vite dev server
+    ? 'http://localhost:8080' // Vite dev server
     : url.format({
         pathname: path.join(__dirname, './dist/index.html'),
         protocol: 'file:',
