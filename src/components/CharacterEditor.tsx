@@ -10,7 +10,7 @@ import { Character } from '@/types';
 import { useCharacter } from '@/contexts/CharacterContext';
 import stabilityAIService from '@/services/stabilityAIService';
 import { toast } from 'sonner';
-import { Loader2, RefreshCw } from 'lucide-react';
+import { Loader2, RefreshCw, Image as ImageIcon } from 'lucide-react';
 
 interface CharacterEditorProps {
   character?: Character;
@@ -59,7 +59,12 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
 
   const handleGenerateImage = async () => {
     if (!modelConfig.imageGen.apiKey) {
-      toast.error('Please enter your Stability AI API key in the settings');
+      toast.error('Please enter your Stability AI API key in the settings to generate images');
+      return;
+    }
+
+    if (!imagePrompt.trim()) {
+      toast.error('Please enter an image prompt');
       return;
     }
 
@@ -74,12 +79,10 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
       if (imageUrl) {
         setImageUrl(imageUrl);
         toast.success('Image generated successfully');
-      } else {
-        toast.error('Failed to generate image');
-      }
+      } 
     } catch (error) {
-      console.error(error);
-      toast.error('Error generating image');
+      console.error("Image generation error:", error);
+      // Error is already handled in stabilityAIService
     } finally {
       setIsGenerating(false);
     }
@@ -177,7 +180,11 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
               </div>
 
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Character Image</h3>
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-semibold">Character Image</h3>
+                  <span className="text-xs text-white/40">(Optional)</span>
+                </div>
+                
                 <div className="relative rounded-lg overflow-hidden aspect-square bg-muted flex items-center justify-center glass-morphism">
                   {imageUrl ? (
                     <img
@@ -187,14 +194,16 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                       onError={() => setImageUrl('')}
                     />
                   ) : (
-                    <div className="text-muted-foreground text-sm p-4 text-center">
-                      No image generated yet
+                    <div className="text-muted-foreground text-sm p-4 text-center flex flex-col items-center justify-center h-full">
+                      <ImageIcon className="h-12 w-12 mb-2 text-muted-foreground/50" />
+                      <span>No image generated</span>
+                      <span className="text-xs text-muted-foreground/50 mt-1">Image is optional</span>
                     </div>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="imagePrompt">Image Prompt</Label>
+                  <Label htmlFor="imagePrompt">Image Prompt (Optional)</Label>
                   <Textarea
                     id="imagePrompt"
                     value={imagePrompt}
@@ -205,7 +214,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                   />
                   <Button
                     onClick={handleGenerateImage}
-                    disabled={isGenerating || !imagePrompt.trim() || !modelConfig.imageGen.apiKey}
+                    disabled={isGenerating || !imagePrompt.trim()}
                     className="w-full mt-2"
                     variant="outline"
                   >
@@ -221,6 +230,11 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                       </>
                     )}
                   </Button>
+                  {!modelConfig.imageGen.apiKey && (
+                    <p className="text-xs text-amber-400 mt-1">
+                      You need to add a Stability AI API key in Settings to generate images
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

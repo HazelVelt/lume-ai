@@ -24,7 +24,7 @@ export class StabilityAIService {
   async generateImage(prompt: string): Promise<string> {
     if (!this.apiKey) {
       toast.error('API key not set for Stability AI');
-      return '';
+      throw new Error('API key not set for Stability AI');
     }
 
     try {
@@ -52,18 +52,24 @@ export class StabilityAIService {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to generate image');
+        const errorMessage = errorData.message || `Error: ${response.status} ${response.statusText}`;
+        console.error('Stability API error:', errorData);
+        throw new Error(errorMessage);
       }
 
       const responseJSON = await response.json();
+      if (!responseJSON.artifacts || !responseJSON.artifacts.length) {
+        throw new Error('No image generated from the API');
+      }
+      
       const imageBase64 = responseJSON.artifacts[0].base64;
       const imageUrl = `data:image/png;base64,${imageBase64}`;
       
       return imageUrl;
     } catch (error) {
       console.error('Error generating image:', error);
-      toast.error('Failed to generate image. Please check your API key and try again.');
-      return '';
+      toast.error('Failed to generate image: ' + (error instanceof Error ? error.message : 'Unknown error'));
+      throw error;
     }
   }
 
