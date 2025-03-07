@@ -7,6 +7,10 @@ export interface Character {
     kinkiness: number;
     dominance: number;
     submissiveness: number;
+    intelligence?: number;
+    empathy?: number;
+    creativity?: number;
+    humor?: number;
   };
   imageUrl: string;
   defaultPrompt: string;

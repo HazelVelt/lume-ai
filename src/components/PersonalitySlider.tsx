@@ -11,6 +11,7 @@ interface PersonalitySliderProps {
   max?: number;
   step?: number;
   color?: string;
+  description?: string;
 }
 
 const PersonalitySlider: React.FC<PersonalitySliderProps> = ({
@@ -21,12 +22,18 @@ const PersonalitySlider: React.FC<PersonalitySliderProps> = ({
   max = 100,
   step = 1,
   color = 'bg-accent1',
+  description,
 }) => {
   return (
     <div className="w-full space-y-2 animate-fade-in">
       <div className="flex justify-between items-center">
-        <label className="text-sm font-medium text-white/80">{label}</label>
-        <span className="text-sm text-white/60">{value}%</span>
+        <div>
+          <label className="text-sm font-medium text-foreground/80">{label}</label>
+          {description && (
+            <p className="text-xs text-muted-foreground">{description}</p>
+          )}
+        </div>
+        <span className="text-sm text-foreground/60">{value}%</span>
       </div>
       <Slider
         className="py-1"
@@ -36,7 +43,7 @@ const PersonalitySlider: React.FC<PersonalitySliderProps> = ({
         value={[value]}
         onValueChange={(values) => onChange(values[0])}
       />
-      <div className="flex justify-between text-xs text-white/40">
+      <div className="flex justify-between text-xs text-foreground/40">
         <span>Low</span>
         <span>High</span>
       </div>

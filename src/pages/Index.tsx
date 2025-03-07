@@ -7,6 +7,7 @@ import CharacterCard from '@/components/CharacterCard';
 import CharacterEditor from '@/components/CharacterEditor';
 import ChatInterface from '@/components/ChatInterface';
 import SettingsPanel from '@/components/SettingsPanel';
+import ThemeToggle from '@/components/ThemeToggle';
 import { toast } from 'sonner';
 
 const MainContent = () => {
@@ -44,18 +45,21 @@ const MainContent = () => {
       <div className="w-full md:w-[320px] border-r border-border bg-background/95 backdrop-blur-sm flex flex-col h-full">
         <div className="p-4 border-b flex justify-between items-center">
           <h1 className="text-xl font-bold text-gradient">AI Character Creator</h1>
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={() => setIsSettingsOpen(true)}
-            className="h-8 w-8 rounded-full"
-          >
-            <Settings className="h-4 w-4" />
-          </Button>
+          <div className="flex items-center space-x-1">
+            <ThemeToggle />
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => setIsSettingsOpen(true)}
+              className="h-8 w-8 rounded-full"
+            >
+              <Settings className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
 
         <div className="flex justify-between items-center p-4">
-          <h2 className="text-sm font-semibold text-white/70">Your Characters</h2>
+          <h2 className="text-sm font-semibold text-foreground/70">Your Characters</h2>
           <Button 
             variant="ghost"
             size="sm"

@@ -10,13 +10,16 @@ import { Character } from '@/types';
 import { useCharacter } from '@/contexts/CharacterContext';
 import stabilityAIService from '@/services/stabilityAIService';
 import { toast } from 'sonner';
-import { Loader2, RefreshCw, Image as ImageIcon } from 'lucide-react';
+import { Loader2, RefreshCw, Image as ImageIcon, User, Upload } from 'lucide-react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from './ui/alert-dialog';
 
 interface CharacterEditorProps {
   character?: Character;
   isOpen: boolean;
   onClose: () => void;
 }
+
+const PLACEHOLDER_IMAGE = '/placeholder.svg';
 
 const CharacterEditor: React.FC<CharacterEditorProps> = ({
   character,
@@ -34,6 +37,10 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
     kinkiness: 50,
     dominance: 50,
     submissiveness: 50,
+    intelligence: 50,
+    empathy: 50,
+    creativity: 50,
+    humor: 50,
   });
 
   // Reset form when character changes
@@ -41,9 +48,17 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
     if (character) {
       setName(character.name);
       setDescription(character.description);
-      setImagePrompt(character.defaultPrompt);
-      setImageUrl(character.imageUrl);
-      setPersonality(character.personality);
+      setImagePrompt(character.defaultPrompt || '');
+      setImageUrl(character.imageUrl || '');
+      setPersonality({
+        kinkiness: character.personality.kinkiness,
+        dominance: character.personality.dominance,
+        submissiveness: character.personality.submissiveness,
+        intelligence: character.personality.intelligence || 50,
+        empathy: character.personality.empathy || 50,
+        creativity: character.personality.creativity || 50,
+        humor: character.personality.humor || 50,
+      });
     } else {
       setName('');
       setDescription('');
@@ -53,6 +68,10 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
         kinkiness: 50,
         dominance: 50,
         submissiveness: 50,
+        intelligence: 50,
+        empathy: 50,
+        creativity: 50,
+        humor: 50,
       });
     }
   }, [character, isOpen]);
@@ -103,7 +122,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
       name,
       description,
       personality,
-      imageUrl,
+      imageUrl: imageUrl || PLACEHOLDER_IMAGE,
       defaultPrompt: imagePrompt,
     };
 
@@ -115,6 +134,44 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
 
     onClose();
   };
+
+  const personalitySliders = [
+    { 
+      key: 'kinkiness', 
+      label: 'Kinkiness', 
+      description: 'How open-minded and adventurous the character is'
+    },
+    { 
+      key: 'dominance', 
+      label: 'Dominance', 
+      description: 'How controlling and assertive the character is'
+    },
+    { 
+      key: 'submissiveness', 
+      label: 'Submissiveness', 
+      description: 'How yielding and compliant the character is'
+    },
+    { 
+      key: 'intelligence', 
+      label: 'Intelligence', 
+      description: 'How smart and knowledgeable the character is'
+    },
+    { 
+      key: 'empathy', 
+      label: 'Empathy', 
+      description: 'How understanding and compassionate the character is'
+    },
+    { 
+      key: 'creativity', 
+      label: 'Creativity', 
+      description: 'How imaginative and innovative the character is'
+    },
+    { 
+      key: 'humor', 
+      label: 'Humor', 
+      description: 'How funny and witty the character is'
+    },
+  ];
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -153,36 +210,25 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Personality Traits</h3>
-                <PersonalitySlider
-                  label="Kinkiness"
-                  value={personality.kinkiness}
-                  onChange={(value) =>
-                    setPersonality((prev) => ({ ...prev, kinkiness: value }))
-                  }
-                  color="bg-pink-500"
-                />
-                <PersonalitySlider
-                  label="Dominance"
-                  value={personality.dominance}
-                  onChange={(value) =>
-                    setPersonality((prev) => ({ ...prev, dominance: value }))
-                  }
-                  color="bg-red-500"
-                />
-                <PersonalitySlider
-                  label="Submissiveness"
-                  value={personality.submissiveness}
-                  onChange={(value) =>
-                    setPersonality((prev) => ({ ...prev, submissiveness: value }))
-                  }
-                  color="bg-blue-500"
-                />
+                <div className="max-h-[360px] overflow-y-auto pr-2 scrollbar-none space-y-6">
+                  {personalitySliders.map((slider) => (
+                    <PersonalitySlider
+                      key={slider.key}
+                      label={slider.label}
+                      description={slider.description}
+                      value={personality[slider.key as keyof typeof personality]}
+                      onChange={(value) =>
+                        setPersonality((prev) => ({ ...prev, [slider.key]: value }))
+                      }
+                    />
+                  ))}
+                </div>
               </div>
 
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-semibold">Character Image</h3>
-                  <span className="text-xs text-white/40">(Optional)</span>
+                  <span className="text-xs text-foreground/40">(Optional)</span>
                 </div>
                 
                 <div className="relative rounded-lg overflow-hidden aspect-square bg-muted flex items-center justify-center glass-morphism">
@@ -191,13 +237,15 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                       src={imageUrl}
                       alt={name || "Character"}
                       className="w-full h-full object-cover"
-                      onError={() => setImageUrl('')}
+                      onError={() => setImageUrl(PLACEHOLDER_IMAGE)}
                     />
                   ) : (
                     <div className="text-muted-foreground text-sm p-4 text-center flex flex-col items-center justify-center h-full">
-                      <ImageIcon className="h-12 w-12 mb-2 text-muted-foreground/50" />
-                      <span>No image generated</span>
-                      <span className="text-xs text-muted-foreground/50 mt-1">Image is optional</span>
+                      <User className="h-16 w-16 mb-2 text-muted-foreground/50" />
+                      <span>No image selected</span>
+                      <span className="text-xs text-muted-foreground/50 mt-1">
+                        You can generate an image or use a placeholder
+                      </span>
                     </div>
                   )}
                 </div>
@@ -212,24 +260,34 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                     rows={2}
                     className="glass-morphism"
                   />
-                  <Button
-                    onClick={handleGenerateImage}
-                    disabled={isGenerating || !imagePrompt.trim()}
-                    className="w-full mt-2"
-                    variant="outline"
-                  >
-                    {isGenerating ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Generating...
-                      </>
-                    ) : (
-                      <>
-                        <RefreshCw className="mr-2 h-4 w-4" />
-                        Generate Image
-                      </>
-                    )}
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={handleGenerateImage}
+                      disabled={isGenerating || !imagePrompt.trim()}
+                      className="flex-1"
+                      variant="outline"
+                    >
+                      {isGenerating ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Generating...
+                        </>
+                      ) : (
+                        <>
+                          <RefreshCw className="mr-2 h-4 w-4" />
+                          Generate Image
+                        </>
+                      )}
+                    </Button>
+                    <Button
+                      onClick={() => setImageUrl(PLACEHOLDER_IMAGE)}
+                      variant="outline"
+                      className="flex-shrink-0"
+                      type="button"
+                    >
+                      <User className="h-4 w-4" />
+                    </Button>
+                  </div>
                   {!modelConfig.imageGen.apiKey && (
                     <p className="text-xs text-amber-400 mt-1">
                       You need to add a Stability AI API key in Settings to generate images
