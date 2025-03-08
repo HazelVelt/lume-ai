@@ -175,14 +175,14 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto scrollbar-none animate-scale-in">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-hidden animate-scale-in">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">
             {character ? 'Edit Character' : 'Create New Character'}
           </DialogTitle>
         </DialogHeader>
 
-        <div className="grid gap-4 py-4">
+        <div className="grid gap-4 py-4 max-h-[calc(80vh-120px)] overflow-y-auto pr-2 scrollbar-thin">
           <div className="grid grid-cols-1 gap-4">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
@@ -210,7 +210,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Personality Traits</h3>
-                <div className="max-h-[360px] overflow-y-auto pr-2 scrollbar-none space-y-6">
+                <div className="space-y-6">
                   {personalitySliders.map((slider) => (
                     <PersonalitySlider
                       key={slider.key}
