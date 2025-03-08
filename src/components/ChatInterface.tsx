@@ -156,6 +156,18 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
                   msg.isUser ? 'justify-end' : 'justify-start'
                 }`}
               >
+                {!msg.isUser && (
+                  <div className="flex flex-col items-center mr-2">
+                    <img 
+                      src={character.imageUrl || '/placeholder.svg'} 
+                      alt={character.name}
+                      className="h-8 w-8 rounded-full object-cover mb-1"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/placeholder.svg';
+                      }}
+                    />
+                  </div>
+                )}
                 <div
                   className={`max-w-[80%] ${
                     msg.isUser
@@ -163,6 +175,11 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
                       : 'bg-secondary glass-morphism rounded-2xl rounded-tl-sm'
                   }`}
                 >
+                  {!msg.isUser && (
+                    <div className="px-3 pt-2 text-sm font-medium">
+                      {character.name}
+                    </div>
+                  )}
                   <div className="p-3">
                     <div className="text-sm whitespace-pre-wrap">{msg.content}</div>
                   </div>

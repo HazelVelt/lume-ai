@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -46,16 +45,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onCreateCharacter }) => {
                 className="w-full h-auto rounded-lg"
               />
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="relative avatar-container">
-                  <div className="glass-morphism p-6 rounded-lg text-center">
-                    <div className="ripple-container">
-                      <div className="ripple-circle"></div>
-                      <div className="ripple-circle" style={{ animationDelay: "1s" }}></div>
-                      <div className="ripple-circle" style={{ animationDelay: "2s" }}></div>
-                    </div>
-                    <h3 className="text-2xl font-semibold mb-2 relative z-10">AI Characters</h3>
-                    <p className="text-muted-foreground relative z-10">Brought to life with your local LLM</p>
-                  </div>
+                <div className="glass-morphism p-6 rounded-lg text-center">
+                  <h3 className="text-2xl font-semibold mb-2 relative z-10">AI Characters</h3>
+                  <p className="text-muted-foreground relative z-10">Brought to life with your local LLM</p>
                 </div>
               </div>
             </div>

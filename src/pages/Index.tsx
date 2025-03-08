@@ -31,8 +31,6 @@ const MainContent = () => {
     }
   };
 
-  // Removed the home navigation when clicking the logo
-
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
   };
@@ -110,12 +108,12 @@ const MainContent = () => {
           </>
         )}
 
-        {/* Sidebar toggle button - Fixed z-index and positioning */}
+        {/* Sidebar toggle button - Fixed positioning */}
         <Button
           variant="ghost"
           size="icon"
           onClick={toggleSidebar}
-          className="absolute top-1/2 -right-4 h-8 w-8 rounded-full bg-background border border-border z-10"
+          className="absolute top-1/2 -right-4 h-8 w-8 rounded-full bg-background border border-border z-50"
         >
           {isSidebarCollapsed ? (
             <ChevronRight className="h-4 w-4" />
@@ -130,13 +128,7 @@ const MainContent = () => {
         {activeCharacter ? (
           <>
             <div className="p-4 border-b flex items-center">
-              <Button 
-                variant="ghost" 
-                onClick={() => setActiveCharacter(null)} 
-                className="mr-2"
-              >
-                <h1 className="text-xl font-bold text-gradient">AI Haven</h1>
-              </Button>
+              <h1 className="text-xl font-bold text-gradient">AI Haven</h1>
             </div>
             <ChatInterface character={activeCharacter} />
             <ChatNavigation 
