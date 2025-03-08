@@ -19,7 +19,7 @@ const MainContent = () => {
   // Show welcome message on first load
   useEffect(() => {
     if (characters.length === 0) {
-      toast('Welcome to AI Character Creator', {
+      toast('Welcome to AI Haven', {
         description: 'Create your first AI character to get started',
         duration: 5000,
       });
@@ -44,7 +44,7 @@ const MainContent = () => {
       {/* Sidebar */}
       <div className="w-full md:w-[320px] border-r border-border bg-background/95 backdrop-blur-sm flex flex-col h-full">
         <div className="p-4 border-b flex justify-between items-center">
-          <h1 className="text-xl font-bold text-gradient">AI Character Creator</h1>
+          <h1 className="text-xl font-bold text-gradient">AI Haven</h1>
           <div className="flex items-center space-x-1">
             <ThemeToggle />
             <Button 
@@ -112,7 +112,7 @@ const MainContent = () => {
         ) : (
           <div className="flex flex-col items-center justify-center h-full p-4 text-center">
             <div className="max-w-md glass-morphism p-8 rounded-xl animate-float">
-              <h2 className="text-2xl font-bold mb-4 text-gradient">Welcome to AI Character Creator</h2>
+              <h2 className="text-2xl font-bold mb-4 text-gradient">Welcome to AI Haven</h2>
               <p className="text-muted-foreground mb-6">
                 Create AI characters with unique personalities and chat with them using your local language model.
               </p>

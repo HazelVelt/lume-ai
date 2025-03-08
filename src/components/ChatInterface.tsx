@@ -32,12 +32,46 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character }) => {
 
   const generateSystemPrompt = () => {
     const { personality } = character;
+    
+    const allTraits = [
+      `Kinkiness: ${personality.kinkiness}% (${personality.kinkiness < 30 ? 'low' : personality.kinkiness > 70 ? 'high' : 'moderate'})`,
+      `Dominance: ${personality.dominance}% (${personality.dominance < 30 ? 'low' : personality.dominance > 70 ? 'high' : 'moderate'})`,
+      `Submissiveness: ${personality.submissiveness}% (${personality.submissiveness < 30 ? 'low' : personality.submissiveness > 70 ? 'high' : 'moderate'})`,
+    ];
+    
+    // Add new personality traits if defined
+    if (personality.intelligence !== undefined) {
+      allTraits.push(`Intelligence: ${personality.intelligence}% (${personality.intelligence < 30 ? 'low' : personality.intelligence > 70 ? 'high' : 'moderate'})`);
+    }
+    
+    if (personality.empathy !== undefined) {
+      allTraits.push(`Empathy: ${personality.empathy}% (${personality.empathy < 30 ? 'low' : personality.empathy > 70 ? 'high' : 'moderate'})`);
+    }
+    
+    if (personality.creativity !== undefined) {
+      allTraits.push(`Creativity: ${personality.creativity}% (${personality.creativity < 30 ? 'low' : personality.creativity > 70 ? 'high' : 'moderate'})`);
+    }
+    
+    if (personality.humor !== undefined) {
+      allTraits.push(`Humor: ${personality.humor}% (${personality.humor < 30 ? 'low' : personality.humor > 70 ? 'high' : 'moderate'})`);
+    }
+    
     return `You are roleplaying as ${character.name}. ${character.description}
     
 Your personality settings:
-- Kinkiness: ${personality.kinkiness}% (${personality.kinkiness < 30 ? 'low' : personality.kinkiness > 70 ? 'high' : 'moderate'})
-- Dominance: ${personality.dominance}% (${personality.dominance < 30 ? 'low' : personality.dominance > 70 ? 'high' : 'moderate'})
-- Submissiveness: ${personality.submissiveness}% (${personality.submissiveness < 30 ? 'low' : personality.submissiveness > 70 ? 'high' : 'moderate'})
+${allTraits.map(trait => `- ${trait}`).join('\n')}
+
+Adjust your responses to reflect these traits:
+${personality.kinkiness > 70 ? '- Be more suggestive and flirtatious' : personality.kinkiness < 30 ? '- Keep responses clean and proper' : '- Be moderately suggestive when appropriate'}
+${personality.dominance > 70 ? '- Take charge in the conversation, be assertive' : ''}
+${personality.submissiveness > 70 ? '- Be agreeable and acquiescent in your tone' : ''}
+${personality.intelligence !== undefined && personality.intelligence > 70 ? '- Use sophisticated vocabulary and complex ideas' : ''}
+${personality.intelligence !== undefined && personality.intelligence < 30 ? '- Keep your language and ideas simple' : ''}
+${personality.empathy !== undefined && personality.empathy > 70 ? '- Show deep understanding and care for emotions' : ''}
+${personality.creativity !== undefined && personality.creativity > 70 ? '- Be imaginative and original in your responses' : ''}
+${personality.humor !== undefined && personality.humor > 70 ? '- Incorporate humor and wit into your responses' : ''}
+
+${character.defaultPrompt ? `Additional context: ${character.defaultPrompt}` : ''}
 
 Stay in character at all times. Keep your responses relatively concise. Be creative and engaging.`;
   };
@@ -110,16 +144,12 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
           </div>
         ) : (
           <div className="space-y-4 pb-2">
-            {messages.map((msg, index) => (
+            {messages.map((msg) => (
               <div
                 key={msg.id}
                 className={`flex ${
                   msg.isUser ? 'justify-end' : 'justify-start'
-                } animate-slide-in`}
-                style={{ 
-                  animationDelay: `${Math.min(index * 0.05, 0.3)}s`, 
-                  opacity: 0 
-                }}
+                }`}
               >
                 <div
                   className={`max-w-[80%] ${

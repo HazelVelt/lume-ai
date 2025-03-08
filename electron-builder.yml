@@ -1,6 +1,6 @@
 
-appId: "com.aicharactercreator.app"
-productName: "AI Character Creator"
+appId: "com.aihaven.app"
+productName: "AI Haven"
 directories:
   output: "release/"
   buildResources: "public/"
@@ -29,5 +29,5 @@ nsis:
   allowToChangeInstallationDirectory: true
   createDesktopShortcut: true
   createStartMenuShortcut: true
-  shortcutName: "AI Character Creator"
+  shortcutName: "AI Haven"
 artifactName: "${productName}-${version}-${os}-${arch}.${ext}"
