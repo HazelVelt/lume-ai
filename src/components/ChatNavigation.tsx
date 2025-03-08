@@ -40,8 +40,8 @@ const ChatNavigation: React.FC<ChatNavigationProps> = ({
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Delete Character</AlertDialogTitle>
-              <AlertDialogDescription>
+              <AlertDialogTitle className="text-destructive">Delete Character</AlertDialogTitle>
+              <AlertDialogDescription className="text-destructive/80">
                 Are you sure you want to delete <span className="font-semibold">{character.name}</span>?
                 This action cannot be undone and all chat history will be lost.
               </AlertDialogDescription>

@@ -31,9 +31,7 @@ const MainContent = () => {
     }
   };
 
-  const goToHome = () => {
-    setActiveCharacter(null);
-  };
+  // Removed the home navigation when clicking the logo
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
@@ -42,18 +40,14 @@ const MainContent = () => {
   return (
     <div className="flex flex-col md:flex-row h-screen overflow-hidden pt-0">
       {/* Sidebar */}
-      <div className={`${isSidebarCollapsed ? 'w-0 md:w-16 overflow-hidden' : 'w-full md:w-[320px]'} border-r border-border bg-background/95 backdrop-blur-sm flex flex-col h-full transition-all duration-300`}>
+      <div className={`${isSidebarCollapsed ? 'w-0 md:w-16 overflow-hidden' : 'w-full md:w-[320px]'} border-r border-border bg-background/95 backdrop-blur-sm flex flex-col h-full transition-all duration-300 relative`}>
         <div className="p-4 border-b flex justify-between items-center">
           {!isSidebarCollapsed && (
-            <h1 
-              onClick={goToHome} 
-              className="text-xl font-bold text-gradient cursor-pointer"
-            >
+            <h1 className="text-xl font-bold text-gradient cursor-pointer">
               AI Haven
             </h1>
           )}
           <div className="flex items-center space-x-1">
-            {!isSidebarCollapsed && <ThemeToggle />}
             <Button 
               variant="ghost" 
               size="icon"
@@ -116,12 +110,12 @@ const MainContent = () => {
           </>
         )}
 
-        {/* Sidebar toggle button */}
+        {/* Sidebar toggle button - Fixed z-index and positioning */}
         <Button
           variant="ghost"
           size="icon"
           onClick={toggleSidebar}
-          className="absolute top-1/2 -right-4 h-8 w-8 rounded-full bg-background border border-border z-50"
+          className="absolute top-1/2 -right-4 h-8 w-8 rounded-full bg-background border border-border z-10"
         >
           {isSidebarCollapsed ? (
             <ChevronRight className="h-4 w-4" />
@@ -136,7 +130,11 @@ const MainContent = () => {
         {activeCharacter ? (
           <>
             <div className="p-4 border-b flex items-center">
-              <Button variant="ghost" onClick={goToHome} className="mr-2">
+              <Button 
+                variant="ghost" 
+                onClick={() => setActiveCharacter(null)} 
+                className="mr-2"
+              >
                 <h1 className="text-xl font-bold text-gradient">AI Haven</h1>
               </Button>
             </div>

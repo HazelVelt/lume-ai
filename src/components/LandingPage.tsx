@@ -46,7 +46,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onCreateCharacter }) => {
                 className="w-full h-auto rounded-lg"
               />
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="relative">
+                <div className="relative avatar-container">
                   <div className="glass-morphism p-6 rounded-lg text-center">
                     <div className="ripple-container">
                       <div className="ripple-circle"></div>
@@ -68,15 +68,15 @@ const LandingPage: React.FC<LandingPageProps> = ({ onCreateCharacter }) => {
             <TabsList className="grid w-full grid-cols-3 mb-8">
               <TabsTrigger value="chat" className="data-[state=active]:bg-accent1/20">
                 <MessageCircle className="mr-2 h-4 w-4" />
-                Chat
+                Chatting
               </TabsTrigger>
               <TabsTrigger value="customize" className="data-[state=active]:bg-accent1/20">
                 <Pencil className="mr-2 h-4 w-4" />
-                Customize
+                Customization
               </TabsTrigger>
               <TabsTrigger value="manage" className="data-[state=active]:bg-accent1/20">
                 <Settings className="mr-2 h-4 w-4" />
-                Manage
+                Management
               </TabsTrigger>
             </TabsList>
             

@@ -126,7 +126,7 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
       <div className="flex-1 overflow-y-auto p-4 scrollbar-none">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center p-4">
-            <div className="mb-4 glass-morphism p-4 rounded-full">
+            <div className="mb-4 glass-morphism p-4 rounded-full relative avatar-container">
               <img 
                 src={character.imageUrl || '/placeholder.svg'} 
                 alt={character.name} 
@@ -135,6 +135,11 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
                   (e.target as HTMLImageElement).src = '/placeholder.svg';
                 }}
               />
+              <div className="ripple-container">
+                <div className="ripple-circle"></div>
+                <div className="ripple-circle" style={{ animationDelay: "1s" }}></div>
+                <div className="ripple-circle" style={{ animationDelay: "2s" }}></div>
+              </div>
             </div>
             <h3 className="text-xl font-semibold text-gradient">{character.name}</h3>
             <p className="text-muted-foreground mt-2">{character.description}</p>

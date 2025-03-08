@@ -84,7 +84,11 @@
     display: none;
   }
 
-  /* Ripple effect */
+  /* Character avatar ripple effect */
+  .avatar-container {
+    @apply relative inline-block;
+  }
+
   .ripple-container {
     @apply absolute inset-0 flex items-center justify-center pointer-events-none;
   }
