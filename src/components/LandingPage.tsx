@@ -11,7 +11,8 @@ interface LandingPageProps {
 const LandingPage: React.FC<LandingPageProps> = ({ onCreateCharacter }) => {
   return (
     <div className="flex flex-col items-center justify-center h-full p-4 md:p-8 overflow-auto">
-      <div className="w-full max-w-5xl mx-auto">
+      <div className="absolute inset-0 bg-gradient-to-br from-accent1/10 via-background to-accent2/10 -z-10"></div>
+      <div className="w-full max-w-5xl mx-auto pt-10">
         {/* Hero Section */}
         <div className="flex flex-col md:flex-row items-center gap-8 mb-12">
           <div className="flex-1 space-y-6">
@@ -45,9 +46,16 @@ const LandingPage: React.FC<LandingPageProps> = ({ onCreateCharacter }) => {
                 className="w-full h-auto rounded-lg"
               />
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="glass-morphism p-6 rounded-lg text-center">
-                  <h3 className="text-2xl font-semibold mb-2">AI Characters</h3>
-                  <p className="text-muted-foreground">Brought to life with your local LLM</p>
+                <div className="relative">
+                  <div className="glass-morphism p-6 rounded-lg text-center">
+                    <div className="ripple-container">
+                      <div className="ripple-circle"></div>
+                      <div className="ripple-circle" style={{ animationDelay: "1s" }}></div>
+                      <div className="ripple-circle" style={{ animationDelay: "2s" }}></div>
+                    </div>
+                    <h3 className="text-2xl font-semibold mb-2 relative z-10">AI Characters</h3>
+                    <p className="text-muted-foreground relative z-10">Brought to life with your local LLM</p>
+                  </div>
                 </div>
               </div>
             </div>

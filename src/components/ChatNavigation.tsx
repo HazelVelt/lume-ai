@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MessageCircle, Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Character } from '@/types';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
@@ -18,15 +18,7 @@ const ChatNavigation: React.FC<ChatNavigationProps> = ({
 }) => {
   return (
     <div className="flex items-center justify-between p-3 border-t border-border bg-background/95 backdrop-blur-sm">
-      <div className="w-full grid grid-cols-3 gap-1">
-        <Button
-          variant="ghost"
-          className="flex flex-col items-center justify-center h-14 rounded-lg"
-        >
-          <MessageCircle className="h-5 w-5 mb-1" />
-          <span className="text-xs">Chat</span>
-        </Button>
-        
+      <div className="w-full grid grid-cols-2 gap-1">
         <Button
           variant="ghost"
           className="flex flex-col items-center justify-center h-14 rounded-lg"

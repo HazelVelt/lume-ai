@@ -21,6 +21,7 @@ interface CharacterCardProps {
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
   isActive?: boolean;
+  showPersonalityValues?: boolean;
 }
 
 const CharacterCard: React.FC<CharacterCardProps> = ({
@@ -29,6 +30,7 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
   onEdit,
   onDelete,
   isActive = false,
+  showPersonalityValues = true,
 }) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
@@ -70,22 +72,24 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
             {character.description}
           </p>
           
-          <div className="space-y-2">
-            <div className="grid grid-cols-3 gap-2 text-xs">
-              <div className="flex flex-col">
-                <span className="text-foreground/60">Kinkiness</span>
-                <span className="font-medium">{character.personality.kinkiness}%</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-foreground/60">Dominance</span>
-                <span className="font-medium">{character.personality.dominance}%</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-foreground/60">Submissiveness</span>
-                <span className="font-medium">{character.personality.submissiveness}%</span>
+          {showPersonalityValues && (
+            <div className="space-y-2">
+              <div className="grid grid-cols-3 gap-2 text-xs">
+                <div className="flex flex-col">
+                  <span className="text-foreground/60">Kinkiness</span>
+                  <span className="font-medium">{character.personality.kinkiness}%</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-foreground/60">Dominance</span>
+                  <span className="font-medium">{character.personality.dominance}%</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-foreground/60">Submissiveness</span>
+                  <span className="font-medium">{character.personality.submissiveness}%</span>
+                </div>
               </div>
             </div>
-          </div>
+          )}
           
           <div className="flex justify-between pt-2">
             <Button
