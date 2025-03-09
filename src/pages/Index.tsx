@@ -113,7 +113,7 @@ const MainContent = () => {
           variant="ghost"
           size="icon"
           onClick={toggleSidebar}
-          className="absolute top-1/2 -right-4 h-8 w-8 rounded-full bg-background border border-border shadow-md z-10"
+          className="absolute top-1/2 -right-4 h-8 w-8 rounded-full bg-background border border-border shadow-md z-20"
         >
           {isSidebarCollapsed ? (
             <ChevronRight className="h-4 w-4" />
