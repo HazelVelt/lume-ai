@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -43,7 +42,6 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
     humor: 50,
   });
 
-  // Reset form when character changes
   useEffect(() => {
     if (character) {
       setName(character.name);
@@ -185,14 +183,14 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-hidden animate-scale-in">
+      <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-hidden animate-scale-in">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">
             {character ? 'Edit Character' : 'Create New Character'}
           </DialogTitle>
         </DialogHeader>
 
-        <div className="grid gap-4 py-4 max-h-[calc(80vh-120px)] overflow-y-auto pr-2 scrollbar-thin">
+        <div className="grid gap-4 py-4 max-h-[calc(80vh-120px)] overflow-y-auto pr-2 scrollbar-none">
           <div className="grid grid-cols-1 gap-4">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>

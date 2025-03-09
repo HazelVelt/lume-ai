@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -26,7 +25,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
   const [ollamaModel, setOllamaModel] = useState(modelConfig.llm.name);
   const [stabilityApiKey, setStabilityApiKey] = useState(modelConfig.imageGen.apiKey || '');
   const [stabilityModel, setStabilityModel] = useState(modelConfig.imageGen.name || 'stable-diffusion-xl-1024-v1-0');
-  const [landingImage, setLandingImage] = useState(localStorage.getItem('landingImage') || '/placeholder.svg');
   
   const [availableOllamaModels, setAvailableOllamaModels] = useState<string[]>([]);
   const [availableStabilityModels, setAvailableStabilityModels] = useState<string[]>([]);
@@ -39,7 +37,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
       setOllamaModel(modelConfig.llm.name);
       setStabilityApiKey(modelConfig.imageGen.apiKey || '');
       setStabilityModel(modelConfig.imageGen.name || 'stable-diffusion-xl-1024-v1-0');
-      setLandingImage(localStorage.getItem('landingImage') || '/placeholder.svg');
       
       loadOllamaModels();
       if (modelConfig.imageGen.apiKey) {
@@ -80,25 +77,18 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
   };
   
   const handleSave = () => {
-    // Update LLM settings
     updateModelConfig('llm', {
       name: ollamaModel,
       endpoint: ollamaEndpoint,
     });
     
-    // Update image generation settings
     updateModelConfig('imageGen', {
       apiKey: stabilityApiKey,
       name: stabilityModel
     });
     
-    // Save landing image preference
-    if (landingImage) {
-      localStorage.setItem('landingImage', landingImage);
-    }
-    
     toast.success('Settings saved successfully', {
-      duration: 2000, // Shortened toast duration to 2 seconds
+      duration: 2000,
     });
     onClose();
   };
@@ -262,20 +252,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
               
               <p className="text-xs text-muted-foreground mt-2">
                 Recommended model: stable-diffusion-xl-1024-v1-0
-              </p>
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="landingImage">Landing Page Image URL</Label>
-              <Input
-                id="landingImage"
-                value={landingImage}
-                onChange={(e) => setLandingImage(e.target.value)}
-                placeholder="/placeholder.svg"
-                className="glass-morphism"
-              />
-              <p className="text-xs text-muted-foreground">
-                Enter a URL for the landing page image or use /placeholder.svg for the default
               </p>
             </div>
           </TabsContent>

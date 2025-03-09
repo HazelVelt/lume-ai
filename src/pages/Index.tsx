@@ -72,7 +72,7 @@ const MainContent = () => {
               </Button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-3 scrollbar-thin">
+            <div className="flex-1 overflow-y-auto p-3 scrollbar-none">
               {characters.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full p-4 text-center">
                   <div className="glass-morphism p-6 rounded-lg max-w-[240px]">
@@ -113,7 +113,7 @@ const MainContent = () => {
           variant="ghost"
           size="icon"
           onClick={toggleSidebar}
-          className="absolute top-1/2 -right-4 h-8 w-8 rounded-full bg-background border border-border shadow-md z-50"
+          className="absolute top-1/2 -right-4 h-8 w-8 rounded-full bg-background border border-border shadow-md z-10"
         >
           {isSidebarCollapsed ? (
             <ChevronRight className="h-4 w-4" />
@@ -128,13 +128,9 @@ const MainContent = () => {
         {activeCharacter ? (
           <>
             <div className="p-4 border-b flex items-center">
-              <Button 
-                variant="ghost" 
-                onClick={() => setActiveCharacter(null)} 
-                className="px-0"
-              >
-                <h1 className="text-xl font-bold text-gradient">AI Haven</h1>
-              </Button>
+              <h1 className="text-xl font-bold text-gradient">
+                AI Haven
+              </h1>
             </div>
             <ChatInterface character={activeCharacter} />
             <ChatNavigation 

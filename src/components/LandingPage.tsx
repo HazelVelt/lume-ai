@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -20,9 +19,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onCreateCharacter }) => {
   }, []);
   
   return (
-    <div className="flex flex-col items-center justify-center h-full p-4 md:p-8 overflow-auto">
+    <div className="flex flex-col items-center justify-center h-full p-4 md:p-8 overflow-auto scrollbar-none">
       <div className="absolute inset-0 bg-gradient-to-br from-accent1/10 via-background to-accent2/10 -z-10"></div>
-      <div className="w-full max-w-5xl mx-auto pt-20">
+      <div className="w-full max-w-5xl mx-auto pt-24">
         {/* Hero Section */}
         <div className="flex flex-col md:flex-row items-center gap-8 mb-12">
           <div className="flex-1 space-y-6">
@@ -47,7 +46,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onCreateCharacter }) => {
             </div>
           </div>
           
-          <div className="flex-1 relative animate-fade-in" style={{ animationDelay: "0.3s" }}>
+          <div className="flex-1 relative animate-fade-in mt-4" style={{ animationDelay: "0.3s" }}>
             <div className="absolute -inset-0.5 bg-gradient-to-r from-accent1 to-purple-600 rounded-lg blur opacity-50"></div>
             <div className="relative glass-morphism rounded-lg overflow-hidden">
               <img 
