@@ -9,7 +9,8 @@ import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ollamaService from '@/services/ollamaService';
 import stabilityAIService from '@/services/stabilityAIService';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Moon, Sun } from 'lucide-react';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface SettingsPanelProps {
@@ -19,11 +20,13 @@ interface SettingsPanelProps {
 
 const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
   const { modelConfig, updateModelConfig } = useCharacter();
+  const { theme, toggleTheme } = useTheme();
   
   const [ollamaEndpoint, setOllamaEndpoint] = useState(modelConfig.llm.endpoint);
   const [ollamaModel, setOllamaModel] = useState(modelConfig.llm.name);
   const [stabilityApiKey, setStabilityApiKey] = useState(modelConfig.imageGen.apiKey || '');
   const [stabilityModel, setStabilityModel] = useState(modelConfig.imageGen.name || 'stable-diffusion-xl-1024-v1-0');
+  const [landingImage, setLandingImage] = useState(localStorage.getItem('landingImage') || '/placeholder.svg');
   
   const [availableOllamaModels, setAvailableOllamaModels] = useState<string[]>([]);
   const [availableStabilityModels, setAvailableStabilityModels] = useState<string[]>([]);
@@ -36,6 +39,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
       setOllamaModel(modelConfig.llm.name);
       setStabilityApiKey(modelConfig.imageGen.apiKey || '');
       setStabilityModel(modelConfig.imageGen.name || 'stable-diffusion-xl-1024-v1-0');
+      setLandingImage(localStorage.getItem('landingImage') || '/placeholder.svg');
       
       loadOllamaModels();
       if (modelConfig.imageGen.apiKey) {
@@ -88,7 +92,14 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
       name: stabilityModel
     });
     
-    toast.success('Settings saved successfully');
+    // Save landing image preference
+    if (landingImage) {
+      localStorage.setItem('landingImage', landingImage);
+    }
+    
+    toast.success('Settings saved successfully', {
+      duration: 2000, // Shortened toast duration to 2 seconds
+    });
     onClose();
   };
   
@@ -100,9 +111,10 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
         </DialogHeader>
         
         <Tabs defaultValue="llm" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="llm">Language Model</TabsTrigger>
             <TabsTrigger value="image">Image Generation</TabsTrigger>
+            <TabsTrigger value="appearance">Appearance</TabsTrigger>
           </TabsList>
           
           <TabsContent value="llm" className="space-y-4 py-4">
@@ -250,6 +262,48 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
               
               <p className="text-xs text-muted-foreground mt-2">
                 Recommended model: stable-diffusion-xl-1024-v1-0
+              </p>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="landingImage">Landing Page Image URL</Label>
+              <Input
+                id="landingImage"
+                value={landingImage}
+                onChange={(e) => setLandingImage(e.target.value)}
+                placeholder="/placeholder.svg"
+                className="glass-morphism"
+              />
+              <p className="text-xs text-muted-foreground">
+                Enter a URL for the landing page image or use /placeholder.svg for the default
+              </p>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="appearance" className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Theme</Label>
+              <div className="grid grid-cols-2 gap-4">
+                <Button 
+                  variant={theme === 'light' ? 'default' : 'outline'}
+                  className={`flex items-center justify-center gap-2 ${theme === 'light' ? 'bg-accent1 hover:bg-accent1/80' : ''}`}
+                  onClick={() => theme !== 'light' && toggleTheme()}
+                >
+                  <Sun className="h-5 w-5" />
+                  <span>Light Mode</span>
+                </Button>
+                
+                <Button 
+                  variant={theme === 'dark' ? 'default' : 'outline'}
+                  className={`flex items-center justify-center gap-2 ${theme === 'dark' ? 'bg-accent1 hover:bg-accent1/80' : ''}`}
+                  onClick={() => theme !== 'dark' && toggleTheme()}
+                >
+                  <Moon className="h-5 w-5" />
+                  <span>Dark Mode</span>
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                Choose between light and dark theme for the application
               </p>
             </div>
           </TabsContent>

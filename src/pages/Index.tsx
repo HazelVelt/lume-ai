@@ -108,12 +108,12 @@ const MainContent = () => {
           </>
         )}
 
-        {/* Sidebar toggle button - Fixed positioning */}
+        {/* Sidebar toggle button - Fixed positioning and z-index */}
         <Button
           variant="ghost"
           size="icon"
           onClick={toggleSidebar}
-          className="absolute top-1/2 -right-4 h-8 w-8 rounded-full bg-background border border-border z-50"
+          className="absolute top-1/2 -right-4 h-8 w-8 rounded-full bg-background border border-border shadow-md z-50"
         >
           {isSidebarCollapsed ? (
             <ChevronRight className="h-4 w-4" />
@@ -128,7 +128,13 @@ const MainContent = () => {
         {activeCharacter ? (
           <>
             <div className="p-4 border-b flex items-center">
-              <h1 className="text-xl font-bold text-gradient">AI Haven</h1>
+              <Button 
+                variant="ghost" 
+                onClick={() => setActiveCharacter(null)} 
+                className="px-0"
+              >
+                <h1 className="text-xl font-bold text-gradient">AI Haven</h1>
+              </Button>
             </div>
             <ChatInterface character={activeCharacter} />
             <ChatNavigation 

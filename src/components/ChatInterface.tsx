@@ -17,8 +17,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character }) => {
   const { conversations, addMessage, modelConfig } = useCharacter();
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [typingMessage, setTypingMessage] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   
   const messages = conversations[character.id] || [];
 
@@ -76,6 +79,30 @@ ${character.defaultPrompt ? `Additional context: ${character.defaultPrompt}` : '
 Stay in character at all times. Keep your responses relatively concise. Be creative and engaging.`;
   };
 
+  // Function to simulate typing animation
+  const simulateTyping = (text: string) => {
+    setIsTyping(true);
+    setTypingMessage('');
+    
+    let i = 0;
+    const typingSpeed = 30; // milliseconds per character
+    
+    const typingInterval = setInterval(() => {
+      if (i < text.length) {
+        setTypingMessage(prev => prev + text.charAt(i));
+        i++;
+        scrollToBottom();
+      } else {
+        clearInterval(typingInterval);
+        setIsTyping(false);
+        addMessage(character.id, text, false);
+        setTypingMessage('');
+      }
+    }, typingSpeed);
+    
+    return () => clearInterval(typingInterval);
+  };
+
   const handleSendMessage = async () => {
     if (!message.trim() || isLoading) return;
     
@@ -98,10 +125,14 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
         conversationHistory
       );
       
-      addMessage(character.id, response, false);
+      // Start typing animation instead of adding message directly
+      simulateTyping(response);
     } catch (error) {
       console.error('Error generating response:', error);
-      toast.error('Failed to generate response');
+      toast.error('Failed to generate response', {
+        duration: 2000, // Shortened toast duration to 2 seconds
+      });
+      setIsLoading(false);
     } finally {
       setIsLoading(false);
     }
@@ -123,7 +154,10 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto p-4 scrollbar-none">
+      <div 
+        ref={chatContainerRef}
+        className="flex-1 overflow-y-auto p-4 scrollbar-thin"
+      >
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center p-4">
             <div className="mb-4 glass-morphism p-4 rounded-full relative avatar-container">
@@ -154,7 +188,7 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
                 key={msg.id}
                 className={`flex ${
                   msg.isUser ? 'justify-end' : 'justify-start'
-                }`}
+                } animate-fade-in`}
               >
                 {!msg.isUser && (
                   <div className="flex flex-col items-center mr-2">
@@ -193,6 +227,34 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
                 </div>
               </div>
             ))}
+            
+            {/* Typing animation message */}
+            {isTyping && (
+              <div className="flex justify-start animate-fade-in">
+                <div className="flex flex-col items-center mr-2">
+                  <img 
+                    src={character.imageUrl || '/placeholder.svg'} 
+                    alt={character.name}
+                    className="h-8 w-8 rounded-full object-cover mb-1"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/placeholder.svg';
+                    }}
+                  />
+                </div>
+                <div className="max-w-[80%] bg-secondary glass-morphism rounded-2xl rounded-tl-sm">
+                  <div className="px-3 pt-2 text-sm font-medium">
+                    {character.name}
+                  </div>
+                  <div className="p-3">
+                    <div className="text-sm whitespace-pre-wrap">{typingMessage}<span className="animate-pulse">▋</span></div>
+                  </div>
+                  <div className="px-3 pb-1 text-xs text-white/50 flex justify-start">
+                    {formatTime(Date.now())}
+                  </div>
+                </div>
+              </div>
+            )}
+            
             <div ref={messagesEndRef} />
           </div>
         )}
@@ -208,15 +270,15 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
               onKeyDown={handleKeyDown}
               placeholder={`Message ${character.name}...`}
               className="flex-1 min-h-[50px] max-h-[150px] glass-morphism resize-none"
-              disabled={isLoading}
+              disabled={isLoading || isTyping}
             />
             <Button
               className={`rounded-full h-10 w-10 p-0 shrink-0 ${
-                isLoading || !message.trim()
+                isLoading || isTyping || !message.trim()
                   ? 'bg-muted text-muted-foreground'
                   : 'bg-accent1 hover:bg-accent1/80'
               }`}
-              disabled={isLoading || !message.trim()}
+              disabled={isLoading || isTyping || !message.trim()}
               onClick={handleSendMessage}
             >
               {isLoading ? (

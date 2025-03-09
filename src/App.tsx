@@ -30,7 +30,7 @@ const App = () => {
       <ThemeProvider>
         <TooltipProvider>
           <Toaster />
-          <Sonner position="top-center" richColors />
+          <Sonner position="top-center" richColors duration={2000} />
           <Router>
             <Routes>
               <Route path="/" element={<Index />} />

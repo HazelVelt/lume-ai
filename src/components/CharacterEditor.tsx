@@ -78,12 +78,16 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
 
   const handleGenerateImage = async () => {
     if (!modelConfig.imageGen.apiKey) {
-      toast.error('Please enter your Stability AI API key in the settings to generate images');
+      toast.error('Please enter your Stability AI API key in the settings to generate images', {
+        duration: 2000,
+      });
       return;
     }
 
     if (!imagePrompt.trim()) {
-      toast.error('Please enter an image prompt');
+      toast.error('Please enter an image prompt', {
+        duration: 2000,
+      });
       return;
     }
 
@@ -97,7 +101,9 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
       
       if (imageUrl) {
         setImageUrl(imageUrl);
-        toast.success('Image generated successfully');
+        toast.success('Image generated successfully', {
+          duration: 2000,
+        });
       } 
     } catch (error) {
       console.error("Image generation error:", error);
@@ -109,12 +115,16 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
 
   const handleSubmit = () => {
     if (!name.trim()) {
-      toast.error('Please enter a name');
+      toast.error('Please enter a name', {
+        duration: 2000,
+      });
       return;
     }
 
     if (!description.trim()) {
-      toast.error('Please enter a description');
+      toast.error('Please enter a description', {
+        duration: 2000,
+      });
       return;
     }
 
@@ -175,7 +185,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-hidden animate-scale-in">
+      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-hidden animate-scale-in">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">
             {character ? 'Edit Character' : 'Create New Character'}

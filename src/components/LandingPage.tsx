@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Plus, MessageCircle, Pencil, Trash2, Bot, Settings } from 'lucide-react';
@@ -8,10 +9,20 @@ interface LandingPageProps {
 }
 
 const LandingPage: React.FC<LandingPageProps> = ({ onCreateCharacter }) => {
+  const [landingImage, setLandingImage] = useState('/placeholder.svg');
+  
+  useEffect(() => {
+    // Load landing image from localStorage
+    const savedImage = localStorage.getItem('landingImage');
+    if (savedImage) {
+      setLandingImage(savedImage);
+    }
+  }, []);
+  
   return (
     <div className="flex flex-col items-center justify-center h-full p-4 md:p-8 overflow-auto">
       <div className="absolute inset-0 bg-gradient-to-br from-accent1/10 via-background to-accent2/10 -z-10"></div>
-      <div className="w-full max-w-5xl mx-auto pt-10">
+      <div className="w-full max-w-5xl mx-auto pt-20">
         {/* Hero Section */}
         <div className="flex flex-col md:flex-row items-center gap-8 mb-12">
           <div className="flex-1 space-y-6">
@@ -40,9 +51,12 @@ const LandingPage: React.FC<LandingPageProps> = ({ onCreateCharacter }) => {
             <div className="absolute -inset-0.5 bg-gradient-to-r from-accent1 to-purple-600 rounded-lg blur opacity-50"></div>
             <div className="relative glass-morphism rounded-lg overflow-hidden">
               <img 
-                src="/placeholder.svg"
+                src={landingImage}
                 alt="AI Character"
                 className="w-full h-auto rounded-lg"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = '/placeholder.svg';
+                }}
               />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="glass-morphism p-6 rounded-lg text-center">
