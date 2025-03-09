@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -11,9 +10,10 @@ import { toast } from 'sonner';
 
 interface ChatInterfaceProps {
   character: Character;
+  onReturn: () => void;
 }
 
-const ChatInterface: React.FC<ChatInterfaceProps> = ({ character }) => {
+const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReturn }) => {
   const { conversations, addMessage, modelConfig } = useCharacter();
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +42,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character }) => {
       `Submissiveness: ${personality.submissiveness}% (${personality.submissiveness < 30 ? 'low' : personality.submissiveness > 70 ? 'high' : 'moderate'})`,
     ];
     
-    // Add new personality traits if defined
     if (personality.intelligence !== undefined) {
       allTraits.push(`Intelligence: ${personality.intelligence}% (${personality.intelligence < 30 ? 'low' : personality.intelligence > 70 ? 'high' : 'moderate'})`);
     }
@@ -79,13 +78,12 @@ ${character.defaultPrompt ? `Additional context: ${character.defaultPrompt}` : '
 Stay in character at all times. Keep your responses relatively concise. Be creative and engaging.`;
   };
 
-  // Function to simulate typing animation
   const simulateTyping = (text: string) => {
     setIsTyping(true);
     setTypingMessage('');
     
     let i = 0;
-    const typingSpeed = 30; // milliseconds per character
+    const typingSpeed = 10;
     
     const typingInterval = setInterval(() => {
       if (i < text.length) {
@@ -112,7 +110,6 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
     setIsLoading(true);
     
     try {
-      // Convert existing messages to a format the LLM can understand
       const conversationHistory = messages.map(msg => ({
         role: msg.isUser ? 'user' : 'assistant',
         content: msg.content
@@ -125,12 +122,11 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
         conversationHistory
       );
       
-      // Start typing animation instead of adding message directly
       simulateTyping(response);
     } catch (error) {
       console.error('Error generating response:', error);
       toast.error('Failed to generate response', {
-        duration: 2000, // Shortened toast duration to 2 seconds
+        duration: 2000,
       });
       setIsLoading(false);
     } finally {
@@ -156,17 +152,17 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
     <div className="flex flex-col h-full">
       <div 
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto p-4 scrollbar-thin"
+        className="flex-1 overflow-y-auto p-4 scrollbar-none"
       >
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center p-4">
             <div className="mb-4 glass-morphism p-4 rounded-full relative avatar-container">
               <img 
-                src={character.imageUrl || '/placeholder.svg'} 
+                src={character.imageUrl || '/character-placeholder.jpg'} 
                 alt={character.name} 
                 className="h-20 w-20 rounded-full object-cover"
                 onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/placeholder.svg';
+                  (e.target as HTMLImageElement).src = '/character-placeholder.jpg';
                 }}
               />
               <div className="ripple-container">
@@ -228,7 +224,6 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
               </div>
             ))}
             
-            {/* Typing animation message */}
             {isTyping && (
               <div className="flex justify-start animate-fade-in">
                 <div className="flex flex-col items-center mr-2">

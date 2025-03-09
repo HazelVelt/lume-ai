@@ -1,62 +1,54 @@
-
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, MessageCircle, Pencil, Trash2, Bot, Settings } from 'lucide-react';
+import { Plus, MessageCircle, Pencil, Trash2, Bot, Settings, Stars } from 'lucide-react';
 
 interface LandingPageProps {
   onCreateCharacter: () => void;
 }
 
 const LandingPage: React.FC<LandingPageProps> = ({ onCreateCharacter }) => {
-  const [landingImage, setLandingImage] = useState('/placeholder.svg');
-  
-  useEffect(() => {
-    // Load landing image from localStorage
-    const savedImage = localStorage.getItem('landingImage');
-    if (savedImage) {
-      setLandingImage(savedImage);
-    }
-  }, []);
-  
   return (
-    <div className="flex flex-col items-center justify-center h-full overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-accent1/10 via-background to-accent2/10 -z-10"></div>
-      
-      {/* Banner Image Section */}
-      <div className="w-full h-[300px] relative mb-8 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/90 z-10"></div>
+    <div className="flex flex-col h-full overflow-hidden scrollbar-none">
+      {/* Full-page Banner Image Section */}
+      <div className="w-full h-full relative mb-0 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/60 to-background/95 z-10"></div>
         <img 
-          src={landingImage}
+          src="/image-banner.jpg"
           alt="AI Banner"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-center"
           onError={(e) => {
             (e.target as HTMLImageElement).src = '/placeholder.svg';
           }}
         />
         <div className="absolute inset-0 flex items-center justify-center z-20">
-          <div className="text-center px-4">
-            <h1 className="text-4xl md:text-5xl font-bold text-gradient animate-fade-in mb-4">
-              Welcome to AI Haven
-            </h1>
-            <p className="text-xl text-muted-foreground animate-fade-in max-w-2xl mx-auto" style={{ animationDelay: "0.1s" }}>
-              Create and chat with AI characters with unique personalities
-            </p>
-            <div className="mt-8 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-              <Button 
-                onClick={onCreateCharacter}
-                className="bg-accent1 hover:bg-accent1/80 text-white"
-                size="lg"
-              >
-                <Plus className="mr-2 h-5 w-5" />
-                Create Your First Character
-              </Button>
+          <div className="text-center px-4 w-full max-w-4xl mx-auto">
+            <div className="glass-morphism p-8 rounded-xl border border-white/20 shadow-xl">
+              <div className="inline-block p-3 rounded-full bg-accent1/20 mb-4">
+                <Stars className="h-8 w-8 text-accent1" />
+              </div>
+              <h1 className="text-4xl md:text-6xl font-bold text-gradient animate-fade-in mb-4">
+                Welcome to AI Haven
+              </h1>
+              <p className="text-xl md:text-2xl text-muted-foreground animate-fade-in max-w-2xl mx-auto" style={{ animationDelay: "0.1s" }}>
+                Your personal space for creating and chatting with unique AI companions
+              </p>
+              <div className="mt-8 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+                <Button 
+                  onClick={onCreateCharacter}
+                  className="bg-accent1 hover:bg-accent1/80 text-white"
+                  size="lg"
+                >
+                  <Plus className="mr-2 h-5 w-5" />
+                  Create Your First Character
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </div>
       
-      <div className="w-full max-w-5xl mx-auto px-4 pb-8">  
+      <div className="w-full max-w-5xl mx-auto px-4 pb-8 overflow-y-auto scrollbar-none">  
         {/* Feature Tabs */}
         <div className="animate-fade-in" style={{ animationDelay: "0.4s" }}>
           <Tabs defaultValue="chat" className="w-full">

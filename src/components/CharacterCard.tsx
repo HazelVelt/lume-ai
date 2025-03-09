@@ -54,11 +54,11 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/90 z-10" />
           
           <img
-            src={character.imageUrl || '/placeholder.svg'}
+            src={character.imageUrl || '/character-placeholder.jpg'}
             alt={character.name}
             className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             onError={(e) => {
-              (e.target as HTMLImageElement).src = '/placeholder.svg';
+              (e.target as HTMLImageElement).src = '/character-placeholder.jpg';
             }}
           />
           
