@@ -192,7 +192,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
         </DialogHeader>
 
         <div className="grid gap-4 py-4 max-h-[calc(80vh-120px)] overflow-y-auto pr-2 scrollbar-none">
-          <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 gap-4 px-2">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
               <Input
@@ -200,7 +200,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Character name"
-                className="glass-morphism"
+                className="glass-morphism px-4"
               />
             </div>
 
@@ -212,7 +212,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Describe your character's backstory, traits, and personality..."
                 rows={4}
-                className="glass-morphism"
+                className="glass-morphism px-4"
               />
             </div>
 
@@ -267,7 +267,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                     onChange={(e) => setImagePrompt(e.target.value)}
                     placeholder="Describe how your character should look..."
                     rows={2}
-                    className="glass-morphism"
+                    className="glass-morphism px-4"
                   />
                   <div className="flex gap-2">
                     <Button

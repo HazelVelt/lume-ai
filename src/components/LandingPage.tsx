@@ -20,22 +20,29 @@ const LandingPage: React.FC<LandingPageProps> = ({ onCreateCharacter }) => {
   }, []);
   
   return (
-    <div className="flex flex-col items-center justify-center h-full p-4 md:p-8 overflow-hidden">
+    <div className="flex flex-col items-center justify-center h-full overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-accent1/10 via-background to-accent2/10 -z-10"></div>
-      <div className="w-full max-w-5xl mx-auto pt-12">
-        {/* Hero Section */}
-        <div className="flex flex-col md:flex-row items-center gap-8 mb-12 mt-8">
-          <div className="flex-1 space-y-6">
-            <div className="space-y-2">
-              <h1 className="text-4xl md:text-5xl font-bold text-gradient animate-fade-in">
-                Welcome to AI Haven
-              </h1>
-              <p className="text-xl text-muted-foreground animate-fade-in" style={{ animationDelay: "0.1s" }}>
-                Create and chat with AI characters with unique personalities
-              </p>
-            </div>
-            
-            <div className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
+      
+      {/* Banner Image Section */}
+      <div className="w-full h-[300px] relative mb-8 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/90 z-10"></div>
+        <img 
+          src={landingImage}
+          alt="AI Banner"
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = '/placeholder.svg';
+          }}
+        />
+        <div className="absolute inset-0 flex items-center justify-center z-20">
+          <div className="text-center px-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-gradient animate-fade-in mb-4">
+              Welcome to AI Haven
+            </h1>
+            <p className="text-xl text-muted-foreground animate-fade-in max-w-2xl mx-auto" style={{ animationDelay: "0.1s" }}>
+              Create and chat with AI characters with unique personalities
+            </p>
+            <div className="mt-8 animate-fade-in" style={{ animationDelay: "0.2s" }}>
               <Button 
                 onClick={onCreateCharacter}
                 className="bg-accent1 hover:bg-accent1/80 text-white"
@@ -46,28 +53,10 @@ const LandingPage: React.FC<LandingPageProps> = ({ onCreateCharacter }) => {
               </Button>
             </div>
           </div>
-          
-          <div className="flex-1 relative animate-fade-in mt-8" style={{ animationDelay: "0.3s" }}>
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-accent1 to-purple-600 rounded-lg blur opacity-50"></div>
-            <div className="relative glass-morphism rounded-lg overflow-hidden">
-              <img 
-                src={landingImage}
-                alt="AI Character"
-                className="w-full h-auto rounded-lg"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/placeholder.svg';
-                }}
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="glass-morphism p-6 rounded-lg text-center">
-                  <h3 className="text-2xl font-semibold mb-2 relative z-10">AI Characters</h3>
-                  <p className="text-muted-foreground relative z-10">Brought to life with your local LLM</p>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-        
+      </div>
+      
+      <div className="w-full max-w-5xl mx-auto px-4 pb-8">  
         {/* Feature Tabs */}
         <div className="animate-fade-in" style={{ animationDelay: "0.4s" }}>
           <Tabs defaultValue="chat" className="w-full">
