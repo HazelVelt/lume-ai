@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -31,7 +32,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReturn }) =>
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, typingMessage]);
 
   const generateSystemPrompt = () => {
     const { personality } = character;
@@ -83,13 +84,12 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
     setTypingMessage('');
     
     let i = 0;
-    const typingSpeed = 10;
+    const typingSpeed = 5; // Faster typing (reduced from 10)
     
     const typingInterval = setInterval(() => {
       if (i < text.length) {
         setTypingMessage(prev => prev + text.charAt(i));
         i++;
-        scrollToBottom();
       } else {
         clearInterval(typingInterval);
         setIsTyping(false);
@@ -149,7 +149,7 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full overflow-hidden">
       <div 
         ref={chatContainerRef}
         className="flex-1 overflow-y-auto p-4 scrollbar-none"
@@ -255,7 +255,7 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
         )}
       </div>
 
-      <Card className="border-t glass-morphism mt-auto">
+      <Card className="border-t glass-morphism sticky bottom-0 z-10">
         <CardContent className="p-4">
           <div className="flex items-end gap-2">
             <Textarea

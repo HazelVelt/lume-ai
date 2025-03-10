@@ -43,8 +43,8 @@ const MainContent = () => {
   }, [activeCharacter]);
 
   const handleReturnToLanding = () => {
-    setActiveCharacter(null);
-    setShowLandingPage(true);
+    setActiveCharacter(null); // Clear active character
+    setShowLandingPage(true);  // Always show landing page when returning home
   };
 
   return (
@@ -170,7 +170,7 @@ const MainContent = () => {
             />
           </>
         ) : (
-          showLandingPage && <LandingPage onCreateCharacter={handleCreateCharacter} />
+          <LandingPage onCreateCharacter={handleCreateCharacter} />
         )}
       </div>
 

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -9,9 +10,9 @@ interface LandingPageProps {
 
 const LandingPage: React.FC<LandingPageProps> = ({ onCreateCharacter }) => {
   return (
-    <div className="flex flex-col h-full overflow-hidden scrollbar-none">
+    <div className="flex flex-col h-full overflow-auto scrollbar-none">
       {/* Full-page Banner Image Section */}
-      <div className="w-full h-full relative mb-0 overflow-hidden">
+      <div className="relative w-full h-screen min-h-[600px]">
         <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/60 to-background/95 z-10"></div>
         <img 
           src="/image-banner.jpg"
@@ -48,7 +49,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onCreateCharacter }) => {
         </div>
       </div>
       
-      <div className="w-full max-w-5xl mx-auto px-4 pb-8 overflow-y-auto scrollbar-none">  
+      <div className="w-full max-w-5xl mx-auto px-4 py-16 overflow-y-auto scrollbar-none">  
         {/* Feature Tabs */}
         <div className="animate-fade-in" style={{ animationDelay: "0.4s" }}>
           <Tabs defaultValue="chat" className="w-full">

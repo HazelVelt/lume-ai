@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,7 +19,7 @@ interface CharacterEditorProps {
   onClose: () => void;
 }
 
-const PLACEHOLDER_IMAGE = '/placeholder.svg';
+const PLACEHOLDER_IMAGE = '/character-placeholder.jpg';
 
 const CharacterEditor: React.FC<CharacterEditorProps> = ({
   character,
@@ -28,6 +28,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
 }) => {
   const { createCharacter, updateCharacter, modelConfig } = useCharacter();
   const [isGenerating, setIsGenerating] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -74,6 +75,28 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
       });
     }
   }, [character, isOpen]);
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const result = e.target?.result as string;
+      setImageUrl(result);
+      toast.success('Image uploaded successfully');
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleGenerateImage = async () => {
     if (!modelConfig.imageGen.apiKey) {
@@ -192,7 +215,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
         </DialogHeader>
 
         <div className="grid gap-4 py-4 max-h-[calc(80vh-120px)] overflow-y-auto pr-2 scrollbar-none">
-          <div className="grid grid-cols-1 gap-4 px-2">
+          <div className="grid grid-cols-1 gap-4 px-4">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
               <Input
@@ -200,7 +223,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Character name"
-                className="glass-morphism px-4"
+                className="glass-morphism px-6"
               />
             </div>
 
@@ -212,7 +235,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Describe your character's backstory, traits, and personality..."
                 rows={4}
-                className="glass-morphism px-4"
+                className="glass-morphism px-6"
               />
             </div>
 
@@ -253,21 +276,21 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                       <User className="h-16 w-16 mb-2 text-muted-foreground/50" />
                       <span>No image selected</span>
                       <span className="text-xs text-muted-foreground/50 mt-1">
-                        You can generate an image or use a placeholder
+                        You can generate an image, upload one, or use a placeholder
                       </span>
                     </div>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="imagePrompt">Image Prompt (Optional)</Label>
+                  <Label htmlFor="imagePrompt">Image Prompt (for AI generation)</Label>
                   <Textarea
                     id="imagePrompt"
                     value={imagePrompt}
                     onChange={(e) => setImagePrompt(e.target.value)}
                     placeholder="Describe how your character should look..."
                     rows={2}
-                    className="glass-morphism px-4"
+                    className="glass-morphism px-6"
                   />
                   <div className="flex gap-2">
                     <Button
@@ -288,6 +311,22 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                         </>
                       )}
                     </Button>
+                    <Button
+                      onClick={handleUploadClick}
+                      variant="outline"
+                      className="flex-1"
+                      type="button"
+                    >
+                      <Upload className="mr-2 h-4 w-4" />
+                      Upload Image
+                    </Button>
+                    <input 
+                      type="file" 
+                      ref={fileInputRef}
+                      style={{ display: 'none' }}
+                      accept="image/*"
+                      onChange={handleFileChange}
+                    />
                     <Button
                       onClick={() => setImageUrl(PLACEHOLDER_IMAGE)}
                       variant="outline"
