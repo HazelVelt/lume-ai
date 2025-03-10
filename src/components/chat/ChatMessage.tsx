@@ -80,14 +80,14 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
             {message.content}
             {isTyping && (
               <div className="absolute inset-0 bg-background flex flex-col justify-end">
-                <div className="mt-auto mb-2 h-1 bg-accent1/20 rounded-full overflow-hidden w-[70%] mx-auto">
+                <div className="mt-auto mb-2 h-1 bg-accent1/20 rounded-full overflow-hidden w-[50%] mx-auto">
                   <div className="h-full bg-accent1 rounded-full animate-progress"></div>
                 </div>
               </div>
             )}
             {isError && (
               <div className="absolute inset-0 bg-background flex flex-col justify-end">
-                <div className="mt-auto mb-2 h-1 bg-destructive/20 rounded-full overflow-hidden w-[70%] mx-auto">
+                <div className="mt-auto mb-2 h-1 bg-destructive/20 rounded-full overflow-hidden w-[50%] mx-auto">
                   <div className="h-full bg-destructive rounded-full animate-progress"></div>
                 </div>
               </div>

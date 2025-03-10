@@ -1,3 +1,4 @@
+
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -19,7 +20,10 @@ const queryClient = new QueryClient({
 });
 
 // Determine if running in Electron
-const isElectron = window.navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
+const isElectron = 
+  window.navigator.userAgent.toLowerCase().indexOf(' electron/') > -1 || 
+  // @ts-ignore
+  typeof window.api !== 'undefined';
 
 const App = () => {
   // Use HashRouter for Electron to ensure file:// protocol works properly

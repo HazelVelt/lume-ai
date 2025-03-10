@@ -41,6 +41,25 @@
   animation: progress 1.5s ease-in-out infinite;
 }
 
+@keyframes pulse-soft {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
@@ -53,4 +72,132 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Custom gradients for different themes */
+.landing-gradient-dark {
+  background-image: radial-gradient(circle at top right, rgba(124, 58, 237, 0.05) 0%, transparent 50%),
+                    radial-gradient(circle at bottom left, rgba(236, 72, 153, 0.05) 0%, transparent 50%);
+}
+
+.landing-gradient-light {
+  background-image: radial-gradient(circle at top right, rgba(124, 58, 237, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at bottom left, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+}
+
+.landing-gradient-purple {
+  background-image: radial-gradient(circle at top right, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at bottom left, rgba(192, 132, 252, 0.1) 0%, transparent 50%);
+}
+
+.landing-gradient-ocean {
+  background-image: radial-gradient(circle at top right, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+}
+
+.landing-gradient-sunset {
+  background-image: radial-gradient(circle at top right, rgba(239, 68, 68, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at bottom left, rgba(234, 179, 8, 0.1) 0%, transparent 50%);
+}
+
+.landing-gradient-emerald {
+  background-image: radial-gradient(circle at top right, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+}
+
+.landing-gradient-cherry {
+  background-image: radial-gradient(circle at top right, rgba(236, 72, 153, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at bottom left, rgba(239, 68, 68, 0.1) 0%, transparent 50%);
+}
+
+.landing-gradient-midnight {
+  background-image: radial-gradient(circle at top right, rgba(91, 33, 182, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at bottom left, rgba(30, 64, 175, 0.1) 0%, transparent 50%);
+}
+
+/* Paper textures and hand-drawn elements */
+.paper-texture {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%239C92AC' fill-opacity='0.05' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+.handcrafted-card {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.handcrafted-border {
+  position: relative;
+  border-radius: 0.75rem;
+}
+
+.sketch-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.sketch-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 3px;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='3' viewBox='0 0 100 3' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,1.5 c5,0 5,-1 10,-1 s5,2 10,2 s5,-2 10,-2 s5,2 10,2 s5,-2 10,-2 s5,2 10,2 s5,-2 10,-2 s5,2 10,2 s5,-2 10,-2 s5,2 10,2' stroke='rgba(124, 58, 237, 0.5)' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: auto 100%;
+}
+
+.wavy-decoration {
+  position: relative;
+}
+
+.wavy-decoration::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 4px;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='4' viewBox='0 0 100 4' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,2 c5,0 5,-2 10,-2 s5,4 10,4 s5,-4 10,-4 s5,4 10,4 s5,-4 10,-4 s5,4 10,4 s5,-4 10,-4 s5,4 10,4 s5,-4 10,-4 s5,4 10,4' stroke='rgba(124, 58, 237, 0.3)' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: auto 100%;
+  pointer-events: none;
+}
+
+.brush-stroke {
+  position: relative;
+}
+
+.brush-stroke::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background-color: rgba(124, 58, 237, 0.2);
+  border-radius: 1px;
+}
+
+.hand-drawn-button {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.hand-drawn-button::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border: 2px solid;
+  border-color: inherit;
+  border-radius: inherit;
+  opacity: 0.3;
+  transform: rotate(-1deg);
+}
+
+.text-gradient {
+  background: linear-gradient(45deg, #8b5cf6, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
