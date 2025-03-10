@@ -8,7 +8,6 @@ import SettingsPanel from '@/components/SettingsPanel';
 import ChatNavigation from '@/components/ChatNavigation';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
-import TagFilterBar from '@/components/chat/TagFilterBar';
 import EmptyStateMessage from '@/components/chat/EmptyStateMessage';
 import { Character } from '@/types';
 
@@ -39,9 +38,6 @@ const ChatPage: React.FC = () => {
       setActiveCharacter(characters[0].id);
     }
   }, [id, characters, activeCharacter]);
-
-  // Get all unique tags from characters
-  const allTags = [...new Set(characters.flatMap(char => char.tags || []))];
 
   const handleCreateCharacter = () => {
     setEditingCharacter(null);
@@ -95,13 +91,15 @@ const ChatPage: React.FC = () => {
 
   return (
     <div className="flex flex-col md:flex-row h-screen overflow-hidden pt-0">
-      {/* Sidebar */}
+      {/* Sidebar with tag filtering */}
       <Sidebar 
         onCreateCharacter={handleCreateCharacter}
         onEditCharacter={handleEditCharacter}
         onSettingsOpen={() => setIsSettingsOpen(true)}
         isSidebarCollapsed={isSidebarCollapsed}
         toggleSidebar={toggleSidebar}
+        selectedTags={selectedTags}
+        toggleTag={toggleTag}
       />
 
       {/* Main content area */}
@@ -109,13 +107,6 @@ const ChatPage: React.FC = () => {
         <Header 
           activeCharacter={activeCharacter} 
           onReturnHome={handleReturnToLanding} 
-        />
-        
-        {/* Tags bar */}
-        <TagFilterBar 
-          allTags={allTags}
-          selectedTags={selectedTags}
-          toggleTag={toggleTag}
         />
         
         {activeCharacter ? (
@@ -143,7 +134,7 @@ const ChatPage: React.FC = () => {
           )
         ) : characters.length === 0 ? (
           <EmptyStateMessage
-            title="Welcome to AI Haven"
+            title="Welcome to LumeAI"
             description="Create your first character to start chatting."
             buttonText="Create New Character"
             onButtonClick={handleCreateCharacter}

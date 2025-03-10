@@ -42,6 +42,7 @@ const Header: React.FC<HeaderProps> = ({ activeCharacter, onReturnHome, onSettin
             <ArrowLeft className="h-5 w-5" />
           </Button>
         )}
+        {!isLandingPage && <span className="text-lg font-semibold">LumeAI</span>}
       </div>
       <div className="flex items-center gap-2">
         {activeCharacter && (

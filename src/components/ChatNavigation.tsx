@@ -38,7 +38,7 @@ const ChatNavigation: React.FC<ChatNavigationProps> = ({
               <span className="text-xs">Delete</span>
             </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent>
+          <AlertDialogContent className="border-destructive/50 bg-destructive/5">
             <AlertDialogHeader>
               <AlertDialogTitle className="text-destructive">Delete Character</AlertDialogTitle>
               <AlertDialogDescription className="text-destructive/80">

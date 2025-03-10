@@ -1,9 +1,10 @@
 
 import React, { useState, useMemo } from 'react';
-import { Settings, Plus, ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import { Settings, Plus, ChevronLeft, ChevronRight, Star, Tags } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCharacter } from '@/contexts/CharacterContext';
 import CharacterCard from '@/components/CharacterCard';
+import { Badge } from '@/components/ui/badge';
 
 interface SidebarProps {
   onCreateCharacter: () => void;
@@ -11,6 +12,8 @@ interface SidebarProps {
   onSettingsOpen: () => void;
   isSidebarCollapsed: boolean;
   toggleSidebar: () => void;
+  selectedTags: string[];
+  toggleTag: (tag: string) => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -19,6 +22,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   onSettingsOpen,
   isSidebarCollapsed,
   toggleSidebar,
+  selectedTags,
+  toggleTag,
 }) => {
   const { characters, setActiveCharacter, deleteCharacter, activeCharacter, toggleFavorite, cardSize } = useCharacter();
   const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
@@ -36,6 +41,17 @@ const Sidebar: React.FC<SidebarProps> = ({
     return 'massive';
   };
 
+  // Extract all tags from characters
+  const allTags = useMemo(() => {
+    const tagSet = new Set<string>();
+    characters.forEach(char => {
+      if (char.tags && char.tags.length > 0) {
+        char.tags.forEach(tag => tagSet.add(tag));
+      }
+    });
+    return Array.from(tagSet);
+  }, [characters]);
+
   // Filter and group characters
   const { favoriteCharacters, otherCharacters } = useMemo(() => {
     const favorites = characters.filter(c => c.isFavorite);
@@ -48,16 +64,29 @@ const Sidebar: React.FC<SidebarProps> = ({
   }, [characters]);
   
   // Characters to display based on filter
-  const displayCharacters = showOnlyFavorites 
-    ? favoriteCharacters 
-    : [...favoriteCharacters, ...otherCharacters];
+  const displayCharacters = useMemo(() => {
+    let filtered = showOnlyFavorites 
+      ? favoriteCharacters 
+      : [...favoriteCharacters, ...otherCharacters];
+    
+    // If tags are selected, filter by those tags
+    if (selectedTags.length > 0) {
+      filtered = filtered.filter(char => {
+        if (!char.tags || char.tags.length === 0) return false;
+        // Character must have ALL selected tags
+        return selectedTags.every(tag => char.tags?.includes(tag));
+      });
+    }
+    
+    return filtered;
+  }, [favoriteCharacters, otherCharacters, showOnlyFavorites, selectedTags]);
 
   return (
     <div className={`${isSidebarCollapsed ? 'w-0 md:w-16 overflow-hidden' : 'w-full md:w-[320px]'} border-r border-border bg-background/95 backdrop-blur-sm flex flex-col h-full transition-all duration-300 relative z-30`}>
       <div className="p-4 border-b flex justify-between items-center">
         {!isSidebarCollapsed && (
           <h1 className="text-xl font-bold text-gradient">
-            AI Haven
+            LumeAI
           </h1>
         )}
         <div className="flex items-center space-x-1">
@@ -87,9 +116,30 @@ const Sidebar: React.FC<SidebarProps> = ({
             </Button>
           </div>
 
-          {/* Filters */}
+          {/* Tags filter section */}
+          {allTags.length > 0 && (
+            <div className="px-4 pb-2">
+              <div className="flex items-center mb-2">
+                <Tags className="h-4 w-4 mr-2 text-muted-foreground" />
+                <h3 className="text-xs font-medium text-muted-foreground">Filter by Tags</h3>
+              </div>
+              <div className="flex flex-wrap gap-2 mb-3">
+                {allTags.map(tag => (
+                  <Badge 
+                    key={tag} 
+                    variant={selectedTags.includes(tag) ? "default" : "outline"}
+                    className="cursor-pointer transition-all hover:scale-105"
+                    onClick={() => toggleTag(tag)}
+                  >
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Favorites filter */}
           <div className="px-4 pb-2 space-y-2">
-            {/* Favorites filter */}
             <div className="flex items-center">
               <Button
                 variant="ghost"
@@ -128,91 +178,42 @@ const Sidebar: React.FC<SidebarProps> = ({
             ) : displayCharacters.length === 0 ? (
               <div className="text-center p-4">
                 <p className="text-sm text-muted-foreground">
-                  No favorites yet. Add characters to favorites to see them here.
+                  {selectedTags.length > 0 
+                    ? 'No characters match the selected tags.' 
+                    : 'No favorites yet. Add characters to favorites to see them here.'}
                 </p>
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-4">
-                {favoriteCharacters.length > 0 && !showOnlyFavorites && (
-                  <div className="col-span-1 mb-1">
-                    <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wider pl-2 mb-2">
-                      Favorites
-                    </h3>
-                    <div className="space-y-3">
-                      {favoriteCharacters.map((character) => (
-                        <CharacterCard
-                          key={character.id}
-                          character={character}
-                          onSelect={setActiveCharacter}
-                          onEdit={onEditCharacter}
-                          onDelete={deleteCharacter}
-                          onToggleFavorite={toggleFavorite}
-                          isActive={activeCharacter?.id === character.id}
-                          showPersonalityValues={false}
-                          compact={isCompact}
-                          sizeClass={getCardSizeClass()}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
-                {otherCharacters.length > 0 && !showOnlyFavorites && (
-                  <div className="col-span-1">
-                    {favoriteCharacters.length > 0 && (
-                      <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wider pl-2 mb-2">
-                        Others
-                      </h3>
-                    )}
-                    <div className="space-y-3">
-                      {otherCharacters.map((character) => (
-                        <CharacterCard
-                          key={character.id}
-                          character={character}
-                          onSelect={setActiveCharacter}
-                          onEdit={onEditCharacter}
-                          onDelete={deleteCharacter}
-                          onToggleFavorite={toggleFavorite}
-                          isActive={activeCharacter?.id === character.id}
-                          showPersonalityValues={false}
-                          compact={isCompact}
-                          sizeClass={getCardSizeClass()}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
-                {showOnlyFavorites && (
-                  <div className="space-y-3">
-                    {favoriteCharacters.map((character) => (
-                      <CharacterCard
-                        key={character.id}
-                        character={character}
-                        onSelect={setActiveCharacter}
-                        onEdit={onEditCharacter}
-                        onDelete={deleteCharacter}
-                        onToggleFavorite={toggleFavorite}
-                        isActive={activeCharacter?.id === character.id}
-                        showPersonalityValues={false}
-                        compact={isCompact}
-                        sizeClass={getCardSizeClass()}
-                      />
-                    ))}
-                  </div>
-                )}
+                {/* Show all filtered characters in one section */}
+                <div className="space-y-3">
+                  {displayCharacters.map((character) => (
+                    <CharacterCard
+                      key={character.id}
+                      character={character}
+                      onSelect={setActiveCharacter}
+                      onEdit={onEditCharacter}
+                      onDelete={deleteCharacter}
+                      onToggleFavorite={toggleFavorite}
+                      isActive={activeCharacter?.id === character.id}
+                      showPersonalityValues={false}
+                      compact={isCompact}
+                      sizeClass={getCardSizeClass()}
+                    />
+                  ))}
+                </div>
               </div>
             )}
           </div>
         </>
       )}
 
-      {/* Sidebar toggle button */}
+      {/* Sidebar toggle button - improved positioning */}
       <Button
         variant="ghost"
         size="icon"
         onClick={toggleSidebar}
-        className="absolute top-1/2 -right-4 h-8 w-8 rounded-full bg-background border border-border shadow-md z-40"
+        className="absolute top-1/2 -right-4 h-8 w-8 rounded-full bg-background border border-border shadow-md z-50"
       >
         {isSidebarCollapsed ? (
           <ChevronRight className="h-4 w-4" />
