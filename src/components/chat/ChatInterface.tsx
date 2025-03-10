@@ -170,7 +170,7 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
   };
 
   return (
-    <div className="flex flex-col h-full overflow-hidden relative">
+    <div className="flex flex-col h-screen overflow-hidden relative">
       {/* Ambient background elements */}
       <div className="absolute inset-0 pointer-events-none z-0">
         {/* Gradient background overlay */}
@@ -204,10 +204,10 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
       {/* Character info bar */}
       <ChatHeader character={character} />
       
-      {/* Messages container */}
+      {/* Messages container - adjust the padding-bottom to create space for the fixed input */}
       <div 
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto styled-scrollbar scrollbar-none z-10 bg-gradient-to-b from-background/70 to-background/40"
+        className="flex-1 overflow-y-auto styled-scrollbar scrollbar-none z-10 bg-gradient-to-b from-background/70 to-background/40 pb-[80px]"
       >
         {messages.length === 0 ? (
           <WelcomeMessage character={character} />
@@ -243,7 +243,7 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
         )}
       </div>
 
-      {/* Input area */}
+      {/* Input area - now positioned fixed at bottom */}
       <ChatInput 
         message={message}
         setMessage={setMessage}

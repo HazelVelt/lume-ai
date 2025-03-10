@@ -32,8 +32,8 @@ const ChatInput: React.FC<ChatInputProps> = ({
   };
 
   return (
-    <Card className="border-t border-accent1/20 glass-morphism sticky bottom-0 z-10 shadow-lg rounded-none">
-      <CardContent className="p-3">
+    <Card className="border-t border-accent1/20 glass-morphism fixed bottom-0 left-0 right-0 z-20 shadow-lg rounded-none">
+      <CardContent className="p-3 max-w-5xl mx-auto">
         <div className="flex items-end gap-2">
           <div className="relative flex-1">
             <Textarea
