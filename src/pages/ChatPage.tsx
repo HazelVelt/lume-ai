@@ -8,6 +8,8 @@ import SettingsPanel from '@/components/SettingsPanel';
 import Sidebar from '@/components/Sidebar';
 import EmptyStateMessage from '@/components/chat/EmptyStateMessage';
 import { Character } from '@/types';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 const ChatPage: React.FC = () => {
   const { id } = useParams();
@@ -18,6 +20,8 @@ const ChatPage: React.FC = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [characterToDelete, setCharacterToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     if (id && id !== 'new') {
@@ -48,8 +52,15 @@ const ChatPage: React.FC = () => {
   };
 
   const handleDeleteCharacter = (id: string) => {
-    if (!isDeleting) {
-      deleteCharacter(id);
+    setCharacterToDelete(id);
+    setShowDeleteDialog(true);
+  };
+
+  const confirmDeleteCharacter = () => {
+    if (characterToDelete && !isDeleting) {
+      deleteCharacter(characterToDelete);
+      setShowDeleteDialog(false);
+      setCharacterToDelete(null);
     }
   };
 
@@ -114,6 +125,7 @@ const ChatPage: React.FC = () => {
       <Sidebar 
         onCreateCharacter={handleCreateCharacter}
         onEditCharacter={handleEditCharacter}
+        onDeleteCharacter={handleDeleteCharacter}
         onSettingsOpen={() => setIsSettingsOpen(true)}
         isSidebarCollapsed={isSidebarCollapsed}
         toggleSidebar={toggleSidebar}
@@ -166,6 +178,24 @@ const ChatPage: React.FC = () => {
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
       />
+
+      {/* Confirmation dialog for deleting characters */}
+      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Delete Character</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this character? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>Cancel</Button>
+            <Button variant="destructive" onClick={confirmDeleteCharacter} disabled={isDeleting}>
+              {isDeleting ? 'Deleting...' : 'Delete'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

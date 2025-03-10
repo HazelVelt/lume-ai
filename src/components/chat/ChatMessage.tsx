@@ -1,20 +1,22 @@
 
 import React from 'react';
 import { Character, ChatMessage as ChatMessageType } from '@/types';
-import { CircleCheckIcon, ClockIcon, Sparkles } from 'lucide-react';
+import { CircleCheckIcon, ClockIcon, Sparkles, AlertTriangleIcon } from 'lucide-react';
 
 interface ChatMessageProps {
   message: ChatMessageType;
   character: Character;
   formatTime: (timestamp: number) => string;
   isTyping?: boolean;
+  isError?: boolean;
 }
 
 const ChatMessage: React.FC<ChatMessageProps> = ({ 
   message, 
   character, 
   formatTime,
-  isTyping = false 
+  isTyping = false,
+  isError = false
 }) => {
   return (
     <div
@@ -83,6 +85,13 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
                 </div>
               </div>
             )}
+            {isError && (
+              <div className="mt-2 relative h-1.5 bg-destructive/10 rounded-full overflow-hidden">
+                <div className="absolute inset-0 bg-destructive/50 rounded-full animate-pulse-soft">
+                  <div className="h-full bg-destructive rounded-full animate-progress"></div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         
@@ -95,6 +104,11 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
             <>
               <ClockIcon className="h-3 w-3" />
               <span>Typing...</span>
+            </>
+          ) : isError ? (
+            <>
+              <AlertTriangleIcon className="h-3 w-3 text-destructive" />
+              <span className="text-destructive">Connection trouble</span>
             </>
           ) : (
             <>
