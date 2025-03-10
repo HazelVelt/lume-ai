@@ -22,6 +22,7 @@ interface CharacterCardProps {
   onDelete: (id: string) => void;
   isActive?: boolean;
   showPersonalityValues?: boolean;
+  compact?: boolean;
 }
 
 const CharacterCard: React.FC<CharacterCardProps> = ({
@@ -31,6 +32,7 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
   onDelete,
   isActive = false,
   showPersonalityValues = true,
+  compact = false,
 }) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
@@ -42,6 +44,16 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
     onDelete(character.id);
     setDeleteDialogOpen(false);
   };
+
+  // Card styles based on compact mode
+  const imageHeight = compact ? 'h-24' : 'h-36';
+  const contentPadding = compact ? 'p-2' : 'p-3';
+  const buttonHeight = compact ? 'h-6' : 'h-7';
+  const buttonTextSize = compact ? 'text-[10px]' : 'text-xs';
+  const iconSize = compact ? 'h-2.5 w-2.5' : 'h-3 w-3';
+  const nameSize = compact ? 'text-sm' : 'text-lg';
+  const descriptionHeight = compact ? 'h-6' : 'h-8';
+  const descriptionTextSize = compact ? 'text-[10px]' : 'text-xs';
 
   return (
     <>
@@ -56,23 +68,23 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
           <img
             src={character.imageUrl || '/character-placeholder.jpg'}
             alt={character.name}
-            className="w-full h-36 object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            className={`w-full ${imageHeight} object-cover transition-transform duration-500 group-hover:scale-[1.03]`}
             onError={(e) => {
               (e.target as HTMLImageElement).src = '/character-placeholder.jpg';
             }}
           />
           
-          <div className="absolute bottom-0 left-0 right-0 p-3 z-20">
-            <h3 className="text-lg font-semibold text-foreground truncate">{character.name}</h3>
+          <div className="absolute bottom-0 left-0 right-0 p-2 z-20">
+            <h3 className={`${nameSize} font-semibold text-foreground truncate`}>{character.name}</h3>
           </div>
         </div>
         
-        <CardContent className="p-3 space-y-2">
-          <p className="text-xs text-muted-foreground line-clamp-2 h-8">
+        <CardContent className={`${contentPadding} space-y-1`}>
+          <p className={`${descriptionTextSize} text-muted-foreground line-clamp-2 ${descriptionHeight}`}>
             {character.description}
           </p>
           
-          {showPersonalityValues && (
+          {showPersonalityValues && !compact && (
             <div className="space-y-1">
               <div className="grid grid-cols-3 gap-1 text-xs">
                 <div className="flex flex-col">
@@ -95,30 +107,32 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
             <Button
               variant="outline"
               size="sm"
-              className="flex-1 mr-1 transition-all hover:bg-accent1/20 h-7 text-xs"
+              className={`flex-1 mr-1 transition-all hover:bg-accent1/20 ${buttonHeight} ${buttonTextSize}`}
               onClick={() => onEdit(character.id)}
             >
-              <Pencil className="h-3 w-3 mr-1" /> Edit
+              <Pencil className={`${iconSize} mr-1`} /> Edit
             </Button>
             
             <Button
               variant="default"
               size="sm"
-              className="flex-1 ml-1 bg-accent1 hover:bg-accent1/80 h-7 text-xs"
+              className={`flex-1 ml-1 bg-accent1 hover:bg-accent1/80 ${buttonHeight} ${buttonTextSize}`}
               onClick={() => onSelect(character.id)}
             >
-              <MessageCircle className="h-3 w-3 mr-1" /> Chat
+              <MessageCircle className={`${iconSize} mr-1`} /> Chat
             </Button>
           </div>
           
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="w-full text-destructive hover:text-destructive hover:bg-destructive/10 h-7 text-xs mt-1"
-            onClick={handleDelete}
-          >
-            <Trash2 className="h-3 w-3 mr-1" /> Delete
-          </Button>
+          {!compact && (
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className={`w-full text-destructive hover:text-destructive hover:bg-destructive/10 ${buttonHeight} ${buttonTextSize} mt-1`}
+              onClick={handleDelete}
+            >
+              <Trash2 className={`${iconSize} mr-1`} /> Delete
+            </Button>
+          )}
         </CardContent>
       </Card>
 
