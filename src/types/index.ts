@@ -14,6 +14,11 @@ export interface Character {
     confidence: number;
     curiosity: number;
     reliability: number;
+    passion: number;
+    sensuality: number;
+    flirtatiousness: number;
+    adventurousness: number;
+    intensity: number;
   };
   imageUrl: string;
   defaultPrompt: string;

@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -295,6 +296,33 @@
     box-shadow: 5px 5px 0 rgba(0,0,0,0.05);
     transition: all 0.2s ease;
   }
+
+  /* New handcrafted UI elements */
+  .artisanal-bubble {
+    @apply relative border-2 border-accent1/30 bg-accent1/5 rounded-2xl px-6 py-4;
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.07);
+  }
+  
+  .artisanal-bubble::before {
+    content: '';
+    @apply absolute bg-accent1/5 border-2 border-accent1/30 w-4 h-4 rounded-full -bottom-2 left-6;
+    transform: rotate(45deg);
+  }
+  
+  .torn-edge {
+    @apply relative overflow-hidden;
+    mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,0 L100,0 L100,90 C95,91 90,89 85,92 C80,95 75,91 70,94 C65,97 60,93 55,96 C50,99 45,95 40,98 C35,101 30,97 25,99 C20,101 15,97 10,100 C5,103 0,99 0,95 Z' fill='%23000'/%3E%3C/svg%3E");
+  }
+  
+  .brush-stroke {
+    position: relative;
+  }
+  
+  .brush-stroke::after {
+    content: '';
+    @apply absolute -bottom-1 left-0 right-0 h-1.5 bg-accent1/30;
+    mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,10 Q10,5 20,10 T40,10 T60,10 T80,10 T100,10' stroke='%23000' stroke-width='8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  }
   
   .sketch-underline {
     @apply relative inline-block;
@@ -360,6 +388,37 @@
       currentColor 8px
     );
     opacity: 0.4;
+  }
+
+  /* New elements for NSFW themes */
+  .passion-gradient {
+    background: linear-gradient(135deg, rgba(252,92,125,0.2) 0%, rgba(106,130,251,0.2) 100%);
+  }
+  
+  .sensual-border {
+    @apply relative rounded-md overflow-hidden;
+  }
+  
+  .sensual-border::before {
+    content: '';
+    @apply absolute inset-0 border-2 border-accent1/40 rounded-md;
+    filter: blur(2px);
+    animation: pulse-border 3s infinite alternate;
+  }
+  
+  .flame-shadow {
+    box-shadow: 0 0 15px 5px rgba(255, 100, 50, 0.2);
+    animation: flame-pulse 2s infinite alternate;
+  }
+  
+  @keyframes pulse-border {
+    0% { opacity: 0.3; }
+    100% { opacity: 0.8; }
+  }
+  
+  @keyframes flame-pulse {
+    0% { box-shadow: 0 0 15px 5px rgba(255, 100, 50, 0.2); }
+    100% { box-shadow: 0 0 20px 8px rgba(255, 100, 50, 0.3); }
   }
 
   @keyframes ripple {

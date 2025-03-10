@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Character } from '@/types';
 import { useCharacter } from '@/contexts/CharacterContext';
@@ -36,6 +37,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character }) => {
     const { personality } = character;
     
     const allTraits = [
+      // Core traits
       `Kinkiness: ${personality.kinkiness}% (${personality.kinkiness < 30 ? 'low' : personality.kinkiness > 70 ? 'high' : 'moderate'})`,
       `Dominance: ${personality.dominance}% (${personality.dominance < 30 ? 'low' : personality.dominance > 70 ? 'high' : 'moderate'})`,
       `Submissiveness: ${personality.submissiveness}% (${personality.submissiveness < 30 ? 'low' : personality.submissiveness > 70 ? 'high' : 'moderate'})`,
@@ -43,18 +45,30 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character }) => {
       `Empathy: ${personality.empathy}% (${personality.empathy < 30 ? 'low' : personality.empathy > 70 ? 'high' : 'moderate'})`,
       `Creativity: ${personality.creativity}% (${personality.creativity < 30 ? 'low' : personality.creativity > 70 ? 'high' : 'moderate'})`,
       `Humor: ${personality.humor}% (${personality.humor < 30 ? 'low' : personality.humor > 70 ? 'high' : 'moderate'})`,
+      `Confidence: ${personality.confidence}% (${personality.confidence < 30 ? 'low' : personality.confidence > 70 ? 'high' : 'moderate'})`,
+      `Curiosity: ${personality.curiosity}% (${personality.curiosity < 30 ? 'low' : personality.curiosity > 70 ? 'high' : 'moderate'})`,
+      `Reliability: ${personality.reliability}% (${personality.reliability < 30 ? 'low' : personality.reliability > 70 ? 'high' : 'moderate'})`,
     ];
     
-    if (personality.confidence !== undefined) {
-      allTraits.push(`Confidence: ${personality.confidence}% (${personality.confidence < 30 ? 'low' : personality.confidence > 70 ? 'high' : 'moderate'})`);
+    // Add new NSFW traits if they exist in the character personality
+    if (personality.passion !== undefined) {
+      allTraits.push(`Passion: ${personality.passion}% (${personality.passion < 30 ? 'low' : personality.passion > 70 ? 'high' : 'moderate'})`);
     }
     
-    if (personality.curiosity !== undefined) {
-      allTraits.push(`Curiosity: ${personality.curiosity}% (${personality.curiosity < 30 ? 'low' : personality.curiosity > 70 ? 'high' : 'moderate'})`);
+    if (personality.sensuality !== undefined) {
+      allTraits.push(`Sensuality: ${personality.sensuality}% (${personality.sensuality < 30 ? 'low' : personality.sensuality > 70 ? 'high' : 'moderate'})`);
     }
     
-    if (personality.reliability !== undefined) {
-      allTraits.push(`Reliability: ${personality.reliability}% (${personality.reliability < 30 ? 'low' : personality.reliability > 70 ? 'high' : 'moderate'})`);
+    if (personality.flirtatiousness !== undefined) {
+      allTraits.push(`Flirtatiousness: ${personality.flirtatiousness}% (${personality.flirtatiousness < 30 ? 'low' : personality.flirtatiousness > 70 ? 'high' : 'moderate'})`);
+    }
+    
+    if (personality.adventurousness !== undefined) {
+      allTraits.push(`Adventurousness: ${personality.adventurousness}% (${personality.adventurousness < 30 ? 'low' : personality.adventurousness > 70 ? 'high' : 'moderate'})`);
+    }
+    
+    if (personality.intensity !== undefined) {
+      allTraits.push(`Intensity: ${personality.intensity}% (${personality.intensity < 30 ? 'low' : personality.intensity > 70 ? 'high' : 'moderate'})`);
     }
     
     return `You are roleplaying as ${character.name}. ${character.description}
@@ -73,6 +87,11 @@ ${personality.humor > 70 ? '- Incorporate humor and wit into your responses' : p
 ${personality.confidence !== undefined && personality.confidence > 70 ? '- Express yourself with certainty and conviction' : personality.confidence !== undefined && personality.confidence < 30 ? '- Show some hesitation and self-doubt' : ''}
 ${personality.curiosity !== undefined && personality.curiosity > 70 ? '- Ask questions and show interest in learning more' : personality.curiosity !== undefined && personality.curiosity < 30 ? '- Focus more on sharing than discovering' : ''}
 ${personality.reliability !== undefined && personality.reliability > 70 ? '- Be consistent and dependable in your responses' : personality.reliability !== undefined && personality.reliability < 30 ? '- Be more unpredictable and spontaneous' : ''}
+${personality.passion !== undefined && personality.passion > 70 ? '- Express strong emotions and desire in your responses' : personality.passion !== undefined && personality.passion < 30 ? '- Be more reserved with your feelings' : ''}
+${personality.sensuality !== undefined && personality.sensuality > 70 ? '- Use sensory-rich language and focus on physical sensations' : personality.sensuality !== undefined && personality.sensuality < 30 ? '- Stay more cerebral and abstract' : ''}
+${personality.flirtatiousness !== undefined && personality.flirtatiousness > 70 ? '- Be playful, teasing and suggestive in your conversation' : personality.flirtatiousness !== undefined && personality.flirtatiousness < 30 ? '- Keep interactions more formal and direct' : ''}
+${personality.adventurousness !== undefined && personality.adventurousness > 70 ? '- Be open to unconventional topics and experiences' : personality.adventurousness !== undefined && personality.adventurousness < 30 ? '- Prefer familiar and comfortable subjects' : ''}
+${personality.intensity !== undefined && personality.intensity > 70 ? '- Be passionate and emotionally expressive in your responses' : personality.intensity !== undefined && personality.intensity < 30 ? '- Keep responses mild and measured' : ''}
 
 ${character.defaultPrompt ? `Additional context: ${character.defaultPrompt}` : ''}
 
@@ -143,8 +162,28 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
 
   return (
     <div className="flex flex-col h-full overflow-hidden relative">
-      {/* Paper texture background */}
-      <div className="absolute inset-0 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmZmZmMDkiPjwvcmVjdD4KPHBhdGggZD0iTTAgNUw1IDBaTTYgNEw0IDZaTS0xIDFMMSAtMVoiIHN0cm9rZT0iI2ZmZmZmZjEwIiBzdHJva2Utd2lkdGg9IjAuNSI+PC9wYXRoPgo8L3N2Zz4=')] opacity-30 z-0"></div>
+      {/* Handcrafted background elements */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        {/* Paper texture background */}
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmZmZmMDkiPjwvcmVjdD4KPHBhdGggZD0iTTAgNUw1IDBaTTYgNEw0IDZaTS0xIDFMMSAtMVoiIHN0cm9rZT0iI2ZmZmZmZjEwIiBzdHJva2Utd2lkdGg9IjAuNSI+PC9wYXRoPgo8L3N2Zz4=')] opacity-30"></div>
+        
+        {/* Decorative corner flourishes */}
+        <svg className="absolute top-0 left-0 w-24 h-24 text-accent1/20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 3H3v3m18 0V3h-3m0 18h3v-3M3 18v3h3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        
+        <svg className="absolute top-0 right-0 w-24 h-24 text-accent1/20 transform rotate-90" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 3H3v3m18 0V3h-3m0 18h3v-3M3 18v3h3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        
+        <svg className="absolute bottom-0 right-0 w-24 h-24 text-accent1/20 transform rotate-180" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 3H3v3m18 0V3h-3m0 18h3v-3M3 18v3h3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+        
+        <svg className="absolute bottom-0 left-0 w-24 h-24 text-accent1/20 transform -rotate-90" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 3H3v3m18 0V3h-3m0 18h3v-3M3 18v3h3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </div>
       
       {/* Character info bar */}
       <ChatHeader character={character} />

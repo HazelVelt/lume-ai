@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -13,7 +12,8 @@ import stabilityAIService from '@/services/stabilityAIService';
 import { toast } from 'sonner';
 import { 
   Loader2, RefreshCw, User, Upload, X, Tag as TagIcon, 
-  Plus, Search, Palette, Brush, Wand2, Pencil, Sparkles
+  Plus, Search, Palette, Brush, Wand2, Pencil, Sparkles,
+  Heart, Flame, VenetianMask, Vibrate, Zap
 } from 'lucide-react';
 
 interface CharacterEditorProps {
@@ -52,6 +52,11 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
     confidence: 50,
     curiosity: 50,
     reliability: 50,
+    passion: 50,
+    sensuality: 50,
+    flirtatiousness: 50,
+    adventurousness: 50,
+    intensity: 50,
   });
 
   useEffect(() => {
@@ -72,6 +77,11 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
         confidence: character.personality.confidence || 50,
         curiosity: character.personality.curiosity || 50,
         reliability: character.personality.reliability || 50,
+        passion: character.personality.passion || 50,
+        sensuality: character.personality.sensuality || 50,
+        flirtatiousness: character.personality.flirtatiousness || 50,
+        adventurousness: character.personality.adventurousness || 50,
+        intensity: character.personality.intensity || 50,
       });
     } else {
       setName('');
@@ -91,6 +101,11 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
         confidence: 50,
         curiosity: 50,
         reliability: 50,
+        passion: 50,
+        sensuality: 50,
+        flirtatiousness: 50,
+        adventurousness: 50,
+        intensity: 50,
       });
     }
   }, [character, isOpen]);
@@ -229,12 +244,11 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
   };
 
   const personalitySliders = [
-    // Emotional traits
     { 
       key: 'empathy', 
       label: 'Empathy', 
       description: 'How understanding and compassionate the character is',
-      icon: <Palette className="h-4 w-4" />
+      icon: <Heart className="h-4 w-4" />
     },
     { 
       key: 'humor', 
@@ -242,7 +256,6 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
       description: 'How funny and witty the character is',
       icon: <Sparkles className="h-4 w-4" />
     },
-    // Intellectual traits
     { 
       key: 'intelligence', 
       label: 'Intelligence', 
@@ -261,7 +274,6 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
       description: 'How eager the character is to learn and explore',
       icon: <Sparkles className="h-4 w-4" />
     },
-    // Personality core traits
     { 
       key: 'confidence', 
       label: 'Confidence', 
@@ -274,7 +286,6 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
       description: 'How dependable and trustworthy the character is',
       icon: <Pencil className="h-4 w-4" />
     },
-    // Relationship dynamics
     { 
       key: 'dominance', 
       label: 'Dominance', 
@@ -290,8 +301,38 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
     { 
       key: 'kinkiness', 
       label: 'Kinkiness', 
-      description: 'How open-minded and adventurous the character is',
-      icon: <Sparkles className="h-4 w-4" />
+      description: 'How open to unconventional desires and fantasies',
+      icon: <VenetianMask className="h-4 w-4" />
+    },
+    { 
+      key: 'passion', 
+      label: 'Passion', 
+      description: 'How intense and enthusiastic in romantic situations',
+      icon: <Flame className="h-4 w-4" />
+    },
+    { 
+      key: 'sensuality', 
+      label: 'Sensuality', 
+      description: 'How attuned to physical pleasure and touch',
+      icon: <Vibrate className="h-4 w-4" />
+    },
+    { 
+      key: 'flirtatiousness', 
+      label: 'Flirtatiousness', 
+      description: 'How playful and suggestive in conversations',
+      icon: <Heart className="h-4 w-4" />
+    },
+    { 
+      key: 'adventurousness', 
+      label: 'Adventurousness', 
+      description: 'How willing to try new experiences',
+      icon: <Flame className="h-4 w-4" />
+    },
+    { 
+      key: 'intensity', 
+      label: 'Intensity', 
+      description: 'How powerful and focused their emotions and desires',
+      icon: <Zap className="h-4 w-4" />
     },
   ];
 

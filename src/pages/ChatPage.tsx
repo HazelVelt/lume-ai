@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCharacter } from '@/contexts/CharacterContext';
@@ -84,8 +85,32 @@ const ChatPage: React.FC = () => {
     }
   }, [selectedTags]);
 
+  // Add decorative elements to create a handcrafted look
+  const decorativeElements = (
+    <div className="fixed inset-0 pointer-events-none z-0">
+      {/* Top-left corner flourish */}
+      <svg className="absolute top-5 left-5 w-24 h-24 text-accent1/5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10,10 Q30,5 50,10 T90,10" fill="none" stroke="currentColor" strokeWidth="2" />
+        <path d="M10,20 Q30,15 50,20 T90,20" fill="none" stroke="currentColor" strokeWidth="2" />
+        <path d="M10,30 Q30,25 50,30 T90,30" fill="none" stroke="currentColor" strokeWidth="2" />
+      </svg>
+      
+      {/* Bottom-right corner flourish */}
+      <svg className="absolute bottom-5 right-5 w-24 h-24 text-accent1/5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10,70 Q30,65 50,70 T90,70" fill="none" stroke="currentColor" strokeWidth="2" />
+        <path d="M10,80 Q30,75 50,80 T90,80" fill="none" stroke="currentColor" strokeWidth="2" />
+        <path d="M10,90 Q30,85 50,90 T90,90" fill="none" stroke="currentColor" strokeWidth="2" />
+      </svg>
+      
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0wIDIwQzAgOC45NTQgOC45NTQgMCAyMCAwczIwIDguOTU0IDIwIDIwLTguOTU0IDIwLTIwIDIwUzAgMzEuMDQ2IDAgMjB6IiBmaWxsPSIjZmZmZmZmMDUiLz48L2c+PC9zdmc+')] opacity-10"></div>
+    </div>
+  );
+
   return (
-    <div className="flex flex-col md:flex-row h-screen overflow-hidden">
+    <div className="flex flex-col md:flex-row h-screen overflow-hidden relative">
+      {decorativeElements}
+      
       <Sidebar 
         onCreateCharacter={handleCreateCharacter}
         onEditCharacter={handleEditCharacter}

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Character } from '@/types';
-import { MessageSquare, Sparkles, Pencil } from 'lucide-react';
+import { MessageSquare, Sparkles, Pencil, VenetianMask, Flame, Heart, Vibrate } from 'lucide-react';
 
 interface WelcomeMessageProps {
   character: Character;
@@ -108,8 +108,8 @@ const WelcomeMessage: React.FC<WelcomeMessageProps> = ({ character }) => {
         <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 rounded-full bg-accent1/40"></div>
       </div>
       
-      {/* Add some CSS for the animations */}
-      <style jsx>{`
+      <style>
+        {`
         @keyframes ping-slow {
           0% { transform: scale(1); opacity: 0.8; }
           50% { transform: scale(1.1); opacity: 0.4; }
@@ -148,7 +148,8 @@ const WelcomeMessage: React.FC<WelcomeMessageProps> = ({ character }) => {
         .handcrafted-callout {
           box-shadow: 0 6px 15px -3px rgba(0, 0, 0, 0.1);
         }
-      `}</style>
+        `}
+      </style>
     </div>
   );
 };
