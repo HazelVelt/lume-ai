@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -8,7 +9,7 @@ import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ollamaService from '@/services/ollamaService';
 import stabilityAIService from '@/services/stabilityAIService';
-import { Loader2, Moon, Sun, Palette, CreditCard, Droplets, Sunset } from 'lucide-react';
+import { Loader2, Moon, Sun, Palette, CreditCard, Droplets, Sunset, Gem, Heart, ScrollText } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { ThemeType } from '@/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -96,6 +97,9 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
     { label: 'Purple', value: 'purple', icon: <Palette className="h-5 w-5" /> },
     { label: 'Ocean', value: 'ocean', icon: <Droplets className="h-5 w-5" /> },
     { label: 'Sunset', value: 'sunset', icon: <Sunset className="h-5 w-5" /> },
+    { label: 'Emerald', value: 'emerald', icon: <Gem className="h-5 w-5" /> },
+    { label: 'Cherry', value: 'cherry', icon: <Heart className="h-5 w-5" /> },
+    { label: 'Midnight', value: 'midnight', icon: <ScrollText className="h-5 w-5" /> },
   ];
   
   const handleSave = () => {
@@ -283,18 +287,18 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
           <TabsContent value="appearance" className="space-y-4 py-4">
             <div className="space-y-2">
               <Label>Theme</Label>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-4 gap-3">
                 {themeOptions.map((option) => (
                   <Button 
                     key={option.value}
                     variant={theme === option.value ? 'default' : 'outline'}
-                    className={`flex items-center justify-center gap-2 py-6 ${
-                      theme === option.value ? 'bg-accent1 hover:bg-accent1/80' : ''
+                    className={`flex items-center justify-center gap-2 py-4 flex-col ${
+                      theme === option.value ? 'bg-accent1 hover:bg-accent1/80 dark:text-black' : ''
                     }`}
                     onClick={() => setTheme(option.value)}
                   >
                     {option.icon}
-                    <span>{option.label}</span>
+                    <span className="text-xs">{option.label}</span>
                   </Button>
                 ))}
               </div>
@@ -334,7 +338,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button onClick={handleSave} className="bg-accent1 hover:bg-accent1/80">
+          <Button onClick={handleSave} className="bg-accent1 hover:bg-accent1/80 dark:text-black">
             Save Changes
           </Button>
         </DialogFooter>

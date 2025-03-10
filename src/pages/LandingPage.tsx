@@ -5,17 +5,33 @@ import { Button } from '@/components/ui/button';
 import { MessageSquare, Wand2, Users, Bot, Heart, Sparkles, Palette, Star, ArrowRight } from 'lucide-react';
 import Header from '@/components/Header';
 import SettingsPanel from '@/components/SettingsPanel';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const { theme } = useTheme();
   
   const handleCreateCharacter = () => {
     navigate('/chat');
   };
 
+  // Determine gradient class based on theme
+  const getGradientClass = () => {
+    switch (theme) {
+      case 'dark': return 'landing-gradient-dark';
+      case 'purple': return 'landing-gradient-purple';
+      case 'ocean': return 'landing-gradient-ocean';
+      case 'sunset': return 'landing-gradient-sunset';
+      case 'emerald': return 'landing-gradient-emerald';
+      case 'cherry': return 'landing-gradient-cherry';
+      case 'midnight': return 'landing-gradient-midnight';
+      default: return 'landing-gradient-light';
+    }
+  };
+
   return (
-    <div className="flex flex-col min-h-screen bg-background paper-texture">
+    <div className={`flex flex-col min-h-screen bg-background paper-texture ${getGradientClass()}`}>
       <Header 
         activeCharacter={null} 
         onReturnHome={() => {}} 
@@ -43,7 +59,7 @@ const LandingPage: React.FC = () => {
             <Button 
               onClick={handleCreateCharacter}
               size="lg"
-              className="hand-drawn-button shadow-accent1/40 bg-accent1 text-white hover:bg-accent1/90 transform hover:-rotate-1"
+              className="hand-drawn-button shadow-accent1/40 bg-accent1 hover:bg-accent1/90 transform hover:-rotate-1 dark:text-black"
             >
               <Sparkles className="mr-2 h-5 w-5 animate-pulse-soft" />
               Start Chatting

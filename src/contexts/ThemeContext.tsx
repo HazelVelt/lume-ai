@@ -19,7 +19,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const toggleTheme = () => {
     setTheme(prevTheme => {
-      const themes: ThemeType[] = ['light', 'dark', 'purple', 'ocean', 'sunset'];
+      const themes: ThemeType[] = ['light', 'dark', 'purple', 'ocean', 'sunset', 'emerald', 'cherry', 'midnight'];
       const currentIndex = themes.indexOf(prevTheme);
       const nextIndex = (currentIndex + 1) % themes.length;
       return themes[nextIndex];
@@ -30,7 +30,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     localStorage.setItem('theme', theme);
     
     // Remove all theme classes first
-    document.documentElement.classList.remove('dark', 'purple', 'ocean', 'sunset');
+    document.documentElement.classList.remove('dark', 'purple', 'ocean', 'sunset', 'emerald', 'cherry', 'midnight');
     
     // Add the current theme class
     if (theme !== 'light') {
