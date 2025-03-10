@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Character, ChatMessage, ModelConfig } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
@@ -21,6 +20,7 @@ type CharacterContextType = {
   updateModelConfig: (type: 'llm' | 'imageGen', config: Partial<ModelConfig>) => void;
   toggleFavorite: (id: string) => void;
   updateCardSize: (size: number) => void;
+  isDeleting: boolean;
 };
 
 const defaultModelConfig = {
@@ -45,8 +45,8 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [conversations, setConversations] = useState<Record<string, ChatMessage[]>>({});
   const [modelConfig, setModelConfig] = useState(defaultModelConfig);
   const [cardSize, setCardSize] = useState<number>(50);
+  const [isDeleting, setIsDeleting] = useState(false);
   
-  // Load from localStorage on initialization
   useEffect(() => {
     try {
       const savedCharacters = localStorage.getItem('aiCharacters');
@@ -74,7 +74,6 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
   }, []);
   
-  // Save to localStorage when state changes
   useEffect(() => {
     localStorage.setItem('aiCharacters', JSON.stringify(characters));
   }, [characters]);
@@ -111,21 +110,30 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   };
   
   const deleteCharacter = (id: string) => {
-    const character = characters.find(c => c.id === id);
-    setCharacters((prev) => prev.filter((char) => char.id !== id));
+    if (isDeleting) return;
     
-    if (activeCharacter?.id === id) {
-      setActiveCharacter(null);
+    setIsDeleting(true);
+    
+    try {
+      const character = characters.find(c => c.id === id);
+      setCharacters((prev) => prev.filter((char) => char.id !== id));
+      
+      if (activeCharacter?.id === id) {
+        setActiveCharacter(null);
+      }
+      
+      setConversations((prev) => {
+        const newConversations = { ...prev };
+        delete newConversations[id];
+        return newConversations;
+      });
+      
+      toast.success(`Deleted character: ${character?.name || 'Character'}`, { duration: 1000 });
+    } finally {
+      setTimeout(() => {
+        setIsDeleting(false);
+      }, 300);
     }
-    
-    // Also delete conversations
-    setConversations((prev) => {
-      const newConversations = { ...prev };
-      delete newConversations[id];
-      return newConversations;
-    });
-    
-    toast.success(`Deleted character: ${character?.name || 'Character'}`, { duration: 1000 });
   };
   
   const setActiveCharacterById = (id: string) => {
@@ -192,6 +200,7 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         conversations,
         cardSize,
         modelConfig,
+        isDeleting,
         createCharacter,
         updateCharacter,
         deleteCharacter,

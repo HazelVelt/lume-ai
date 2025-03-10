@@ -14,7 +14,7 @@ import { Character } from '@/types';
 const ChatPage: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { characters, activeCharacter, setActiveCharacter, deleteCharacter } = useCharacter();
+  const { characters, activeCharacter, setActiveCharacter, deleteCharacter, isDeleting } = useCharacter();
   const [editingCharacter, setEditingCharacter] = useState<Character | null>(null);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -49,6 +49,13 @@ const ChatPage: React.FC = () => {
     if (character) {
       setEditingCharacter(character);
       setIsEditorOpen(true);
+    }
+  };
+
+  const handleDeleteCharacter = (id: string) => {
+    // Prevent double deletion by checking isDeleting flag
+    if (!isDeleting) {
+      deleteCharacter(id);
     }
   };
 
@@ -119,7 +126,7 @@ const ChatPage: React.FC = () => {
               <ChatNavigation 
                 character={activeCharacter}
                 onEdit={handleEditCharacter}
-                onDelete={deleteCharacter}
+                onDelete={handleDeleteCharacter}
               />
             </>
           ) : (

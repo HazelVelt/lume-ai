@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Settings, Plus, ChevronLeft, ChevronRight, Heart, Tags } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -28,10 +27,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   const { characters, setActiveCharacter, deleteCharacter, activeCharacter, toggleFavorite, cardSize } = useCharacter();
   const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
   
-  // Calculate if cards should be compact based on scale
   const isCompact = cardSize < 40;
   
-  // Calculate specific card size class based on the scale
   const getCardSizeClass = () => {
     if (cardSize < 20) return 'super-compact';
     if (cardSize < 35) return 'compact';
@@ -41,7 +38,6 @@ const Sidebar: React.FC<SidebarProps> = ({
     return 'massive';
   };
 
-  // Extract all tags from characters
   const allTags = useMemo(() => {
     const tagSet = new Set<string>();
     characters.forEach(char => {
@@ -52,7 +48,6 @@ const Sidebar: React.FC<SidebarProps> = ({
     return Array.from(tagSet);
   }, [characters]);
 
-  // Filter and group characters
   const { favoriteCharacters, otherCharacters } = useMemo(() => {
     const favorites = characters.filter(c => c.isFavorite);
     const others = characters.filter(c => !c.isFavorite);
@@ -63,17 +58,14 @@ const Sidebar: React.FC<SidebarProps> = ({
     };
   }, [characters]);
   
-  // Characters to display based on filter
   const displayCharacters = useMemo(() => {
     let filtered = showOnlyFavorites 
       ? favoriteCharacters 
       : [...favoriteCharacters, ...otherCharacters];
     
-    // If tags are selected, filter by those tags
     if (selectedTags.length > 0) {
       filtered = filtered.filter(char => {
         if (!char.tags || char.tags.length === 0) return false;
-        // Character must have ALL selected tags
         return selectedTags.every(tag => char.tags?.includes(tag));
       });
     }
@@ -82,7 +74,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   }, [favoriteCharacters, otherCharacters, showOnlyFavorites, selectedTags]);
 
   return (
-    <div className={`${isSidebarCollapsed ? 'w-0 md:w-16 overflow-hidden' : 'w-full md:w-[320px]'} border-r border-border bg-background/95 backdrop-blur-sm flex flex-col h-full transition-all duration-300 relative z-30`}>
+    <div className={`${isSidebarCollapsed ? 'w-0 md:w-16 overflow-hidden' : 'w-full md:w-[320px]'} border-r border-border bg-background/95 backdrop-blur-sm flex flex-col h-full transition-all duration-300 relative z-10`}>
       <div className="p-4 border-b flex justify-between items-center">
         {!isSidebarCollapsed && (
           <h1 className="text-xl font-bold text-gradient">
@@ -116,7 +108,6 @@ const Sidebar: React.FC<SidebarProps> = ({
             </Button>
           </div>
 
-          {/* Tags filter section */}
           {allTags.length > 0 && (
             <div className="px-4 pb-2">
               <div className="flex items-center mb-2">
@@ -138,7 +129,6 @@ const Sidebar: React.FC<SidebarProps> = ({
             </div>
           )}
 
-          {/* Favorites filter */}
           <div className="px-4 pb-2 space-y-2">
             <div className="flex items-center">
               <Button
@@ -185,30 +175,26 @@ const Sidebar: React.FC<SidebarProps> = ({
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-4">
-                {/* Show all filtered characters in one section */}
-                <div className="space-y-3">
-                  {displayCharacters.map((character) => (
-                    <CharacterCard
-                      key={character.id}
-                      character={character}
-                      onSelect={setActiveCharacter}
-                      onEdit={onEditCharacter}
-                      onDelete={deleteCharacter}
-                      onToggleFavorite={toggleFavorite}
-                      isActive={activeCharacter?.id === character.id}
-                      showPersonalityValues={false}
-                      compact={isCompact}
-                      sizeClass={getCardSizeClass()}
-                    />
-                  ))}
-                </div>
+                {displayCharacters.map((character) => (
+                  <CharacterCard
+                    key={character.id}
+                    character={character}
+                    onSelect={setActiveCharacter}
+                    onEdit={onEditCharacter}
+                    onDelete={deleteCharacter}
+                    onToggleFavorite={toggleFavorite}
+                    isActive={activeCharacter?.id === character.id}
+                    showPersonalityValues={false}
+                    compact={isCompact}
+                    sizeClass={getCardSizeClass()}
+                  />
+                ))}
               </div>
             )}
           </div>
         </>
       )}
 
-      {/* Sidebar toggle button - fixed z-index issue */}
       <Button
         variant="ghost"
         size="icon"

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -10,7 +11,10 @@ import { Character } from '@/types';
 import { useCharacter } from '@/contexts/CharacterContext';
 import stabilityAIService from '@/services/stabilityAIService';
 import { toast } from 'sonner';
-import { Loader2, RefreshCw, User, Upload, X, Tag as TagIcon, Plus, Search } from 'lucide-react';
+import { 
+  Loader2, RefreshCw, User, Upload, X, Tag as TagIcon, 
+  Plus, Search, Palette, Brush, Wand2, Pencil, Sparkles
+} from 'lucide-react';
 
 interface CharacterEditorProps {
   character?: Character;
@@ -228,52 +232,62 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
     { 
       key: 'kinkiness', 
       label: 'Kinkiness', 
-      description: 'How open-minded and adventurous the character is'
+      description: 'How open-minded and adventurous the character is',
+      icon: <Sparkles className="h-4 w-4" />
     },
     { 
       key: 'dominance', 
       label: 'Dominance', 
-      description: 'How controlling and assertive the character is'
+      description: 'How controlling and assertive the character is',
+      icon: <Wand2 className="h-4 w-4" />
     },
     { 
       key: 'submissiveness', 
       label: 'Submissiveness', 
-      description: 'How yielding and compliant the character is'
+      description: 'How yielding and compliant the character is',
+      icon: <Pencil className="h-4 w-4" />
     },
     { 
       key: 'intelligence', 
       label: 'Intelligence', 
-      description: 'How smart and knowledgeable the character is'
+      description: 'How smart and knowledgeable the character is',
+      icon: <Brush className="h-4 w-4" />
     },
     { 
       key: 'empathy', 
       label: 'Empathy', 
-      description: 'How understanding and compassionate the character is'
+      description: 'How understanding and compassionate the character is',
+      icon: <Palette className="h-4 w-4" />
     },
     { 
       key: 'creativity', 
       label: 'Creativity', 
-      description: 'How imaginative and innovative the character is'
+      description: 'How imaginative and innovative the character is',
+      icon: <Brush className="h-4 w-4" />
     },
     { 
       key: 'humor', 
       label: 'Humor', 
-      description: 'How funny and witty the character is'
+      description: 'How funny and witty the character is',
+      icon: <Sparkles className="h-4 w-4" />
     },
     { 
       key: 'confidence', 
       label: 'Confidence', 
-      description: 'How self-assured and certain the character is'
+      description: 'How self-assured and certain the character is',
+      icon: <Wand2 className="h-4 w-4" />
     },
     { 
       key: 'curiosity', 
       label: 'Curiosity', 
-      description: 'How eager the character is to learn and explore'
+      description: 'How eager the character is to learn and explore',
+      icon: <Sparkles className="h-4 w-4" />
     },
     { 
       key: 'reliability', 
       label: 'Reliability', 
-      description: 'How dependable and trustworthy the character is'
+      description: 'How dependable and trustworthy the character is',
+      icon: <Pencil className="h-4 w-4" />
     },
   ];
 
@@ -281,7 +295,8 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-hidden animate-scale-in">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold">
+          <DialogTitle className="text-xl font-bold handcrafted-border pb-2 sketch-underline">
+            <Palette className="inline-block mr-2 h-5 w-5 text-accent1" />
             {character ? 'Edit Character' : 'Create New Character'}
           </DialogTitle>
         </DialogHeader>
@@ -289,31 +304,37 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
         <div className="grid gap-4 py-4 max-h-[calc(80vh-120px)] overflow-y-auto pr-2 scrollbar-none">
           <div className="grid grid-cols-1 gap-4 px-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name" className="flex items-center gap-1 text-lg">
+                <Wand2 className="h-4 w-4 text-accent1" />
+                Name
+              </Label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Character name"
-                className="glass-morphism px-6"
+                className="handcrafted-input px-6 text-lg shadow-accent1/20"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description" className="flex items-center gap-1 text-lg">
+                <Brush className="h-4 w-4 text-accent1" />
+                Description
+              </Label>
               <Textarea
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Describe your character's backstory, traits, and personality..."
                 rows={4}
-                className="glass-morphism px-6"
+                className="handcrafted-input px-6 shadow-accent1/20"
               />
             </div>
 
             <div className="space-y-2">
-              <Label className="flex items-center gap-1">
-                <TagIcon className="h-4 w-4" />
+              <Label className="flex items-center gap-1 text-lg">
+                <TagIcon className="h-4 w-4 text-accent1" />
                 Tags
               </Label>
               <div className="flex items-center gap-2 relative">
@@ -324,12 +345,12 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                     onKeyDown={handleTagKeyDown}
                     onFocus={() => tagInput.trim() !== '' && setShowTagSuggestions(true)}
                     placeholder="Add tags (press Enter)"
-                    className="glass-morphism pl-8"
+                    className="handcrafted-input pl-8 shadow-accent1/20"
                   />
-                  <Search className="h-4 w-4 absolute left-2 top-3 text-muted-foreground" />
+                  <Search className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
                   
                   {showTagSuggestions && (
-                    <div className="absolute z-10 mt-1 w-full bg-background border border-border rounded-md shadow-lg max-h-40 overflow-y-auto">
+                    <div className="absolute z-10 mt-1 w-full bg-background border-2 border-border rounded-md shadow-lg max-h-40 overflow-y-auto animate-fade-in">
                       {tagSuggestions
                         .filter(tag => 
                           tag.toLowerCase().includes(tagInput.toLowerCase()) && 
@@ -338,9 +359,10 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                         .map(tag => (
                           <div 
                             key={tag} 
-                            className="px-3 py-2 hover:bg-accent1/10 cursor-pointer text-sm"
+                            className="px-3 py-2 hover:bg-accent1/10 cursor-pointer text-sm flex items-center gap-2"
                             onClick={() => handleAddTag(tag)}
                           >
+                            <Plus className="h-3 w-3 text-accent1" />
                             {tag}
                           </div>
                         ))}
@@ -352,7 +374,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                   variant="outline"
                   onClick={() => handleAddTag()}
                   disabled={!tagInput.trim()}
-                  className="whitespace-nowrap"
+                  className="whitespace-nowrap handcrafted-input h-10 px-4 shadow-accent1/10"
                 >
                   <Plus className="h-4 w-4 mr-1" />
                   Add Tag
@@ -364,7 +386,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                   <Badge 
                     key={tag} 
                     variant="secondary"
-                    className="flex items-center gap-1 py-1"
+                    className="flex items-center gap-1 py-1 border border-border animate-pulse-soft"
                   >
                     {tag}
                     <Button
@@ -385,8 +407,11 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Personality Traits</h3>
-                <div className="space-y-6">
+                <h3 className="text-lg font-semibold sketch-underline inline-block">
+                  <Palette className="inline-block mr-2 h-5 w-5 text-accent1" />
+                  Personality Traits
+                </h3>
+                <div className="space-y-6 handcrafted-border p-4 rounded-lg bg-background/50">
                   {personalitySliders.map((slider) => (
                     <PersonalitySlider
                       key={slider.key}
@@ -396,6 +421,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                       onChange={(value) =>
                         setPersonality((prev) => ({ ...prev, [slider.key]: value }))
                       }
+                      icon={slider.icon}
                     />
                   ))}
                 </div>
@@ -403,11 +429,14 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
 
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-semibold">Character Image</h3>
+                  <h3 className="text-lg font-semibold sketch-underline inline-block">
+                    <Wand2 className="inline-block mr-2 h-5 w-5 text-accent1" />
+                    Character Image
+                  </h3>
                   <span className="text-xs text-foreground/40">(Optional)</span>
                 </div>
                 
-                <div className="relative rounded-lg overflow-hidden aspect-square bg-muted flex items-center justify-center glass-morphism">
+                <div className="relative rounded-lg overflow-hidden aspect-square bg-muted flex items-center justify-center handcrafted-card transform rotate-1 hover:rotate-0 transition-transform duration-300">
                   {imageUrl ? (
                     <img
                       src={imageUrl}
@@ -427,20 +456,23 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="imagePrompt">Image Prompt (for AI generation)</Label>
+                  <Label htmlFor="imagePrompt" className="flex items-center gap-1">
+                    <Sparkles className="h-4 w-4 text-accent1" />
+                    Image Prompt (for AI generation)
+                  </Label>
                   <Textarea
                     id="imagePrompt"
                     value={imagePrompt}
                     onChange={(e) => setImagePrompt(e.target.value)}
                     placeholder="Describe how your character should look..."
                     rows={2}
-                    className="glass-morphism px-6"
+                    className="handcrafted-input px-6 shadow-accent1/20"
                   />
                   <div className="flex gap-2">
                     <Button
                       onClick={handleGenerateImage}
                       disabled={isGenerating || !imagePrompt.trim()}
-                      className="flex-1"
+                      className="flex-1 handcrafted-input h-auto py-2 hover:bg-accent1/10 shadow-accent1/20"
                       variant="outline"
                     >
                       {isGenerating ? (
@@ -458,7 +490,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                     <Button
                       onClick={handleUploadClick}
                       variant="outline"
-                      className="flex-1"
+                      className="flex-1 handcrafted-input h-auto py-2 hover:bg-accent1/10 shadow-accent1/20"
                       type="button"
                     >
                       <Upload className="mr-2 h-4 w-4" />
@@ -474,7 +506,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                     <Button
                       onClick={() => setImageUrl(PLACEHOLDER_IMAGE)}
                       variant="outline"
-                      className="flex-shrink-0"
+                      className="flex-shrink-0 handcrafted-input h-auto py-2 hover:bg-accent1/10 shadow-accent1/20"
                       type="button"
                     >
                       <User className="h-4 w-4" />
@@ -491,11 +523,15 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
           </div>
         </div>
 
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
+        <DialogFooter className="gap-2">
+          <Button variant="outline" onClick={onClose} className="handcrafted-input">
             Cancel
           </Button>
-          <Button onClick={handleSubmit} className="bg-accent1 hover:bg-accent1/80">
+          <Button 
+            onClick={handleSubmit} 
+            className="bg-accent1 hover:bg-accent1/80 handcrafted-input shadow-accent1/20"
+          >
+            <Sparkles className="mr-2 h-4 w-4" />
             {character ? 'Save Changes' : 'Create Character'}
           </Button>
         </DialogFooter>

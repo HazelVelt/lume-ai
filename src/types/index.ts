@@ -35,3 +35,5 @@ export interface ModelConfig {
   type: 'ollama' | 'stability';
   apiKey?: string;
 }
+
+export type ThemeType = 'dark' | 'light' | 'purple' | 'ocean' | 'sunset';

@@ -53,8 +53,8 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        accent1: "hsl(280 100% 60%)",
-        accent2: "hsl(210 100% 60%)",
+        accent1: "hsl(var(--primary))",
+        accent2: "hsl(var(--accent))",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -102,6 +102,14 @@ export default {
           "0%": { filter: "blur(12px)", opacity: "0" },
           "100%": { filter: "blur(0)", opacity: "1" },
         },
+        "wiggle": {
+          "0%, 100%": { transform: "rotate(-1deg)" },
+          "50%": { transform: "rotate(1deg)" },
+        },
+        "pulse-soft": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.8" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -114,6 +122,8 @@ export default {
         "scale-out": "scale-out 0.3s ease-out",
         "float": "float 6s ease-in-out infinite",
         "blur-in": "blur-in 0.5s ease-out",
+        "wiggle": "wiggle 2s ease-in-out infinite",
+        "pulse-soft": "pulse-soft 3s ease-in-out infinite",
       },
     },
   },

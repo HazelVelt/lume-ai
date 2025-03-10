@@ -1,38 +1,45 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-
-type Theme = 'light' | 'dark';
+import { ThemeType } from '@/types';
 
 interface ThemeContextType {
-  theme: Theme;
+  theme: ThemeType;
+  setTheme: (theme: ThemeType) => void;
   toggleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | null>(null);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>(() => {
+  const [theme, setTheme] = useState<ThemeType>(() => {
     const savedTheme = localStorage.getItem('theme');
-    return (savedTheme as Theme) || 
+    return (savedTheme as ThemeType) || 
            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   });
 
   const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'dark' ? 'light' : 'dark');
+    setTheme(prevTheme => {
+      const themes: ThemeType[] = ['light', 'dark', 'purple', 'ocean', 'sunset'];
+      const currentIndex = themes.indexOf(prevTheme);
+      const nextIndex = (currentIndex + 1) % themes.length;
+      return themes[nextIndex];
+    });
   };
 
   useEffect(() => {
     localStorage.setItem('theme', theme);
     
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
+    // Remove all theme classes first
+    document.documentElement.classList.remove('dark', 'purple', 'ocean', 'sunset');
+    
+    // Add the current theme class
+    if (theme !== 'light') {
+      document.documentElement.classList.add(theme);
     }
   }, [theme]);
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );

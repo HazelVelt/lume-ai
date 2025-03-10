@@ -48,6 +48,72 @@
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
   }
+  
+  .purple {
+    --background: 260 20% 4%;
+    --foreground: 260 5% 96%;
+    --card: 260 20% 8%;
+    --card-foreground: 260 5% 96%;
+    --popover: 260 20% 6%;
+    --popover-foreground: 260 5% 96%;
+    --primary: 280 100% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 260 15% 20%;
+    --secondary-foreground: 260 5% 96%;
+    --muted: 260 15% 15%;
+    --muted-foreground: 260 5% 65%;
+    --accent: 280 75% 55%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 75% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 260 15% 20%;
+    --input: 260 15% 20%;
+    --ring: 280 75% 60%;
+  }
+  
+  .ocean {
+    --background: 210 30% 8%;
+    --foreground: 210 5% 98%;
+    --card: 210 30% 12%;
+    --card-foreground: 210 5% 98%;
+    --popover: 210 30% 10%;
+    --popover-foreground: 210 5% 98%;
+    --primary: 210 100% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 25% 20%;
+    --secondary-foreground: 210 5% 98%;
+    --muted: 210 25% 15%;
+    --muted-foreground: 210 5% 65%;
+    --accent: 210 75% 55%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 75% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 210 25% 20%;
+    --input: 210 25% 20%;
+    --ring: 210 75% 60%;
+  }
+  
+  .sunset {
+    --background: 25 30% 6%;
+    --foreground: 25 5% 98%;
+    --card: 25 30% 12%;
+    --card-foreground: 25 5% 98%;
+    --popover: 25 30% 10%;
+    --popover-foreground: 25 5% 98%;
+    --primary: 25 100% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 25 25% 20%;
+    --secondary-foreground: 25 5% 98%;
+    --muted: 25 25% 15%;
+    --muted-foreground: 25 5% 65%;
+    --accent: 35 75% 55%; 
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 75% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 25 25% 20%;
+    --input: 25 25% 20%;
+    --ring: 35 75% 60%;
+  }
 
   * {
     @apply border-border selection:bg-primary/10 selection:text-primary;
@@ -98,6 +164,50 @@
     width: 100px;
     height: 100px;
     animation: ripple 4s ease-out infinite;
+  }
+
+  /* Handcrafted UI elements */
+  .handcrafted-border {
+    @apply border-2 border-dashed;
+  }
+  
+  .handcrafted-input {
+    @apply bg-background/50 border-2 border-border/60 focus:border-primary/60;
+    border-radius: 12px;
+    box-shadow: 2px 2px 0px var(--tw-shadow-color);
+  }
+  
+  .handcrafted-slider {
+    @apply relative h-14 flex items-center;
+  }
+  
+  .handcrafted-slider:before {
+    content: '';
+    @apply absolute inset-0 bg-secondary/30 rounded-full;
+    top: 45%;
+    bottom: 45%;
+  }
+  
+  .handcrafted-card {
+    @apply relative bg-card border-2 border-border/50 rounded-lg overflow-hidden;
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+    transform: rotate(-0.5deg);
+  }
+  
+  .handcrafted-card:hover {
+    transform: rotate(0deg) translateY(-2px);
+    box-shadow: 5px 5px 0 rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+  }
+  
+  .sketch-underline {
+    @apply relative inline-block;
+  }
+  
+  .sketch-underline:after {
+    content: '';
+    @apply absolute bg-primary/30 left-0 right-5 bottom-0 h-[3px];
+    clip-path: polygon(0 0, 100% 35%, 92% 100%, 8% 65%);
   }
 
   @keyframes ripple {

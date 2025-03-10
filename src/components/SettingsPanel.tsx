@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -9,8 +8,9 @@ import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ollamaService from '@/services/ollamaService';
 import stabilityAIService from '@/services/stabilityAIService';
-import { Loader2, Moon, Sun, CreditCard } from 'lucide-react';
+import { Loader2, Moon, Sun, Palette, CreditCard, Droplets, Sunset } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
+import { ThemeType } from '@/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 
@@ -21,7 +21,7 @@ interface SettingsPanelProps {
 
 const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
   const { modelConfig, updateModelConfig, updateCardSize, cardSize } = useCharacter();
-  const { theme, toggleTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   
   const [ollamaEndpoint, setOllamaEndpoint] = useState(modelConfig.llm.endpoint);
   const [ollamaModel, setOllamaModel] = useState(modelConfig.llm.name);
@@ -89,6 +89,14 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
     if (size <= 90) return 'Extra Large';
     return 'Massive';
   };
+  
+  const themeOptions: { label: string; value: ThemeType; icon: React.ReactNode }[] = [
+    { label: 'Light', value: 'light', icon: <Sun className="h-5 w-5" /> },
+    { label: 'Dark', value: 'dark', icon: <Moon className="h-5 w-5" /> },
+    { label: 'Purple', value: 'purple', icon: <Palette className="h-5 w-5" /> },
+    { label: 'Ocean', value: 'ocean', icon: <Droplets className="h-5 w-5" /> },
+    { label: 'Sunset', value: 'sunset', icon: <Sunset className="h-5 w-5" /> },
+  ];
   
   const handleSave = () => {
     updateModelConfig('llm', {
@@ -275,24 +283,20 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
           <TabsContent value="appearance" className="space-y-4 py-4">
             <div className="space-y-2">
               <Label>Theme</Label>
-              <div className="grid grid-cols-2 gap-4">
-                <Button 
-                  variant={theme === 'light' ? 'default' : 'outline'}
-                  className={`flex items-center justify-center gap-2 ${theme === 'light' ? 'bg-accent1 hover:bg-accent1/80' : ''}`}
-                  onClick={() => theme !== 'light' && toggleTheme()}
-                >
-                  <Sun className="h-5 w-5" />
-                  <span>Light Mode</span>
-                </Button>
-                
-                <Button 
-                  variant={theme === 'dark' ? 'default' : 'outline'}
-                  className={`flex items-center justify-center gap-2 ${theme === 'dark' ? 'bg-accent1 hover:bg-accent1/80' : ''}`}
-                  onClick={() => theme !== 'dark' && toggleTheme()}
-                >
-                  <Moon className="h-5 w-5" />
-                  <span>Dark Mode</span>
-                </Button>
+              <div className="grid grid-cols-3 gap-3">
+                {themeOptions.map((option) => (
+                  <Button 
+                    key={option.value}
+                    variant={theme === option.value ? 'default' : 'outline'}
+                    className={`flex items-center justify-center gap-2 py-6 ${
+                      theme === option.value ? 'bg-accent1 hover:bg-accent1/80' : ''
+                    }`}
+                    onClick={() => setTheme(option.value)}
+                  >
+                    {option.icon}
+                    <span>{option.label}</span>
+                  </Button>
+                ))}
               </div>
             </div>
             
