@@ -238,7 +238,7 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
             </p>
           </div>
         ) : (
-          <div className="space-y-4 pb-2 max-w-3xl mx-auto">
+          <div className="space-y-4 pb-2 max-w-4xl mx-auto">
             {messages.map((msg) => (
               <div
                 key={msg.id}
@@ -259,10 +259,10 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
                   </div>
                 )}
                 <div
-                  className={`max-w-[80%] ${
+                  className={`max-w-[80%] md:max-w-[85%] ${
                     msg.isUser
-                      ? 'bg-accent1/20 border border-accent1/30 rounded-2xl rounded-tr-sm shadow-md'
-                      : 'bg-background/80 border border-border rounded-2xl rounded-tl-sm shadow-md'
+                      ? 'bg-accent1/20 border border-accent1/30 rounded-2xl rounded-tr-sm shadow-md mr-0 ml-auto'
+                      : 'bg-background/80 border border-border rounded-2xl rounded-tl-sm shadow-md ml-0 mr-auto'
                   }`}
                 >
                   {!msg.isUser && (
@@ -299,7 +299,7 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
                     }}
                   />
                 </div>
-                <div className="max-w-[80%] bg-background/80 border border-border rounded-2xl rounded-tl-sm shadow-md">
+                <div className="max-w-[80%] md:max-w-[85%] bg-background/80 border border-border rounded-2xl rounded-tl-sm shadow-md ml-0 mr-auto">
                   <div className="px-3 pt-2 text-sm font-medium flex items-center">
                     {character.name}
                     {character.isFavorite && (

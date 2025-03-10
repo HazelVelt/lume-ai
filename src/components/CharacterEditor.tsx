@@ -5,13 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
 import PersonalitySlider from './PersonalitySlider';
 import { Character } from '@/types';
 import { useCharacter } from '@/contexts/CharacterContext';
 import stabilityAIService from '@/services/stabilityAIService';
 import { toast } from 'sonner';
-import { Loader2, RefreshCw, Image as ImageIcon, User, Upload } from 'lucide-react';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from './ui/alert-dialog';
+import { Loader2, RefreshCw, Image as ImageIcon, User, Upload, X, Tag as TagIcon, Plus } from 'lucide-react';
 
 interface CharacterEditorProps {
   character?: Character;
@@ -34,6 +34,8 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
   const [description, setDescription] = useState('');
   const [imagePrompt, setImagePrompt] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState('');
   const [personality, setPersonality] = useState({
     kinkiness: 50,
     dominance: 50,
@@ -50,6 +52,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
       setDescription(character.description);
       setImagePrompt(character.defaultPrompt || '');
       setImageUrl(character.imageUrl || '');
+      setTags(character.tags || []);
       setPersonality({
         kinkiness: character.personality.kinkiness,
         dominance: character.personality.dominance,
@@ -64,6 +67,8 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
       setDescription('');
       setImagePrompt('Full body portrait of a character');
       setImageUrl('');
+      setTags([]);
+      setTagInput('');
       setPersonality({
         kinkiness: 50,
         dominance: 50,
@@ -135,6 +140,24 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
     }
   };
 
+  const handleAddTag = () => {
+    if (tagInput.trim() && !tags.includes(tagInput.trim())) {
+      setTags(prev => [...prev, tagInput.trim()]);
+      setTagInput('');
+    }
+  };
+
+  const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAddTag();
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove: string) => {
+    setTags(prev => prev.filter(tag => tag !== tagToRemove));
+  };
+
   const handleSubmit = () => {
     if (!name.trim()) {
       toast.error('Please enter a name', {
@@ -156,6 +179,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
       personality,
       imageUrl: imageUrl || PLACEHOLDER_IMAGE,
       defaultPrompt: imagePrompt,
+      tags,
     };
 
     if (character) {
@@ -237,6 +261,56 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
                 rows={4}
                 className="glass-morphism px-6"
               />
+            </div>
+
+            {/* Tags section */}
+            <div className="space-y-2">
+              <Label className="flex items-center gap-1">
+                <TagIcon className="h-4 w-4" />
+                Tags
+              </Label>
+              <div className="flex items-center gap-2">
+                <Input
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={handleTagKeyDown}
+                  placeholder="Add tags (press Enter)"
+                  className="glass-morphism"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleAddTag}
+                  disabled={!tagInput.trim()}
+                  className="whitespace-nowrap"
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add Tag
+                </Button>
+              </div>
+              
+              <div className="flex flex-wrap gap-1 mt-2">
+                {tags.map(tag => (
+                  <Badge 
+                    key={tag} 
+                    variant="secondary"
+                    className="flex items-center gap-1 py-1"
+                  >
+                    {tag}
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleRemoveTag(tag)}
+                      className="h-4 w-4 p-0 ml-1 hover:bg-destructive/10 hover:text-destructive rounded-full"
+                    >
+                      <X className="h-3 w-3" />
+                    </Button>
+                  </Badge>
+                ))}
+                {tags.length === 0 && (
+                  <span className="text-xs text-muted-foreground">No tags added yet</span>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -1,10 +1,9 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Home, MessageSquare, Star, StarOff } from 'lucide-react';
+import { Home, MessageSquare } from 'lucide-react';
 import { Character } from '@/types';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useCharacter } from '@/contexts/CharacterContext';
 
 interface HeaderProps {
   activeCharacter: Character | null;
@@ -14,18 +13,6 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ activeCharacter, onReturnHome }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { updateCharacter } = useCharacter();
-  
-  const handleToggleFavorite = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    
-    if (activeCharacter) {
-      updateCharacter(activeCharacter.id, {
-        ...activeCharacter,
-        isFavorite: !activeCharacter.isFavorite
-      });
-    }
-  };
   
   const isChatPage = location.pathname.includes('/chat');
   
@@ -48,23 +35,9 @@ const Header: React.FC<HeaderProps> = ({ activeCharacter, onReturnHome }) => {
       </div>
       <div className="flex items-center gap-2">
         {activeCharacter && (
-          <>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleToggleFavorite}
-              className="mr-1 h-8 w-8 rounded-full"
-            >
-              {activeCharacter.isFavorite ? (
-                <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-              ) : (
-                <StarOff className="h-4 w-4" />
-              )}
-            </Button>
-            <span className="text-sm text-muted-foreground mr-2">
-              Chatting with {activeCharacter.name}
-            </span>
-          </>
+          <span className="text-sm text-muted-foreground mr-2">
+            Chatting with {activeCharacter.name}
+          </span>
         )}
         {window.location.pathname !== '/chat' && (
           <Button

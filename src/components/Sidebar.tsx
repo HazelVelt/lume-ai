@@ -27,6 +27,14 @@ const Sidebar: React.FC<SidebarProps> = ({
   
   // Calculate if cards should be compact based on scale
   const isCompact = cardScale < 40;
+  // Calculate specific card size class based on the scale
+  const getCardSizeClass = () => {
+    if (cardScale < 30) return 'super-compact'; // Very small
+    if (cardScale < 40) return 'compact'; // Compact
+    if (cardScale < 60) return 'normal'; // Normal
+    if (cardScale < 80) return 'large'; // Large
+    return 'extra-large'; // Very large
+  };
 
   // Filter and group characters
   const { favoriteCharacters, otherCharacters } = useMemo(() => {
@@ -103,14 +111,19 @@ const Sidebar: React.FC<SidebarProps> = ({
             <div>
               <div className="flex justify-between items-center mb-1">
                 <span className="text-xs text-muted-foreground">Card Size</span>
-                <span className="text-xs text-muted-foreground">{isCompact ? 'Compact' : 'Normal'}</span>
+                <span className="text-xs text-muted-foreground capitalize">
+                  {cardScale < 30 ? 'Tiny' : 
+                   cardScale < 40 ? 'Compact' : 
+                   cardScale < 60 ? 'Regular' : 
+                   cardScale < 80 ? 'Large' : 'Extra Large'}
+                </span>
               </div>
               <Slider 
                 value={[cardScale]} 
                 onValueChange={(value) => setCardScale(value[0])}
                 min={20}
-                max={80}
-                step={1}
+                max={100}
+                step={5}
                 className="my-2"
               />
             </div>
@@ -157,6 +170,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                           isActive={activeCharacter?.id === character.id}
                           showPersonalityValues={false}
                           compact={isCompact}
+                          sizeClass={getCardSizeClass()}
                         />
                       ))}
                     </div>
@@ -181,6 +195,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                           isActive={activeCharacter?.id === character.id}
                           showPersonalityValues={false}
                           compact={isCompact}
+                          sizeClass={getCardSizeClass()}
                         />
                       ))}
                     </div>
@@ -199,6 +214,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                         isActive={activeCharacter?.id === character.id}
                         showPersonalityValues={false}
                         compact={isCompact}
+                        sizeClass={getCardSizeClass()}
                       />
                     ))}
                   </div>
