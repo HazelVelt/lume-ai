@@ -81,14 +81,6 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
             {isTyping && (
               <span className="inline-block ml-1 animate-blink">▋</span>
             )}
-            {isError && (
-              <div className="absolute inset-0 bg-background flex flex-col justify-end">
-                <div className="mt-auto mb-2 text-destructive text-center">
-                  <AlertTriangleIcon className="h-5 w-5 mx-auto mb-1" />
-                  Connection trouble
-                </div>
-              </div>
-            )}
           </div>
         </div>
         
@@ -104,8 +96,8 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
             </>
           ) : isError ? (
             <>
-              <AlertTriangleIcon className="h-3 w-3 text-destructive" />
-              <span className="text-destructive">Connection trouble</span>
+              <AlertTriangleIcon className="h-3 w-3 text-amber-500" />
+              <span className="text-amber-500">Connection issue</span>
             </>
           ) : (
             <>
@@ -114,6 +106,14 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
             </>
           )}
         </div>
+        
+        {/* Small inline error notification instead of full overlay */}
+        {isError && (
+          <div className="mx-4 mb-2 px-2 py-1 bg-amber-500/10 border border-amber-500/20 rounded text-xs text-amber-500 flex items-center">
+            <AlertTriangleIcon className="h-3 w-3 mr-1" />
+            <span>Connection trouble - Check if Ollama is running</span>
+          </div>
+        )}
       </div>
       
       {message.isUser && (

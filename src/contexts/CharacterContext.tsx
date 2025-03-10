@@ -173,6 +173,9 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   };
   
   const toggleFavorite = (id: string) => {
+    const character = characters.find(c => c.id === id);
+    const wasFavorite = character?.isFavorite || false;
+    
     setCharacters(prev => 
       prev.map(char => 
         char.id === id 
@@ -181,9 +184,14 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       )
     );
     
-    const character = characters.find(c => c.id === id);
+    if (activeCharacter?.id === id) {
+      setActiveCharacter((prev) => 
+        prev ? { ...prev, isFavorite: !wasFavorite } : null
+      );
+    }
+    
     if (character) {
-      const action = character.isFavorite ? 'Removed from' : 'Added to';
+      const action = wasFavorite ? 'Removed from' : 'Added to';
       toast.success(`${action} favorites`, { duration: 1000 });
     }
   };
