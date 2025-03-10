@@ -79,20 +79,16 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
           <div className="text-sm whitespace-pre-wrap break-words">
             {message.content}
             {isTyping && (
-              <div className="absolute inset-0 bg-background/90 flex flex-col justify-end">
-                <div className="mt-auto mb-2 h-1.5 bg-accent1/10 rounded-full overflow-hidden">
-                  <div className="absolute inset-0 bg-accent1/50 rounded-full animate-pulse-soft">
-                    <div className="h-full bg-accent1 rounded-full animate-progress"></div>
-                  </div>
+              <div className="absolute inset-0 bg-background flex flex-col justify-end">
+                <div className="mt-auto mb-2 h-1 bg-accent1/20 rounded-full overflow-hidden w-[70%] mx-auto">
+                  <div className="h-full bg-accent1 rounded-full animate-progress"></div>
                 </div>
               </div>
             )}
             {isError && (
-              <div className="absolute inset-0 bg-background/90 flex flex-col justify-end">
-                <div className="mt-auto mb-2 h-1.5 bg-destructive/10 rounded-full overflow-hidden">
-                  <div className="absolute inset-0 bg-destructive/50 rounded-full animate-pulse-soft">
-                    <div className="h-full bg-destructive rounded-full animate-progress"></div>
-                  </div>
+              <div className="absolute inset-0 bg-background flex flex-col justify-end">
+                <div className="mt-auto mb-2 h-1 bg-destructive/20 rounded-full overflow-hidden w-[70%] mx-auto">
+                  <div className="h-full bg-destructive rounded-full animate-progress"></div>
                 </div>
               </div>
             )}
