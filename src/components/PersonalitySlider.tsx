@@ -1,52 +1,39 @@
 
 import React from 'react';
-import { Slider } from '@/components/ui/slider';
-import { cn } from '@/lib/utils';
+import { Slider } from './ui/slider';
 
-interface PersonalitySliderProps {
+export interface PersonalitySliderProps {
   label: string;
+  description: string;
   value: number;
   onChange: (value: number) => void;
-  min?: number;
-  max?: number;
-  step?: number;
-  color?: string;
-  description?: string;
+  icon?: React.ReactNode;
 }
 
 const PersonalitySlider: React.FC<PersonalitySliderProps> = ({
   label,
+  description,
   value,
   onChange,
-  min = 0,
-  max = 100,
-  step = 1,
-  color = 'bg-accent1',
-  description,
+  icon
 }) => {
   return (
-    <div className="w-full space-y-2 animate-fade-in">
-      <div className="flex justify-between items-center">
-        <div>
-          <label className="text-sm font-medium text-foreground/80">{label}</label>
-          {description && (
-            <p className="text-xs text-muted-foreground">{description}</p>
-          )}
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1">
+          {icon && <div className="text-accent1">{icon}</div>}
+          <label className="text-sm font-medium">{label}</label>
         </div>
-        <span className="text-sm text-foreground/60">{value}%</span>
+        <span className="text-sm font-medium">{value}</span>
       </div>
       <Slider
-        className="py-1"
-        min={min}
-        max={max}
-        step={step}
         value={[value]}
         onValueChange={(values) => onChange(values[0])}
+        min={0}
+        max={100}
+        step={5}
       />
-      <div className="flex justify-between text-xs text-foreground/40">
-        <span>Low</span>
-        <span>High</span>
-      </div>
+      <p className="text-xs text-muted-foreground">{description}</p>
     </div>
   );
 };
