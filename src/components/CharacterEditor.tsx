@@ -229,12 +229,52 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
   };
 
   const personalitySliders = [
+    // Emotional traits
     { 
-      key: 'kinkiness', 
-      label: 'Kinkiness', 
-      description: 'How open-minded and adventurous the character is',
+      key: 'empathy', 
+      label: 'Empathy', 
+      description: 'How understanding and compassionate the character is',
+      icon: <Palette className="h-4 w-4" />
+    },
+    { 
+      key: 'humor', 
+      label: 'Humor', 
+      description: 'How funny and witty the character is',
       icon: <Sparkles className="h-4 w-4" />
     },
+    // Intellectual traits
+    { 
+      key: 'intelligence', 
+      label: 'Intelligence', 
+      description: 'How smart and knowledgeable the character is',
+      icon: <Brush className="h-4 w-4" />
+    },
+    { 
+      key: 'creativity', 
+      label: 'Creativity', 
+      description: 'How imaginative and innovative the character is',
+      icon: <Brush className="h-4 w-4" />
+    },
+    { 
+      key: 'curiosity', 
+      label: 'Curiosity', 
+      description: 'How eager the character is to learn and explore',
+      icon: <Sparkles className="h-4 w-4" />
+    },
+    // Personality core traits
+    { 
+      key: 'confidence', 
+      label: 'Confidence', 
+      description: 'How self-assured and certain the character is',
+      icon: <Wand2 className="h-4 w-4" />
+    },
+    { 
+      key: 'reliability', 
+      label: 'Reliability', 
+      description: 'How dependable and trustworthy the character is',
+      icon: <Pencil className="h-4 w-4" />
+    },
+    // Relationship dynamics
     { 
       key: 'dominance', 
       label: 'Dominance', 
@@ -248,46 +288,10 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
       icon: <Pencil className="h-4 w-4" />
     },
     { 
-      key: 'intelligence', 
-      label: 'Intelligence', 
-      description: 'How smart and knowledgeable the character is',
-      icon: <Brush className="h-4 w-4" />
-    },
-    { 
-      key: 'empathy', 
-      label: 'Empathy', 
-      description: 'How understanding and compassionate the character is',
-      icon: <Palette className="h-4 w-4" />
-    },
-    { 
-      key: 'creativity', 
-      label: 'Creativity', 
-      description: 'How imaginative and innovative the character is',
-      icon: <Brush className="h-4 w-4" />
-    },
-    { 
-      key: 'humor', 
-      label: 'Humor', 
-      description: 'How funny and witty the character is',
+      key: 'kinkiness', 
+      label: 'Kinkiness', 
+      description: 'How open-minded and adventurous the character is',
       icon: <Sparkles className="h-4 w-4" />
-    },
-    { 
-      key: 'confidence', 
-      label: 'Confidence', 
-      description: 'How self-assured and certain the character is',
-      icon: <Wand2 className="h-4 w-4" />
-    },
-    { 
-      key: 'curiosity', 
-      label: 'Curiosity', 
-      description: 'How eager the character is to learn and explore',
-      icon: <Sparkles className="h-4 w-4" />
-    },
-    { 
-      key: 'reliability', 
-      label: 'Reliability', 
-      description: 'How dependable and trustworthy the character is',
-      icon: <Pencil className="h-4 w-4" />
     },
   ];
 

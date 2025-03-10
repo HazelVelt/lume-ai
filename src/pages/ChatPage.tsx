@@ -1,11 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCharacter } from '@/contexts/CharacterContext';
 import CharacterEditor from '@/components/CharacterEditor';
 import ChatInterface from '@/components/chat/ChatInterface';
 import SettingsPanel from '@/components/SettingsPanel';
-import ChatNavigation from '@/components/ChatNavigation';
 import Sidebar from '@/components/Sidebar';
 import EmptyStateMessage from '@/components/chat/EmptyStateMessage';
 import { Character } from '@/types';
@@ -21,19 +19,16 @@ const ChatPage: React.FC = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   useEffect(() => {
-    // If we have an ID from the route, set that character as active
     if (id && id !== 'new') {
       const character = characters.find(c => c.id === id);
       if (character) {
         setActiveCharacter(character.id);
       } else {
-        // If character not found, go to main chat page
         navigate('/chat');
       }
     } else if (id === 'new') {
       handleCreateCharacter();
     } else if (characters.length > 0 && !activeCharacter) {
-      // Default to first character if none is active
       setActiveCharacter(characters[0].id);
     }
   }, [id, characters, activeCharacter]);
@@ -52,7 +47,6 @@ const ChatPage: React.FC = () => {
   };
 
   const handleDeleteCharacter = (id: string) => {
-    // Prevent double deletion by checking isDeleting flag
     if (!isDeleting) {
       deleteCharacter(id);
     }
@@ -71,23 +65,18 @@ const ChatPage: React.FC = () => {
   };
 
   const handleReturnToLanding = () => {
-    // Navigate to landing page
     navigate('/');
   };
 
-  // Check if the selected tags filter matches the current character
   const doesCharacterMatchTags = (character: Character) => {
     if (selectedTags.length === 0) return true;
     if (!character.tags || character.tags.length === 0) return false;
     
-    // Check if character has all selected tags
     return selectedTags.every(tag => character.tags?.includes(tag));
   };
 
-  // If tags are selected and active character doesn't match, try to select another character
   useEffect(() => {
     if (selectedTags.length > 0 && activeCharacter && !doesCharacterMatchTags(activeCharacter)) {
-      // Find the first character that matches the selected tags
       const matchingCharacter = characters.find(c => doesCharacterMatchTags(c));
       if (matchingCharacter) {
         setActiveCharacter(matchingCharacter.id);
@@ -97,7 +86,6 @@ const ChatPage: React.FC = () => {
 
   return (
     <div className="flex flex-col md:flex-row h-screen overflow-hidden">
-      {/* Sidebar with tag filtering */}
       <Sidebar 
         onCreateCharacter={handleCreateCharacter}
         onEditCharacter={handleEditCharacter}
@@ -109,21 +97,13 @@ const ChatPage: React.FC = () => {
         onReturnHome={handleReturnToLanding}
       />
 
-      {/* Main content area */}
       <div className="flex-1 flex flex-col h-full bg-background relative z-10">
         {activeCharacter ? (
           doesCharacterMatchTags(activeCharacter) ? (
-            <>
-              <ChatInterface 
-                character={activeCharacter}
-                onReturn={handleReturnToLanding}
-              />
-              <ChatNavigation 
-                character={activeCharacter}
-                onEdit={handleEditCharacter}
-                onDelete={handleDeleteCharacter}
-              />
-            </>
+            <ChatInterface 
+              character={activeCharacter}
+              onReturn={handleReturnToLanding}
+            />
           ) : (
             <EmptyStateMessage
               title="No Matching Characters"
@@ -151,7 +131,6 @@ const ChatPage: React.FC = () => {
         )}
       </div>
 
-      {/* Dialogs */}
       <CharacterEditor
         character={editingCharacter}
         isOpen={isEditorOpen}
