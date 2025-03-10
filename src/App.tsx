@@ -5,8 +5,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/ThemeContext";
-import Index from "./pages/Index";
+import LandingPage from "./pages/LandingPage";
+import ChatPage from "./pages/ChatPage";
 import NotFound from "./pages/NotFound";
+import { CharacterProvider } from "@/contexts/CharacterContext";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -28,16 +30,20 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner position="top-center" richColors duration={2000} />
-          <Router>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Router>
-        </TooltipProvider>
+        <CharacterProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner position="top-center" richColors duration={2000} />
+            <Router>
+              <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/chat" element={<ChatPage />} />
+                <Route path="/chat/:id" element={<ChatPage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Router>
+          </TooltipProvider>
+        </CharacterProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

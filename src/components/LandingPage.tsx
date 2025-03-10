@@ -1,28 +1,22 @@
 
-import React from 'react';
-import HeroSection from './landing/HeroSection';
-import FeatureTabs from './landing/FeatureTabs';
-import GettingStartedSection from './landing/GettingStartedSection';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface LandingPageProps {
   onCreateCharacter: () => void;
 }
 
+// This is now just a wrapper that redirects to the new LandingPage route
 const LandingPage: React.FC<LandingPageProps> = ({ onCreateCharacter }) => {
-  return (
-    <div className="flex flex-col h-full overflow-auto scrollbar-none">
-      {/* Hero Section */}
-      <HeroSection onCreateCharacter={onCreateCharacter} />
-      
-      <div className="w-full max-w-5xl mx-auto px-4 py-10 overflow-y-auto scrollbar-none">  
-        {/* Feature Tabs */}
-        <FeatureTabs />
-        
-        {/* Requirements Section */}
-        <GettingStartedSection />
-      </div>
-    </div>
-  );
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    // Redirect to the new LandingPage route
+    navigate('/');
+  }, [navigate]);
+  
+  // This component doesn't render anything as it immediately redirects
+  return null;
 };
 
 export default LandingPage;

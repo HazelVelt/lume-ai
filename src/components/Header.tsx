@@ -2,8 +2,8 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Home } from 'lucide-react';
-import ThemeToggle from '@/components/ThemeToggle';
 import { Character } from '@/types';
+import { Link } from 'react-router-dom';
 
 interface HeaderProps {
   activeCharacter: Character | null;
@@ -28,11 +28,10 @@ const Header: React.FC<HeaderProps> = ({ activeCharacter, onReturnHome }) => {
       </div>
       <div className="flex items-center">
         {activeCharacter && (
-          <span className="text-sm text-muted-foreground mr-2">
+          <span className="text-sm text-muted-foreground">
             Chatting with {activeCharacter.name}
           </span>
         )}
-        <ThemeToggle />
       </div>
     </div>
   );
