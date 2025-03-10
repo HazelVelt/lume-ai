@@ -10,6 +10,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 interface SidebarProps {
   onCreateCharacter: () => void;
   onEditCharacter: (id: string) => void;
+  onDeleteCharacter: (id: string) => void;
   onSettingsOpen: () => void;
   isSidebarCollapsed: boolean;
   toggleSidebar: () => void;
@@ -21,6 +22,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({
   onCreateCharacter,
   onEditCharacter,
+  onDeleteCharacter,
   onSettingsOpen,
   isSidebarCollapsed,
   toggleSidebar,

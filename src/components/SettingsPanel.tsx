@@ -135,22 +135,22 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
         </DialogHeader>
         
         <Tabs defaultValue="appearance" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 handcrafted-border rounded-md p-1 bg-background/50">
+          <TabsList className="grid w-full grid-cols-3 handcrafted-border rounded-md p-2 bg-background/50 gap-2">
             <TabsTrigger 
               value="appearance" 
-              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hand-drawn-button shadow-primary/20"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hand-drawn-button shadow-primary/20 py-1.5"
             >
               Appearance
             </TabsTrigger>
             <TabsTrigger 
               value="llm" 
-              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hand-drawn-button shadow-primary/20"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hand-drawn-button shadow-primary/20 py-1.5"
             >
               Language Model
             </TabsTrigger>
             <TabsTrigger 
               value="image" 
-              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hand-drawn-button shadow-primary/20"
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hand-drawn-button shadow-primary/20 py-1.5"
             >
               Image Generation
             </TabsTrigger>
