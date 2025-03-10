@@ -1,32 +1,47 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Home, MessageSquare } from 'lucide-react';
+import { MessageSquare, Settings } from 'lucide-react';
 import { Character } from '@/types';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 interface HeaderProps {
   activeCharacter: Character | null;
   onReturnHome: () => void;
+  onSettingsOpen?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ activeCharacter, onReturnHome }) => {
+const Header: React.FC<HeaderProps> = ({ activeCharacter, onReturnHome, onSettingsOpen }) => {
   const navigate = useNavigate();
   const location = useLocation();
   
   const isChatPage = location.pathname.includes('/chat');
+  const isLandingPage = location.pathname === '/';
   
   return (
     <div className="p-4 border-b flex items-center justify-between sticky top-0 z-20 bg-background/90 backdrop-blur-sm">
       <div className="flex items-center">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onReturnHome}
-          className="mr-2 h-9 w-9 rounded-full"
-        >
-          <Home className="h-5 w-5" />
-        </Button>
+        {isLandingPage ? (
+          onSettingsOpen && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onSettingsOpen}
+              className="mr-2 h-9 w-9 rounded-full"
+            >
+              <Settings className="h-5 w-5" />
+            </Button>
+          )
+        ) : (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onReturnHome}
+            className="mr-2 h-9 w-9 rounded-full"
+          >
+            <Settings className="h-5 w-5" />
+          </Button>
+        )}
         {!isChatPage && (
           <h1 className="text-xl font-bold text-gradient">
             AI Haven

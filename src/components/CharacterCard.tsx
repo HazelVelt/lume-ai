@@ -4,7 +4,7 @@ import { Character } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Pencil, MessageCircle, Trash2, AlertTriangle } from 'lucide-react';
+import { Pencil, MessageCircle, Trash2, AlertTriangle, Heart } from 'lucide-react';
 import { 
   AlertDialog,
   AlertDialogAction,
@@ -15,16 +15,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { toast } from 'sonner';
 
 interface CharacterCardProps {
   character: Character;
   onSelect: (id: string) => void;
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
+  onToggleFavorite?: (id: string) => void;
   isActive?: boolean;
   showPersonalityValues?: boolean;
   compact?: boolean;
-  sizeClass?: 'super-compact' | 'compact' | 'normal' | 'large' | 'extra-large';
+  sizeClass?: 'super-compact' | 'compact' | 'normal' | 'large' | 'extra-large' | 'massive';
 }
 
 const CharacterCard: React.FC<CharacterCardProps> = ({
@@ -32,6 +34,7 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
   onSelect,
   onEdit,
   onDelete,
+  onToggleFavorite,
   isActive = false,
   showPersonalityValues = true,
   compact = false,
@@ -46,6 +49,14 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
   const confirmDelete = () => {
     onDelete(character.id);
     setDeleteDialogOpen(false);
+    toast.error(`Deleted ${character.name}`, { duration: 1000 });
+  };
+
+  const handleToggleFavorite = () => {
+    if (onToggleFavorite) {
+      onToggleFavorite(character.id);
+      toast.success(`${character.isFavorite ? 'Removed from' : 'Added to'} favorites`, { duration: 1000 });
+    }
   };
 
   // Define styles based on size class
@@ -53,15 +64,16 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
     switch (sizeClass) {
       case 'super-compact':
         return {
-          imageHeight: 'h-16',
+          imageHeight: 'h-14',
           contentPadding: 'p-1.5',
           buttonHeight: 'h-5',
           buttonTextSize: 'text-[9px]',
           iconSize: 'h-2 w-2',
           nameSize: 'text-xs',
-          descriptionHeight: 'h-4',
+          descriptionHeight: 'h-0',
           descriptionTextSize: 'text-[8px]',
-          showTags: false
+          showTags: false,
+          showButtons: false
         };
       case 'compact':
         return {
@@ -73,7 +85,8 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
           nameSize: 'text-sm',
           descriptionHeight: 'h-6',
           descriptionTextSize: 'text-[10px]',
-          showTags: true
+          showTags: true,
+          showButtons: true
         };
       case 'normal':
         return {
@@ -85,7 +98,8 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
           nameSize: 'text-base',
           descriptionHeight: 'h-8',
           descriptionTextSize: 'text-xs',
-          showTags: true
+          showTags: true,
+          showButtons: true
         };
       case 'large':
         return {
@@ -97,7 +111,8 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
           nameSize: 'text-lg',
           descriptionHeight: 'h-12',
           descriptionTextSize: 'text-sm',
-          showTags: true
+          showTags: true,
+          showButtons: true
         };
       case 'extra-large':
         return {
@@ -109,7 +124,21 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
           nameSize: 'text-xl',
           descriptionHeight: 'h-16',
           descriptionTextSize: 'text-base',
-          showTags: true
+          showTags: true,
+          showButtons: true
+        };
+      case 'massive':
+        return {
+          imageHeight: 'h-56',
+          contentPadding: 'p-5',
+          buttonHeight: 'h-10',
+          buttonTextSize: 'text-lg',
+          iconSize: 'h-6 w-6',
+          nameSize: 'text-2xl',
+          descriptionHeight: 'h-20',
+          descriptionTextSize: 'text-lg',
+          showTags: true,
+          showButtons: true
         };
       default:
         return {
@@ -121,7 +150,8 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
           nameSize: 'text-base',
           descriptionHeight: 'h-8',
           descriptionTextSize: 'text-xs',
-          showTags: true
+          showTags: true,
+          showButtons: true
         };
     }
   };
@@ -131,8 +161,8 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
   return (
     <>
       <Card 
-        className={`w-full overflow-hidden transition-all duration-300 group hover:scale-[1.02] hover:shadow-lg ${
-          isActive ? 'ring-2 ring-accent1' : ''
+        className={`w-full overflow-hidden transition-all duration-300 group hover:shadow-lg bg-gradient-to-br from-background/80 to-accent/5 backdrop-blur-sm ${
+          isActive ? 'ring-2 ring-accent1' : 'hover:ring-1 hover:ring-accent1/30'
         }`}
       >
         <div className="relative">
@@ -147,26 +177,40 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
             }}
           />
           
+          {/* Favorite button */}
+          {onToggleFavorite && (
+            <button 
+              onClick={handleToggleFavorite}
+              className="absolute top-2 right-2 z-20 bg-background/30 backdrop-blur-sm p-1 rounded-full"
+            >
+              <Heart 
+                className={`${style.iconSize} ${character.isFavorite ? 'text-red-500 fill-red-500' : 'text-white/70'}`} 
+              />
+            </button>
+          )}
+          
           <div className="absolute bottom-0 left-0 right-0 p-2 z-20">
             <h3 className={`${style.nameSize} font-semibold text-foreground truncate`}>{character.name}</h3>
           </div>
         </div>
         
         <CardContent className={`${style.contentPadding} space-y-1`}>
-          <p className={`${style.descriptionTextSize} text-muted-foreground line-clamp-2 ${style.descriptionHeight}`}>
-            {character.description}
-          </p>
+          {style.descriptionHeight !== 'h-0' && (
+            <p className={`${style.descriptionTextSize} text-muted-foreground line-clamp-2 ${style.descriptionHeight}`}>
+              {character.description}
+            </p>
+          )}
           
           {/* Tags */}
           {style.showTags && character.tags && character.tags.length > 0 && (
             <div className="flex flex-wrap gap-1 my-1">
               {character.tags.slice(0, 3).map(tag => (
-                <Badge key={tag} variant="outline" className={`${style.buttonTextSize} py-0`}>
+                <Badge key={tag} variant="outline" className={`${style.buttonTextSize} py-0 bg-accent1/10`}>
                   {tag}
                 </Badge>
               ))}
               {character.tags.length > 3 && (
-                <Badge variant="outline" className={`${style.buttonTextSize} py-0`}>
+                <Badge variant="outline" className={`${style.buttonTextSize} py-0 bg-accent1/5`}>
                   +{character.tags.length - 3}
                 </Badge>
               )}
@@ -192,27 +236,29 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
             </div>
           )}
           
-          <div className="flex justify-between pt-1">
-            <Button
-              variant="outline"
-              size="sm"
-              className={`flex-1 mr-1 transition-all hover:bg-accent1/20 ${style.buttonHeight} ${style.buttonTextSize}`}
-              onClick={() => onEdit(character.id)}
-            >
-              <Pencil className={`${style.iconSize} mr-1`} /> Edit
-            </Button>
-            
-            <Button
-              variant="default"
-              size="sm"
-              className={`flex-1 ml-1 bg-accent1 hover:bg-accent1/80 ${style.buttonHeight} ${style.buttonTextSize}`}
-              onClick={() => onSelect(character.id)}
-            >
-              <MessageCircle className={`${style.iconSize} mr-1`} /> Chat
-            </Button>
-          </div>
+          {style.showButtons && (
+            <div className="flex justify-between pt-1">
+              <Button
+                variant="outline"
+                size="sm"
+                className={`flex-1 mr-1 transition-all hover:bg-accent1/20 ${style.buttonHeight} ${style.buttonTextSize}`}
+                onClick={() => onEdit(character.id)}
+              >
+                <Pencil className={`${style.iconSize} mr-1`} /> Edit
+              </Button>
+              
+              <Button
+                variant="default"
+                size="sm"
+                className={`flex-1 ml-1 bg-accent1 hover:bg-accent1/80 ${style.buttonHeight} ${style.buttonTextSize}`}
+                onClick={() => onSelect(character.id)}
+              >
+                <MessageCircle className={`${style.iconSize} mr-1`} /> Chat
+              </Button>
+            </div>
+          )}
           
-          {sizeClass !== 'super-compact' && sizeClass !== 'compact' && (
+          {sizeClass !== 'super-compact' && sizeClass !== 'compact' && style.showButtons && (
             <Button 
               variant="ghost" 
               size="sm" 
@@ -226,20 +272,20 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
       </Card>
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className="bg-gradient-to-br from-red-900/20 to-red-950/20 backdrop-blur-sm border-red-500/30">
           <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center">
-              <AlertTriangle className="h-5 w-5 text-destructive mr-2" />
+            <AlertDialogTitle className="flex items-center text-red-500">
+              <AlertTriangle className="h-5 w-5 text-red-500 mr-2" />
               Delete Character
             </AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete <span className="font-semibold">{character.name}</span>?
+            <AlertDialogDescription className="text-red-200/80">
+              Are you sure you want to delete <span className="font-semibold text-white">{character.name}</span>?
               This action cannot be undone and all chat history with this character will be lost.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+            <AlertDialogCancel className="bg-transparent border-red-500/30 text-white hover:bg-red-950/30">Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-red-600 text-white hover:bg-red-700">
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>

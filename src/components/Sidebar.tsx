@@ -21,19 +21,20 @@ const Sidebar: React.FC<SidebarProps> = ({
   isSidebarCollapsed,
   toggleSidebar,
 }) => {
-  const { characters, setActiveCharacter, deleteCharacter, activeCharacter } = useCharacter();
-  const [cardScale, setCardScale] = useState(50); // Scale from 0-100
+  const { characters, setActiveCharacter, deleteCharacter, activeCharacter, toggleFavorite, cardSize } = useCharacter();
   const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
   
   // Calculate if cards should be compact based on scale
-  const isCompact = cardScale < 40;
+  const isCompact = cardSize < 40;
+  
   // Calculate specific card size class based on the scale
   const getCardSizeClass = () => {
-    if (cardScale < 30) return 'super-compact'; // Very small
-    if (cardScale < 40) return 'compact'; // Compact
-    if (cardScale < 60) return 'normal'; // Normal
-    if (cardScale < 80) return 'large'; // Large
-    return 'extra-large'; // Very large
+    if (cardSize < 20) return 'super-compact';
+    if (cardSize < 35) return 'compact';
+    if (cardSize < 50) return 'normal';
+    if (cardSize < 70) return 'large';
+    if (cardSize < 85) return 'extra-large';
+    return 'massive';
   };
 
   // Filter and group characters
@@ -56,7 +57,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     <div className={`${isSidebarCollapsed ? 'w-0 md:w-16 overflow-hidden' : 'w-full md:w-[320px]'} border-r border-border bg-background/95 backdrop-blur-sm flex flex-col h-full transition-all duration-300 relative z-30`}>
       <div className="p-4 border-b flex justify-between items-center">
         {!isSidebarCollapsed && (
-          <h1 className="text-xl font-bold text-gradient cursor-pointer">
+          <h1 className="text-xl font-bold text-gradient">
             AI Haven
           </h1>
         )}
@@ -87,7 +88,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             </Button>
           </div>
 
-          {/* Filters & Settings */}
+          {/* Filters */}
           <div className="px-4 pb-2 space-y-2">
             {/* Favorites filter */}
             <div className="flex items-center">
@@ -106,33 +107,12 @@ const Sidebar: React.FC<SidebarProps> = ({
                 </span>
               )}
             </div>
-            
-            {/* Card Scale Slider */}
-            <div>
-              <div className="flex justify-between items-center mb-1">
-                <span className="text-xs text-muted-foreground">Card Size</span>
-                <span className="text-xs text-muted-foreground capitalize">
-                  {cardScale < 30 ? 'Tiny' : 
-                   cardScale < 40 ? 'Compact' : 
-                   cardScale < 60 ? 'Regular' : 
-                   cardScale < 80 ? 'Large' : 'Extra Large'}
-                </span>
-              </div>
-              <Slider 
-                value={[cardScale]} 
-                onValueChange={(value) => setCardScale(value[0])}
-                min={20}
-                max={100}
-                step={5}
-                className="my-2"
-              />
-            </div>
           </div>
 
           <div className="flex-1 overflow-y-auto p-3 scrollbar-none">
             {characters.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full p-4 text-center">
-                <div className="border border-accent1/20 p-6 rounded-lg max-w-[240px] shadow-md bg-background/60">
+                <div className="glass-morphism p-6 rounded-lg max-w-[240px] shadow-md">
                   <h3 className="text-lg font-semibold mb-2">No Characters Yet</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Create your first AI character to start chatting
@@ -167,6 +147,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                           onSelect={setActiveCharacter}
                           onEdit={onEditCharacter}
                           onDelete={deleteCharacter}
+                          onToggleFavorite={toggleFavorite}
                           isActive={activeCharacter?.id === character.id}
                           showPersonalityValues={false}
                           compact={isCompact}
@@ -192,6 +173,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                           onSelect={setActiveCharacter}
                           onEdit={onEditCharacter}
                           onDelete={deleteCharacter}
+                          onToggleFavorite={toggleFavorite}
                           isActive={activeCharacter?.id === character.id}
                           showPersonalityValues={false}
                           compact={isCompact}
@@ -211,6 +193,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                         onSelect={setActiveCharacter}
                         onEdit={onEditCharacter}
                         onDelete={deleteCharacter}
+                        onToggleFavorite={toggleFavorite}
                         isActive={activeCharacter?.id === character.id}
                         showPersonalityValues={false}
                         compact={isCompact}

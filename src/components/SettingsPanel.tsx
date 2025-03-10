@@ -8,9 +8,10 @@ import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ollamaService from '@/services/ollamaService';
 import stabilityAIService from '@/services/stabilityAIService';
-import { Loader2, Moon, Sun } from 'lucide-react';
+import { Loader2, Moon, Sun, CreditCard } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Slider } from '@/components/ui/slider';
 
 interface SettingsPanelProps {
   isOpen: boolean;
@@ -18,13 +19,14 @@ interface SettingsPanelProps {
 }
 
 const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
-  const { modelConfig, updateModelConfig } = useCharacter();
+  const { modelConfig, updateModelConfig, updateCardSize, cardSize } = useCharacter();
   const { theme, toggleTheme } = useTheme();
   
   const [ollamaEndpoint, setOllamaEndpoint] = useState(modelConfig.llm.endpoint);
   const [ollamaModel, setOllamaModel] = useState(modelConfig.llm.name);
   const [stabilityApiKey, setStabilityApiKey] = useState(modelConfig.imageGen.apiKey || '');
   const [stabilityModel, setStabilityModel] = useState(modelConfig.imageGen.name || 'stable-diffusion-xl-1024-v1-0');
+  const [cardSizeValue, setCardSizeValue] = useState(cardSize || 50);
   
   const [availableOllamaModels, setAvailableOllamaModels] = useState<string[]>([]);
   const [availableStabilityModels, setAvailableStabilityModels] = useState<string[]>([]);
@@ -37,13 +39,14 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
       setOllamaModel(modelConfig.llm.name);
       setStabilityApiKey(modelConfig.imageGen.apiKey || '');
       setStabilityModel(modelConfig.imageGen.name || 'stable-diffusion-xl-1024-v1-0');
+      setCardSizeValue(cardSize || 50);
       
       loadOllamaModels();
       if (modelConfig.imageGen.apiKey) {
         loadStabilityModels();
       }
     }
-  }, [isOpen, modelConfig]);
+  }, [isOpen, modelConfig, cardSize]);
   
   const loadOllamaModels = async () => {
     setIsLoadingOllamaModels(true);
@@ -76,6 +79,15 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
     }
   };
   
+  const getCardSizeLabel = (size: number) => {
+    if (size <= 20) return 'Tiny';
+    if (size <= 35) return 'Compact';
+    if (size <= 50) return 'Regular';
+    if (size <= 70) return 'Large';
+    if (size <= 85) return 'Extra Large';
+    return 'Massive';
+  };
+  
   const handleSave = () => {
     updateModelConfig('llm', {
       name: ollamaModel,
@@ -87,8 +99,10 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
       name: stabilityModel
     });
     
+    updateCardSize(cardSizeValue);
+    
     toast.success('Settings saved successfully', {
-      duration: 2000,
+      duration: 1000,
     });
     onClose();
   };
@@ -278,8 +292,33 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
                   <span>Dark Mode</span>
                 </Button>
               </div>
+            </div>
+            
+            <div className="space-y-2 pt-2">
+              <div className="flex items-center justify-between">
+                <Label className="flex items-center">
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Card Size
+                </Label>
+                <span className="text-sm font-medium">{getCardSizeLabel(cardSizeValue)}</span>
+              </div>
+              <Slider 
+                value={[cardSizeValue]} 
+                onValueChange={(value) => setCardSizeValue(value[0])}
+                min={10}
+                max={100}
+                step={5}
+                className="my-4"
+              />
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>Tiny</span>
+                <span>Compact</span>
+                <span>Regular</span>
+                <span>Large</span>
+                <span>Massive</span>
+              </div>
               <p className="text-xs text-muted-foreground mt-2">
-                Choose between light and dark theme for the application
+                Adjust the size of character cards in the sidebar
               </p>
             </div>
           </TabsContent>
