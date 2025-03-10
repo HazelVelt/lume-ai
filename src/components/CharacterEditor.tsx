@@ -349,7 +349,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
         <div className="grid gap-4 py-4 max-h-[calc(80vh-120px)] overflow-y-auto pr-2 scrollbar-none">
           <div className="grid grid-cols-1 gap-4 px-4">
             <div className="space-y-2">
-              <Label htmlFor="name" className="flex items-center gap-1 text-lg">
+              <Label htmlFor="name" className="flex items-center gap-1 text-lg sketch-underline">
                 <Wand2 className="h-4 w-4 text-accent1" />
                 Name
               </Label>
@@ -363,7 +363,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description" className="flex items-center gap-1 text-lg">
+              <Label htmlFor="description" className="flex items-center gap-1 text-lg sketch-underline">
                 <Brush className="h-4 w-4 text-accent1" />
                 Description
               </Label>
@@ -378,7 +378,7 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
             </div>
 
             <div className="space-y-2">
-              <Label className="flex items-center gap-1 text-lg">
+              <Label className="flex items-center gap-1 text-lg sketch-underline">
                 <TagIcon className="h-4 w-4 text-accent1" />
                 Tags
               </Label>

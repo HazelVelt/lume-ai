@@ -143,7 +143,7 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
       if (response.includes("I apologize, but I'm having trouble connecting")) {
         setIsConnectionError(true);
         setErrorMessage(response);
-        addErrorMessage(response);
+        addMessage(character.id, response, false);
       } else {
         simulateTyping(response);
       }
@@ -152,7 +152,7 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
       setIsConnectionError(true);
       const errorResponse = "I apologize, but I'm having trouble connecting to my language model. Please ensure Ollama is running on your computer.";
       setErrorMessage(errorResponse);
-      addErrorMessage(errorResponse);
+      addMessage(character.id, errorResponse, false);
       toast.error('Failed to generate response', {
         duration: 3000,
       });

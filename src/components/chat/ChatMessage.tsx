@@ -2,6 +2,7 @@
 import React from 'react';
 import { Character, ChatMessage as ChatMessageType } from '@/types';
 import { CircleCheckIcon, ClockIcon, Sparkles, AlertTriangleIcon } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
 interface ChatMessageProps {
   message: ChatMessageType;
@@ -76,10 +77,14 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
         )}
         
         <div className="px-4 py-3 relative">
-          <div className="text-sm whitespace-pre-wrap break-words">
-            {message.content}
-            {isTyping && (
-              <span className="inline-block ml-1 animate-blink">▋</span>
+          <div className="text-sm markdown-content">
+            {isTyping ? (
+              <>
+                {message.content}
+                <span className="inline-block ml-1 animate-blink">▋</span>
+              </>
+            ) : (
+              <ReactMarkdown>{message.content}</ReactMarkdown>
             )}
           </div>
         </div>

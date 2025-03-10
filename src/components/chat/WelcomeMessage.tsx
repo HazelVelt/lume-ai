@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Character } from '@/types';
@@ -57,13 +56,9 @@ const WelcomeMessage: React.FC<WelcomeMessageProps> = ({ character }) => {
       
       {/* Character name with hand-drawn underline */}
       <div className="relative mb-2 z-10">
-        <h2 className="text-3xl font-bold text-gradient animate-float">
+        <h2 className="text-3xl font-bold text-gradient animate-float sketch-underline">
           {character.name}
         </h2>
-        <svg className="absolute -bottom-2 left-1/4 right-1/4 w-1/2 mx-auto opacity-70" height="6" viewBox="0 0 100 6">
-          <path d="M 0 3 Q 10 6, 20 3 T 40 3 T 60 3 T 80 3 T 100 3" 
-                fill="none" stroke="currentColor" strokeWidth="2" className="text-accent1" />
-        </svg>
       </div>
       
       {/* Character description with handcrafted text container */}
