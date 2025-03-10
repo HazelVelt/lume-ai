@@ -10,21 +10,14 @@ interface ChatHeaderProps {
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({ character }) => {
-  const { toggleFavorite } = useCharacter();
+  const { toggleFavorite, characters } = useCharacter();
   const [imgError, setImgError] = useState(false);
   
-  // Use state to track favorite status for immediate UI updates
-  const [isFavorite, setIsFavorite] = useState(character.isFavorite);
-  
-  // Update local state when character prop changes
-  useEffect(() => {
-    setIsFavorite(character.isFavorite);
-  }, [character.isFavorite]);
+  // Find the current character in the global state to get the up-to-date favorite status
+  const currentCharacter = characters.find(c => c.id === character.id);
+  const isFavorite = currentCharacter?.isFavorite || false;
   
   const handleFavoriteToggle = () => {
-    // Update local state immediately for responsive UI
-    setIsFavorite(!isFavorite);
-    // Then update the actual data
     toggleFavorite(character.id);
   };
 

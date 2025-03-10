@@ -126,8 +126,6 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
     setMessage('');
     addMessage(character.id, userMessage, true);
     setIsLoading(true);
-    setIsConnectionError(false);
-    setErrorMessage('');
     
     try {
       const conversationHistory = messages.map(msg => ({
@@ -145,7 +143,7 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
       if (response.includes("I apologize, but I'm having trouble connecting")) {
         setIsConnectionError(true);
         setErrorMessage(response);
-        simulateErrorMessage(response);
+        addErrorMessage(response);
       } else {
         simulateTyping(response);
       }
@@ -154,25 +152,17 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
       setIsConnectionError(true);
       const errorResponse = "I apologize, but I'm having trouble connecting to my language model. Please ensure Ollama is running on your computer.";
       setErrorMessage(errorResponse);
-      simulateErrorMessage(errorResponse);
+      addErrorMessage(errorResponse);
       toast.error('Failed to generate response', {
-        duration: 1000,
+        duration: 3000,
       });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const simulateErrorMessage = (text: string) => {
-    setIsConnectionError(true);
-    setErrorMessage(text);
-    
-    // Wait a moment then add the error message to the conversation
-    setTimeout(() => {
-      setIsConnectionError(false);
-      addMessage(character.id, text, false);
-      setErrorMessage('');
-    }, 2000);
+  const addErrorMessage = (text: string) => {
+    addMessage(character.id, text, false);
   };
 
   const formatTime = (timestamp: number) => {
@@ -225,6 +215,7 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
                 message={msg}
                 character={character}
                 formatTime={formatTime}
+                isError={msg.content.includes("I apologize, but I'm having trouble connecting")}
               />
             ))}
             
@@ -243,21 +234,6 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
               />
             )}
 
-            {isConnectionError && (
-              <ChatMessage 
-                message={{
-                  id: 'error',
-                  senderId: character.id,
-                  content: errorMessage,
-                  timestamp: Date.now(),
-                  isUser: false
-                }}
-                character={character}
-                formatTime={formatTime}
-                isError={true}
-              />
-            )}
-            
             <div ref={messagesEndRef} />
           </div>
         )}
@@ -269,7 +245,7 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
         setMessage={setMessage}
         handleSendMessage={handleSendMessage}
         isLoading={isLoading}
-        isTyping={isTyping || isConnectionError}
+        isTyping={isTyping}
         characterName={character.name}
       />
     </div>
