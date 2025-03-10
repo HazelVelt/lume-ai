@@ -142,14 +142,14 @@ const ChatPage: React.FC = () => {
         ) : characters.length === 0 ? (
           <EmptyStateMessage
             title="Welcome to LumeAI"
-            description="Create your first character to start chatting."
-            buttonText="Create New Character"
+            description="Create your first AI character and embark on a journey of endless conversations. Your imagination is the only limit!"
+            buttonText="Create Your First Character"
             onButtonClick={handleCreateCharacter}
           />
         ) : (
           <EmptyStateMessage
             title="Select a Character"
-            description="Choose an existing character from the sidebar or create a new one to start chatting."
+            description="Choose an existing character from the sidebar or create a new one to start a unique conversation."
             buttonText="Create New Character"
             onButtonClick={handleCreateCharacter}
           />

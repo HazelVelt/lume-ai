@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Character } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
@@ -41,7 +42,9 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
 }) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
-  const handleDelete = () => {
+  const handleDelete = (e: React.MouseEvent) => {
+    // Stop propagation to prevent other event handlers from being triggered
+    e.stopPropagation();
     setDeleteDialogOpen(true);
   };
 
@@ -51,7 +54,8 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
     toast.error(`Deleted ${character.name}`, { duration: 1000 });
   };
 
-  const handleToggleFavorite = () => {
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (onToggleFavorite) {
       onToggleFavorite(character.id);
       toast.success(`${character.isFavorite ? 'Removed from' : 'Added to'} favorites`, { duration: 1000 });
@@ -238,7 +242,10 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
                 variant="outline"
                 size="sm"
                 className={`flex-1 mr-1 transition-all hover:bg-accent1/20 ${style.buttonHeight} ${style.buttonTextSize}`}
-                onClick={() => onEdit(character.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(character.id);
+                }}
               >
                 <Pencil className={`${style.iconSize} mr-1`} /> Edit
               </Button>
