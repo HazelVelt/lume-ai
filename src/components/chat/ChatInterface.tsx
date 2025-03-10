@@ -217,9 +217,9 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
       {/* Messages container with adjusted padding to prevent overlap with fixed input */}
       <div 
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto styled-scrollbar z-10 bg-gradient-to-b from-background/70 to-background/40 pb-[90px]"
+        className="flex-1 overflow-y-auto styled-scrollbar z-10 bg-gradient-to-b from-background/70 to-background/40 pb-[90px] md:pl-[320px]"
       >
-        <div className="px-4 py-2 space-y-1 max-w-5xl mx-auto">
+        <div className="max-w-5xl mx-auto px-4 py-2 space-y-1">
           {messages.length === 0 ? (
             <WelcomeMessage character={character} />
           ) : (
@@ -255,7 +255,7 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
         </div>
       </div>
 
-      {/* Input area - fixed at bottom with proper offset for sidebar */}
+      {/* Input area */}
       <ChatInput 
         message={message}
         setMessage={setMessage}

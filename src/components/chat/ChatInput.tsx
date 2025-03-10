@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -32,7 +31,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
   };
 
   return (
-    <Card className="border-t border-accent1/20 glass-morphism fixed bottom-0 left-0 right-0 z-20 shadow-lg rounded-none md:ml-[320px] md:left-auto">
+    <Card className="border-t border-accent1/20 glass-morphism fixed bottom-0 w-full z-20 shadow-lg rounded-none md:pl-[320px]">
       <CardContent className="p-3 max-w-5xl mx-auto">
         <div className="flex items-end gap-2">
           <div className="relative flex-1">
