@@ -79,16 +79,13 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
           <div className="text-sm whitespace-pre-wrap break-words">
             {message.content}
             {isTyping && (
-              <div className="absolute inset-0 bg-background flex flex-col justify-end">
-                <div className="mt-auto mb-2 h-1 bg-accent1/20 rounded-full overflow-hidden w-[50%] mx-auto">
-                  <div className="h-full bg-accent1 rounded-full animate-progress"></div>
-                </div>
-              </div>
+              <span className="inline-block ml-1 animate-blink">▋</span>
             )}
             {isError && (
               <div className="absolute inset-0 bg-background flex flex-col justify-end">
-                <div className="mt-auto mb-2 h-1 bg-destructive/20 rounded-full overflow-hidden w-[50%] mx-auto">
-                  <div className="h-full bg-destructive rounded-full animate-progress"></div>
+                <div className="mt-auto mb-2 text-destructive text-center">
+                  <AlertTriangleIcon className="h-5 w-5 mx-auto mb-1" />
+                  Connection trouble
                 </div>
               </div>
             )}

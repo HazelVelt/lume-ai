@@ -8,6 +8,7 @@ import LandingPage from "./pages/LandingPage";
 import ChatPage from "./pages/ChatPage";
 import NotFound from "./pages/NotFound";
 import { CharacterProvider } from "@/contexts/CharacterContext";
+import "./App.css";
 
 // Create a client
 const queryClient = new QueryClient({

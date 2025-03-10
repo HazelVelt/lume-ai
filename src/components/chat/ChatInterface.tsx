@@ -104,8 +104,6 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
     setTypingMessage('');
     
     let i = 0;
-    const typingSpeed = 2; // Even faster typing
-    
     const typingInterval = setInterval(() => {
       if (i < text.length) {
         setTypingMessage(prev => prev + text.charAt(i));
@@ -116,7 +114,7 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
         addMessage(character.id, text, false);
         setTypingMessage('');
       }
-    }, typingSpeed);
+    }, 30);
     
     return () => clearInterval(typingInterval);
   };
