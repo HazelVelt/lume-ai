@@ -16,6 +16,7 @@ const queryClient = new QueryClient({
     queries: {
       retry: 1,
       refetchOnWindowFocus: false,
+      staleTime: 60000, // 1 minute
     },
   },
 });
@@ -35,15 +36,21 @@ const App = () => {
       <ThemeProvider>
         <CharacterProvider>
           <TooltipProvider>
-            <Sonner position="top-center" richColors duration={1000} />
-            <Router>
-              <Routes>
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/chat" element={<ChatPage />} />
-                <Route path="/chat/:id" element={<ChatPage />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Router>
+            <Sonner position="top-center" richColors duration={1000} className="z-50" />
+            <div className="relative">
+              {/* Global ambient background elements */}
+              <div className="fixed inset-0 -z-10 bg-gradient-to-br from-background via-background to-background/95"></div>
+              <div className="fixed inset-0 -z-10 noise-texture opacity-10"></div>
+              
+              <Router>
+                <Routes>
+                  <Route path="/" element={<LandingPage />} />
+                  <Route path="/chat" element={<ChatPage />} />
+                  <Route path="/chat/:id" element={<ChatPage />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Router>
+            </div>
           </TooltipProvider>
         </CharacterProvider>
       </ThemeProvider>

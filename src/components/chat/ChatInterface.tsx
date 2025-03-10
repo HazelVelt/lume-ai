@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Character } from '@/types';
 import { useCharacter } from '@/contexts/CharacterContext';
@@ -161,10 +162,6 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
     }
   };
 
-  const addErrorMessage = (text: string) => {
-    addMessage(character.id, text, false);
-  };
-
   const formatTime = (timestamp: number) => {
     return new Date(timestamp).toLocaleTimeString([], {
       hour: '2-digit',
@@ -174,25 +171,32 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
 
   return (
     <div className="flex flex-col h-full overflow-hidden relative">
-      {/* Handcrafted background elements */}
+      {/* Ambient background elements */}
       <div className="absolute inset-0 pointer-events-none z-0">
-        {/* Paper texture background */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmZmZmMDkiPjwvcmVjdD4KPHBhdGggZD0iTTAgNUw1IDBaTTYgNEw0IDZaTS0xIDFMMSAtMVoiIHN0cm9rZT0iI2ZmZmZmZjEwIiBzdHJva2Utd2lkdGg9IjAuNSI+PC9wYXRoPgo8L3N2Zz4=')] opacity-30"></div>
+        {/* Gradient background overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-accent1/5 via-transparent to-accent1/5 opacity-80"></div>
+        
+        {/* Subtle noise texture */}
+        <div className="absolute inset-0 noise-texture opacity-10"></div>
+        
+        {/* Soft glow in corners */}
+        <div className="absolute -top-20 -left-20 w-40 h-40 bg-accent1/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-accent1/10 rounded-full blur-3xl"></div>
         
         {/* Decorative corner flourishes */}
-        <svg className="absolute top-0 left-0 w-24 h-24 text-accent1/20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg className="absolute top-0 left-0 w-24 h-24 text-accent1/20 transform scale-75 md:scale-100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M6 3H3v3m18 0V3h-3m0 18h3v-3M3 18v3h3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
         
-        <svg className="absolute top-0 right-0 w-24 h-24 text-accent1/20 transform rotate-90" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg className="absolute top-0 right-0 w-24 h-24 text-accent1/20 transform rotate-90 scale-75 md:scale-100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M6 3H3v3m18 0V3h-3m0 18h3v-3M3 18v3h3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
         
-        <svg className="absolute bottom-0 right-0 w-24 h-24 text-accent1/20 transform rotate-180" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg className="absolute bottom-0 right-0 w-24 h-24 text-accent1/20 transform rotate-180 scale-75 md:scale-100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M6 3H3v3m18 0V3h-3m0 18h3v-3M3 18v3h3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
         
-        <svg className="absolute bottom-0 left-0 w-24 h-24 text-accent1/20 transform -rotate-90" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg className="absolute bottom-0 left-0 w-24 h-24 text-accent1/20 transform -rotate-90 scale-75 md:scale-100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M6 3H3v3m18 0V3h-3m0 18h3v-3M3 18v3h3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </div>
@@ -203,7 +207,7 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
       {/* Messages container */}
       <div 
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto scrollbar-none z-10 bg-gradient-to-b from-background/50 to-background/30"
+        className="flex-1 overflow-y-auto styled-scrollbar scrollbar-none z-10 bg-gradient-to-b from-background/70 to-background/40"
       >
         {messages.length === 0 ? (
           <WelcomeMessage character={character} />

@@ -31,13 +31,13 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
             <img 
               src={character.imageUrl || '/placeholder.svg'} 
               alt={character.name}
-              className="h-9 w-9 rounded-full object-cover border-2 border-accent1/40 shadow-md transform hover:rotate-3 transition-transform"
+              className="h-10 w-10 rounded-full object-cover border-2 border-accent1/40 shadow-lg transform hover:rotate-3 transition-transform"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = '/placeholder.svg';
               }}
             />
-            <div className="absolute -top-1 -right-1 bg-background rounded-full p-0.5 border border-accent1/30">
-              <Sparkles className="h-3 w-3 text-accent1" />
+            <div className="absolute -top-1 -right-1 bg-background rounded-full p-0.5 border border-accent1/30 shadow-md">
+              <Sparkles className="h-3 w-3 text-accent1 animate-pulse-soft" />
             </div>
           </div>
         </div>
@@ -46,10 +46,23 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
       <div
         className={`max-w-[90%] sm:max-w-[85%] md:max-w-[80%] ${
           message.isUser
-            ? 'bg-accent1/10 border-2 border-accent1/20 rounded-2xl rounded-tr-sm text-foreground transform rotate-0.5deg shadow-accent1/5'
-            : 'bg-background/90 border-2 border-border/70 rounded-2xl rounded-tl-sm transform -rotate-0.5deg shadow-border/5'
-        } shadow-lg flex flex-col paper-texture relative`}
+            ? 'bg-accent1/10 border-2 border-accent1/20 rounded-2xl rounded-tr-sm text-foreground transform rotate-0.5deg shadow-accent1/10'
+            : 'bg-background/90 border-2 border-border/70 rounded-2xl rounded-tl-sm transform -rotate-0.5deg shadow-lg'
+        } shadow-lg flex flex-col paper-texture relative overflow-hidden`}
       >
+        {/* Message shine effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent pointer-events-none opacity-70
+                       animate-[shine_3s_ease-in-out_infinite] -translate-x-full" style={{
+          animation: 'shine 3s ease-in-out infinite'
+        }}></div>
+        <style jsx>{`
+          @keyframes shine {
+            0% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+            100% { transform: translateX(100%); }
+          }
+        `}</style>
+        
         {/* Decorative corner elements for character messages */}
         {!message.isUser && (
           <>
@@ -81,7 +94,11 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
             {isTyping ? (
               <>
                 {message.content}
-                <span className="inline-block ml-1 animate-blink">▋</span>
+                <span className="typing-indicator ml-1">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </span>
               </>
             ) : (
               <ReactMarkdown>{message.content}</ReactMarkdown>
@@ -114,7 +131,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
         
         {/* Small inline error notification */}
         {isError && (
-          <div className="mx-4 mb-2 px-2 py-1 bg-amber-500/10 border border-amber-500/20 rounded text-xs text-amber-500 flex items-center">
+          <div className="mx-4 mb-2 px-2 py-1 bg-amber-500/10 border border-amber-500/20 rounded-md text-xs text-amber-500 flex items-center">
             <AlertTriangleIcon className="h-3 w-3 mr-1" />
             <span>Check if Ollama is running</span>
           </div>
@@ -123,7 +140,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
       
       {message.isUser && (
         <div className="flex-shrink-0 ml-3 mt-1">
-          <div className="h-9 w-9 rounded-full bg-accent1/15 border-2 border-accent1/40 flex items-center justify-center text-sm font-medium text-accent1 transform hover:rotate-3 transition-transform">
+          <div className="h-10 w-10 rounded-full bg-accent1/15 border-2 border-accent1/40 flex items-center justify-center text-sm font-medium text-accent1 transform hover:-rotate-3 transition-transform shadow-md">
             You
           </div>
         </div>

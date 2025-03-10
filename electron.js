@@ -1,161 +1,71 @@
-
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, shell } = require('electron');
 const path = require('path');
 const url = require('url');
-const fs = require('fs');
-const isDev = process.env.NODE_ENV !== 'production';
 
-// Keep a global reference of the window object
-let mainWindow;
-
-// Define data path for storing application data
-const userDataPath = app.getPath('userData');
-const charactersPath = path.join(userDataPath, 'characters');
-const settingsPath = path.join(userDataPath, 'settings.json');
-
-// Ensure directories exist
-function ensureDirectoriesExist() {
-  if (!fs.existsSync(charactersPath)) {
-    fs.mkdirSync(charactersPath, { recursive: true });
-  }
+// Handle creating/removing shortcuts on Windows when installing/uninstalling
+if (require('electron-squirrel-startup')) {
+  app.quit();
 }
+
+// Keep a global reference of the mainWindow object
+let mainWindow;
 
 function createWindow() {
   // Create the browser window
   mainWindow = new BrowserWindow({
-    width: 1280,
-    height: 900,
-    minWidth: 800,
-    minHeight: 600,
+    width: 1200,
+    height: 800,
+    title: 'LumeAI',
+    icon: path.join(__dirname, 'public/favicon.ico'),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
     },
-    icon: path.join(__dirname, 'public/favicon.ico'),
-    backgroundColor: '#13111C',
-    title: 'LumeAI',
     show: false,
-    frame: true
   });
-
-  // Add a splash screen
-  const splash = new BrowserWindow({
-    width: 500,
-    height: 300,
-    transparent: true,
-    frame: false,
-    alwaysOnTop: true,
-    icon: path.join(__dirname, 'public/favicon.ico')
-  });
-
-  splash.loadURL(
-    url.format({
-      pathname: path.join(__dirname, 'public/splash.html'),
-      protocol: 'file:',
-      slashes: true
-    })
-  );
 
   // Load the app
-  const startUrl = isDev
-    ? 'http://localhost:8080' // Vite dev server
-    : url.format({
-        pathname: path.join(__dirname, './dist/index.html'),
-        protocol: 'file:',
-        slashes: true,
-      });
-
+  const startUrl = process.env.ELECTRON_START_URL || url.format({
+    pathname: path.join(__dirname, './dist/index.html'),
+    protocol: 'file:',
+    slashes: true,
+  });
+  
   mainWindow.loadURL(startUrl);
 
-  // Once the main window is ready, show it and close the splash screen
+  // Open external links in the default browser instead of a new electron window
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url);
+    return { action: 'deny' };
+  });
+
+  // Show window when ready to prevent flashing
   mainWindow.once('ready-to-show', () => {
-    splash.destroy();
     mainWindow.show();
   });
 
-  // Open DevTools in development
-  if (isDev) {
-    mainWindow.webContents.openDevTools();
-  }
-
   // Emitted when the window is closed
-  mainWindow.on('closed', function () {
+  mainWindow.on('closed', () => {
+    // Dereference the window object
     mainWindow = null;
   });
 }
 
-// Initialize file system
-ensureDirectoriesExist();
+// This method will be called when Electron has finished initialization
+app.whenReady().then(() => {
+  createWindow();
 
-// Create window when Electron has finished initialization
-app.whenReady().then(createWindow);
-
-// Quit when all windows are closed
-app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') app.quit();
+  app.on('activate', () => {
+    // On macOS it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
 });
 
-app.on('activate', function () {
-  if (mainWindow === null) createWindow();
-});
-
-// IPC handlers for file operations
-ipcMain.handle('save-character', async (event, character) => {
-  try {
-    const filePath = path.join(charactersPath, `${character.id}.json`);
-    fs.writeFileSync(filePath, JSON.stringify(character, null, 2));
-    return { success: true };
-  } catch (error) {
-    return { success: false, error: error.message };
-  }
-});
-
-ipcMain.handle('load-characters', async () => {
-  try {
-    const files = fs.readdirSync(charactersPath);
-    const characters = files
-      .filter(file => file.endsWith('.json'))
-      .map(file => {
-        const filePath = path.join(charactersPath, file);
-        const data = fs.readFileSync(filePath, 'utf8');
-        return JSON.parse(data);
-      });
-    return { success: true, characters };
-  } catch (error) {
-    return { success: false, error: error.message, characters: [] };
-  }
-});
-
-ipcMain.handle('delete-character', async (event, characterId) => {
-  try {
-    const filePath = path.join(charactersPath, `${characterId}.json`);
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-    }
-    return { success: true };
-  } catch (error) {
-    return { success: false, error: error.message };
-  }
-});
-
-ipcMain.handle('save-settings', async (event, settings) => {
-  try {
-    fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2));
-    return { success: true };
-  } catch (error) {
-    return { success: false, error: error.message };
-  }
-});
-
-ipcMain.handle('load-settings', async () => {
-  try {
-    if (fs.existsSync(settingsPath)) {
-      const data = fs.readFileSync(settingsPath, 'utf8');
-      return { success: true, settings: JSON.parse(data) };
-    }
-    return { success: true, settings: null };
-  } catch (error) {
-    return { success: false, error: error.message, settings: null };
+// Quit when all windows are closed, except on macOS
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
   }
 });
