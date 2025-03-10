@@ -1,9 +1,11 @@
+
 import React, { useState, useMemo } from 'react';
-import { Settings, Plus, ChevronLeft, ChevronRight, Heart, Tags } from 'lucide-react';
+import { Settings, Plus, ChevronLeft, ChevronRight, Heart, Tags, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCharacter } from '@/contexts/CharacterContext';
 import CharacterCard from '@/components/CharacterCard';
 import { Badge } from '@/components/ui/badge';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 interface SidebarProps {
   onCreateCharacter: () => void;
@@ -13,6 +15,7 @@ interface SidebarProps {
   toggleSidebar: () => void;
   selectedTags: string[];
   toggleTag: (tag: string) => void;
+  onReturnHome: () => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -23,9 +26,12 @@ const Sidebar: React.FC<SidebarProps> = ({
   toggleSidebar,
   selectedTags,
   toggleTag,
+  onReturnHome,
 }) => {
   const { characters, setActiveCharacter, deleteCharacter, activeCharacter, toggleFavorite, cardSize } = useCharacter();
   const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
+  const location = useLocation();
+  const isLandingPage = location.pathname === '/';
   
   const isCompact = cardSize < 40;
   
@@ -75,13 +81,25 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <div className={`${isSidebarCollapsed ? 'w-0 md:w-16 overflow-hidden' : 'w-full md:w-[320px]'} border-r border-border bg-background/95 backdrop-blur-sm flex flex-col h-full transition-all duration-300 relative z-10`}>
-      <div className="p-4 border-b flex justify-between items-center">
+      <div className="p-4 border-b flex items-center">
+        {!isLandingPage && !isSidebarCollapsed && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onReturnHome}
+            className="mr-2 h-8 w-8 rounded-full"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+        )}
+        
         {!isSidebarCollapsed && (
           <h1 className="text-xl font-bold text-gradient">
             LumeAI
           </h1>
         )}
-        <div className="flex items-center space-x-1">
+        
+        <div className="ml-auto flex items-center space-x-1">
           <Button 
             variant="ghost" 
             size="icon"

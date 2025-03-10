@@ -7,7 +7,6 @@ import ChatInterface from '@/components/chat/ChatInterface';
 import SettingsPanel from '@/components/SettingsPanel';
 import ChatNavigation from '@/components/ChatNavigation';
 import Sidebar from '@/components/Sidebar';
-import Header from '@/components/Header';
 import EmptyStateMessage from '@/components/chat/EmptyStateMessage';
 import { Character } from '@/types';
 
@@ -97,7 +96,7 @@ const ChatPage: React.FC = () => {
   }, [selectedTags]);
 
   return (
-    <div className="flex flex-col md:flex-row h-screen overflow-hidden pt-0">
+    <div className="flex flex-col md:flex-row h-screen overflow-hidden">
       {/* Sidebar with tag filtering */}
       <Sidebar 
         onCreateCharacter={handleCreateCharacter}
@@ -107,15 +106,11 @@ const ChatPage: React.FC = () => {
         toggleSidebar={toggleSidebar}
         selectedTags={selectedTags}
         toggleTag={toggleTag}
+        onReturnHome={handleReturnToLanding}
       />
 
       {/* Main content area */}
       <div className="flex-1 flex flex-col h-full bg-background relative">
-        <Header 
-          activeCharacter={activeCharacter} 
-          onReturnHome={handleReturnToLanding} 
-        />
-        
         {activeCharacter ? (
           doesCharacterMatchTags(activeCharacter) ? (
             <>

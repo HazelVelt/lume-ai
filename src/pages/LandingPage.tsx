@@ -2,8 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { MessageSquare, Wand2, Users, Bot, Heart, Sparkles, Palette, Star, ArrowRight } from 'lucide-react';
-import Header from '@/components/Header';
+import { MessageSquare, Wand2, Users, Bot, Heart, Sparkles, Palette, Star, ArrowRight, Settings } from 'lucide-react';
 import SettingsPanel from '@/components/SettingsPanel';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -32,11 +31,19 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className={`flex flex-col min-h-screen bg-background paper-texture ${getGradientClass()}`}>
-      <Header 
-        activeCharacter={null} 
-        onReturnHome={() => {}} 
-        onSettingsOpen={() => setIsSettingsOpen(true)} 
-      />
+      <div className="p-4 border-b flex items-center justify-between sticky top-0 z-20 bg-background/90 backdrop-blur-sm">
+        <h1 className="text-xl font-bold text-gradient">
+          LumeAI
+        </h1>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setIsSettingsOpen(true)}
+          className="h-9 w-9 rounded-full"
+        >
+          <Settings className="h-5 w-5" />
+        </Button>
+      </div>
       
       <main className="flex-1 flex flex-col items-center justify-center p-4 md:p-8">
         {/* Hero Section */}

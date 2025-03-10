@@ -137,6 +137,12 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
         <Tabs defaultValue="appearance" className="w-full">
           <TabsList className="grid w-full grid-cols-3 handcrafted-border rounded-md p-1 bg-background/50">
             <TabsTrigger 
+              value="appearance" 
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hand-drawn-button shadow-primary/20"
+            >
+              Appearance
+            </TabsTrigger>
+            <TabsTrigger 
               value="llm" 
               className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hand-drawn-button shadow-primary/20"
             >
@@ -148,13 +154,68 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
             >
               Image Generation
             </TabsTrigger>
-            <TabsTrigger 
-              value="appearance" 
-              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hand-drawn-button shadow-primary/20"
-            >
-              Appearance
-            </TabsTrigger>
           </TabsList>
+          
+          <TabsContent value="appearance" className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label className="wavy-decoration">Theme</Label>
+              
+              <Select value={theme} onValueChange={(value: ThemeType) => setTheme(value)}>
+                <SelectTrigger className="handcrafted-input">
+                  <SelectValue placeholder="Select a theme">
+                    <div className="flex items-center gap-2">
+                      {themeOptions.find(option => option.value === theme)?.icon}
+                      <span>{themeOptions.find(option => option.value === theme)?.label}</span>
+                    </div>
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent className="paper-texture border-2 border-dashed border-border/60">
+                  {themeOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value} className="flex items-center gap-2">
+                      <div className="flex items-center gap-2">
+                        {option.icon}
+                        <span>{option.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="space-y-2 pt-4 mt-2 border-t border-dashed border-border/40">
+              <div className="flex items-center justify-between">
+                <Label className="flex items-center wavy-decoration">
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Card Size
+                </Label>
+                <span className="text-sm font-medium bg-primary/10 px-2 py-1 rounded-md">
+                  {getCardSizeLabel(cardSizeValue)}
+                </span>
+              </div>
+              
+              <div className="handcrafted-slider">
+                <Slider 
+                  value={[cardSizeValue]} 
+                  onValueChange={(value) => setCardSizeValue(value[0])}
+                  min={10}
+                  max={100}
+                  step={5}
+                  className="my-4"
+                />
+              </div>
+              
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>Tiny</span>
+                <span>Small</span>
+                <span>Medium</span>
+                <span>Large</span>
+                <span>Massive</span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                Adjust the size of character cards in the sidebar
+              </p>
+            </div>
+          </TabsContent>
           
           <TabsContent value="llm" className="space-y-4 py-4">
             <div className="space-y-2">
@@ -301,84 +362,6 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
               
               <p className="text-xs text-muted-foreground mt-2">
                 Recommended model: stable-diffusion-xl-1024-v1-0
-              </p>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="appearance" className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label className="wavy-decoration">Theme</Label>
-              
-              <Select value={theme} onValueChange={(value: ThemeType) => setTheme(value)}>
-                <SelectTrigger className="handcrafted-input">
-                  <SelectValue placeholder="Select a theme">
-                    <div className="flex items-center gap-2">
-                      {themeOptions.find(option => option.value === theme)?.icon}
-                      <span>{themeOptions.find(option => option.value === theme)?.label}</span>
-                    </div>
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent className="paper-texture border-2 border-dashed border-border/60">
-                  {themeOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value} className="flex items-center gap-2">
-                      <div className="flex items-center gap-2">
-                        {option.icon}
-                        <span>{option.label}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              
-              <div className="grid grid-cols-4 gap-3 mt-3">
-                {themeOptions.map((option) => (
-                  <Button 
-                    key={option.value}
-                    variant={theme === option.value ? 'default' : 'outline'}
-                    className={`flex items-center justify-center gap-2 py-4 flex-col 
-                      ${theme === option.value ? 'bg-accent1 hover:bg-accent1/80 dark:text-black' : ''}
-                      hand-drawn-button shadow-primary/20
-                    `}
-                    onClick={() => setTheme(option.value)}
-                  >
-                    {option.icon}
-                    <span className="text-xs">{option.label}</span>
-                  </Button>
-                ))}
-              </div>
-            </div>
-            
-            <div className="space-y-2 pt-4 mt-2 border-t border-dashed border-border/40">
-              <div className="flex items-center justify-between">
-                <Label className="flex items-center wavy-decoration">
-                  <CreditCard className="h-4 w-4 mr-2" />
-                  Card Size
-                </Label>
-                <span className="text-sm font-medium bg-primary/10 px-2 py-1 rounded-md">
-                  {getCardSizeLabel(cardSizeValue)}
-                </span>
-              </div>
-              
-              <div className="handcrafted-slider">
-                <Slider 
-                  value={[cardSizeValue]} 
-                  onValueChange={(value) => setCardSizeValue(value[0])}
-                  min={10}
-                  max={100}
-                  step={5}
-                  className="my-4"
-                />
-              </div>
-              
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>Tiny</span>
-                <span>Small</span>
-                <span>Medium</span>
-                <span>Large</span>
-                <span>Massive</span>
-              </div>
-              <p className="text-xs text-muted-foreground mt-2">
-                Adjust the size of character cards in the sidebar
               </p>
             </div>
           </TabsContent>
