@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Character } from '@/types';
 import { useCharacter } from '@/contexts/CharacterContext';
@@ -40,22 +39,22 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character }) => {
       `Kinkiness: ${personality.kinkiness}% (${personality.kinkiness < 30 ? 'low' : personality.kinkiness > 70 ? 'high' : 'moderate'})`,
       `Dominance: ${personality.dominance}% (${personality.dominance < 30 ? 'low' : personality.dominance > 70 ? 'high' : 'moderate'})`,
       `Submissiveness: ${personality.submissiveness}% (${personality.submissiveness < 30 ? 'low' : personality.submissiveness > 70 ? 'high' : 'moderate'})`,
+      `Intelligence: ${personality.intelligence}% (${personality.intelligence < 30 ? 'low' : personality.intelligence > 70 ? 'high' : 'moderate'})`,
+      `Empathy: ${personality.empathy}% (${personality.empathy < 30 ? 'low' : personality.empathy > 70 ? 'high' : 'moderate'})`,
+      `Creativity: ${personality.creativity}% (${personality.creativity < 30 ? 'low' : personality.creativity > 70 ? 'high' : 'moderate'})`,
+      `Humor: ${personality.humor}% (${personality.humor < 30 ? 'low' : personality.humor > 70 ? 'high' : 'moderate'})`,
     ];
     
-    if (personality.intelligence !== undefined) {
-      allTraits.push(`Intelligence: ${personality.intelligence}% (${personality.intelligence < 30 ? 'low' : personality.intelligence > 70 ? 'high' : 'moderate'})`);
+    if (personality.confidence !== undefined) {
+      allTraits.push(`Confidence: ${personality.confidence}% (${personality.confidence < 30 ? 'low' : personality.confidence > 70 ? 'high' : 'moderate'})`);
     }
     
-    if (personality.empathy !== undefined) {
-      allTraits.push(`Empathy: ${personality.empathy}% (${personality.empathy < 30 ? 'low' : personality.empathy > 70 ? 'high' : 'moderate'})`);
+    if (personality.curiosity !== undefined) {
+      allTraits.push(`Curiosity: ${personality.curiosity}% (${personality.curiosity < 30 ? 'low' : personality.curiosity > 70 ? 'high' : 'moderate'})`);
     }
     
-    if (personality.creativity !== undefined) {
-      allTraits.push(`Creativity: ${personality.creativity}% (${personality.creativity < 30 ? 'low' : personality.creativity > 70 ? 'high' : 'moderate'})`);
-    }
-    
-    if (personality.humor !== undefined) {
-      allTraits.push(`Humor: ${personality.humor}% (${personality.humor < 30 ? 'low' : personality.humor > 70 ? 'high' : 'moderate'})`);
+    if (personality.reliability !== undefined) {
+      allTraits.push(`Reliability: ${personality.reliability}% (${personality.reliability < 30 ? 'low' : personality.reliability > 70 ? 'high' : 'moderate'})`);
     }
     
     return `You are roleplaying as ${character.name}. ${character.description}
@@ -67,11 +66,13 @@ Adjust your responses to reflect these traits:
 ${personality.kinkiness > 70 ? '- Be more suggestive and flirtatious' : personality.kinkiness < 30 ? '- Keep responses clean and proper' : '- Be moderately suggestive when appropriate'}
 ${personality.dominance > 70 ? '- Take charge in the conversation, be assertive' : ''}
 ${personality.submissiveness > 70 ? '- Be agreeable and acquiescent in your tone' : ''}
-${personality.intelligence !== undefined && personality.intelligence > 70 ? '- Use sophisticated vocabulary and complex ideas' : ''}
-${personality.intelligence !== undefined && personality.intelligence < 30 ? '- Keep your language and ideas simple' : ''}
-${personality.empathy !== undefined && personality.empathy > 70 ? '- Show deep understanding and care for emotions' : ''}
-${personality.creativity !== undefined && personality.creativity > 70 ? '- Be imaginative and original in your responses' : ''}
-${personality.humor !== undefined && personality.humor > 70 ? '- Incorporate humor and wit into your responses' : ''}
+${personality.intelligence > 70 ? '- Use sophisticated vocabulary and complex ideas' : personality.intelligence < 30 ? '- Keep your language and ideas simple' : ''}
+${personality.empathy > 70 ? '- Show deep understanding and care for emotions' : personality.empathy < 30 ? '- Be more logical and less emotional' : ''}
+${personality.creativity > 70 ? '- Be imaginative and original in your responses' : personality.creativity < 30 ? '- Be straightforward and literal' : ''}
+${personality.humor > 70 ? '- Incorporate humor and wit into your responses' : personality.humor < 30 ? '- Be serious and straightforward' : ''}
+${personality.confidence !== undefined && personality.confidence > 70 ? '- Express yourself with certainty and conviction' : personality.confidence !== undefined && personality.confidence < 30 ? '- Show some hesitation and self-doubt' : ''}
+${personality.curiosity !== undefined && personality.curiosity > 70 ? '- Ask questions and show interest in learning more' : personality.curiosity !== undefined && personality.curiosity < 30 ? '- Focus more on sharing than discovering' : ''}
+${personality.reliability !== undefined && personality.reliability > 70 ? '- Be consistent and dependable in your responses' : personality.reliability !== undefined && personality.reliability < 30 ? '- Be more unpredictable and spontaneous' : ''}
 
 ${character.defaultPrompt ? `Additional context: ${character.defaultPrompt}` : ''}
 

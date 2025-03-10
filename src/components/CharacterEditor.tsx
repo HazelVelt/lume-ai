@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -11,7 +10,7 @@ import { Character } from '@/types';
 import { useCharacter } from '@/contexts/CharacterContext';
 import stabilityAIService from '@/services/stabilityAIService';
 import { toast } from 'sonner';
-import { Loader2, RefreshCw, Image as ImageIcon, User, Upload, X, Tag as TagIcon, Plus } from 'lucide-react';
+import { Loader2, RefreshCw, User, Upload, X, Tag as TagIcon, Plus, Search } from 'lucide-react';
 
 interface CharacterEditorProps {
   character?: Character;
@@ -19,14 +18,14 @@ interface CharacterEditorProps {
   onClose: () => void;
 }
 
-const PLACEHOLDER_IMAGE = '/character-placeholder.jpg';
+const PLACEHOLDER_IMAGE = '/placeholder.svg';
 
 const CharacterEditor: React.FC<CharacterEditorProps> = ({
   character,
   isOpen,
   onClose,
 }) => {
-  const { createCharacter, updateCharacter, modelConfig } = useCharacter();
+  const { createCharacter, updateCharacter, modelConfig, characters } = useCharacter();
   const [isGenerating, setIsGenerating] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
@@ -36,6 +35,8 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
   const [imageUrl, setImageUrl] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
+  const [tagSuggestions, setTagSuggestions] = useState<string[]>([]);
+  const [showTagSuggestions, setShowTagSuggestions] = useState(false);
   const [personality, setPersonality] = useState({
     kinkiness: 50,
     dominance: 50,
@@ -44,6 +45,9 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
     empathy: 50,
     creativity: 50,
     humor: 50,
+    confidence: 50,
+    curiosity: 50,
+    reliability: 50,
   });
 
   useEffect(() => {
@@ -61,6 +65,9 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
         empathy: character.personality.empathy || 50,
         creativity: character.personality.creativity || 50,
         humor: character.personality.humor || 50,
+        confidence: character.personality.confidence || 50,
+        curiosity: character.personality.curiosity || 50,
+        reliability: character.personality.reliability || 50,
       });
     } else {
       setName('');
@@ -77,9 +84,33 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
         empathy: 50,
         creativity: 50,
         humor: 50,
+        confidence: 50,
+        curiosity: 50,
+        reliability: 50,
       });
     }
   }, [character, isOpen]);
+
+  useEffect(() => {
+    const allTags = new Set<string>();
+    characters.forEach(char => {
+      if (char.tags && char.tags.length > 0) {
+        char.tags.forEach(tag => allTags.add(tag));
+      }
+    });
+    setTagSuggestions(Array.from(allTags));
+  }, [characters]);
+
+  useEffect(() => {
+    if (tagInput.trim() !== '') {
+      const filteredSuggestions = tagSuggestions.filter(
+        tag => tag.toLowerCase().includes(tagInput.toLowerCase()) && !tags.includes(tag)
+      );
+      setShowTagSuggestions(filteredSuggestions.length > 0);
+    } else {
+      setShowTagSuggestions(false);
+    }
+  }, [tagInput, tags, tagSuggestions]);
 
   const handleUploadClick = () => {
     fileInputRef.current?.click();
@@ -134,16 +165,16 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
       } 
     } catch (error) {
       console.error("Image generation error:", error);
-      // Error is already handled in stabilityAIService
     } finally {
       setIsGenerating(false);
     }
   };
 
-  const handleAddTag = () => {
-    if (tagInput.trim() && !tags.includes(tagInput.trim())) {
-      setTags(prev => [...prev, tagInput.trim()]);
+  const handleAddTag = (tagToAdd: string = tagInput) => {
+    if (tagToAdd.trim() && !tags.includes(tagToAdd.trim())) {
+      setTags(prev => [...prev, tagToAdd.trim()]);
       setTagInput('');
+      setShowTagSuggestions(false);
     }
   };
 
@@ -151,6 +182,8 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
     if (e.key === 'Enter') {
       e.preventDefault();
       handleAddTag();
+    } else if (e.key === 'Escape') {
+      setShowTagSuggestions(false);
     }
   };
 
@@ -227,6 +260,21 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
       label: 'Humor', 
       description: 'How funny and witty the character is'
     },
+    { 
+      key: 'confidence', 
+      label: 'Confidence', 
+      description: 'How self-assured and certain the character is'
+    },
+    { 
+      key: 'curiosity', 
+      label: 'Curiosity', 
+      description: 'How eager the character is to learn and explore'
+    },
+    { 
+      key: 'reliability', 
+      label: 'Reliability', 
+      description: 'How dependable and trustworthy the character is'
+    },
   ];
 
   return (
@@ -263,24 +311,46 @@ const CharacterEditor: React.FC<CharacterEditorProps> = ({
               />
             </div>
 
-            {/* Tags section */}
             <div className="space-y-2">
               <Label className="flex items-center gap-1">
                 <TagIcon className="h-4 w-4" />
                 Tags
               </Label>
-              <div className="flex items-center gap-2">
-                <Input
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  onKeyDown={handleTagKeyDown}
-                  placeholder="Add tags (press Enter)"
-                  className="glass-morphism"
-                />
+              <div className="flex items-center gap-2 relative">
+                <div className="relative flex-1">
+                  <Input
+                    value={tagInput}
+                    onChange={(e) => setTagInput(e.target.value)}
+                    onKeyDown={handleTagKeyDown}
+                    onFocus={() => tagInput.trim() !== '' && setShowTagSuggestions(true)}
+                    placeholder="Add tags (press Enter)"
+                    className="glass-morphism pl-8"
+                  />
+                  <Search className="h-4 w-4 absolute left-2 top-3 text-muted-foreground" />
+                  
+                  {showTagSuggestions && (
+                    <div className="absolute z-10 mt-1 w-full bg-background border border-border rounded-md shadow-lg max-h-40 overflow-y-auto">
+                      {tagSuggestions
+                        .filter(tag => 
+                          tag.toLowerCase().includes(tagInput.toLowerCase()) && 
+                          !tags.includes(tag)
+                        )
+                        .map(tag => (
+                          <div 
+                            key={tag} 
+                            className="px-3 py-2 hover:bg-accent1/10 cursor-pointer text-sm"
+                            onClick={() => handleAddTag(tag)}
+                          >
+                            {tag}
+                          </div>
+                        ))}
+                    </div>
+                  )}
+                </div>
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={handleAddTag}
+                  onClick={() => handleAddTag()}
                   disabled={!tagInput.trim()}
                   className="whitespace-nowrap"
                 >

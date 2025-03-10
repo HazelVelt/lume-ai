@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Character } from '@/types';
 import { MessageSquare } from 'lucide-react';
@@ -9,16 +9,16 @@ interface WelcomeMessageProps {
 }
 
 const WelcomeMessage: React.FC<WelcomeMessageProps> = ({ character }) => {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <div className="flex flex-col items-center justify-center h-full text-center p-8">
       <div className="mb-6 p-4 rounded-full relative avatar-container border-2 border-accent1/40 shadow-lg">
         <img 
-          src={character.imageUrl || '/character-placeholder.jpg'} 
+          src={(!imgError && character.imageUrl) || '/placeholder.svg'} 
           alt={character.name} 
           className="h-24 w-24 rounded-full object-cover"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = '/character-placeholder.jpg';
-          }}
+          onError={() => setImgError(true)}
         />
         <div className="ripple-container">
           <div className="ripple-circle"></div>

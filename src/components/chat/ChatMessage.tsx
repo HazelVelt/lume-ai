@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Character, ChatMessage as ChatMessageType } from '@/types';
-import { Star } from 'lucide-react';
 
 interface ChatMessageProps {
   message: ChatMessageType;
@@ -45,9 +44,6 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
         {!message.isUser && (
           <div className="px-3 pt-2 text-sm font-medium flex items-center">
             {character.name}
-            {character.isFavorite && (
-              <Star className="h-3 w-3 ml-1 text-yellow-400 fill-yellow-400" />
-            )}
           </div>
         )}
         
