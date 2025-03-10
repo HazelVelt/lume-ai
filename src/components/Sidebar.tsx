@@ -2,7 +2,6 @@
 import React, { useState, useMemo } from 'react';
 import { Settings, Plus, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
 import { useCharacter } from '@/contexts/CharacterContext';
 import CharacterCard from '@/components/CharacterCard';
 

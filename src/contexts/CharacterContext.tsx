@@ -8,6 +8,7 @@ type CharacterContextType = {
   characters: Character[];
   activeCharacter: Character | null;
   conversations: Record<string, ChatMessage[]>;
+  cardSize: number;
   modelConfig: {
     llm: ModelConfig;
     imageGen: ModelConfig;
@@ -18,6 +19,8 @@ type CharacterContextType = {
   setActiveCharacter: (id: string) => void;
   addMessage: (characterId: string, content: string, isUser: boolean) => void;
   updateModelConfig: (type: 'llm' | 'imageGen', config: Partial<ModelConfig>) => void;
+  toggleFavorite: (id: string) => void;
+  updateCardSize: (size: number) => void;
 };
 
 const defaultModelConfig = {
@@ -41,6 +44,7 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [activeCharacter, setActiveCharacter] = useState<Character | null>(null);
   const [conversations, setConversations] = useState<Record<string, ChatMessage[]>>({});
   const [modelConfig, setModelConfig] = useState(defaultModelConfig);
+  const [cardSize, setCardSize] = useState<number>(50);
   
   // Load from localStorage on initialization
   useEffect(() => {
@@ -48,6 +52,7 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       const savedCharacters = localStorage.getItem('aiCharacters');
       const savedConversations = localStorage.getItem('aiConversations');
       const savedModelConfig = localStorage.getItem('aiModelConfig');
+      const savedCardSize = localStorage.getItem('aiCardSize');
       
       if (savedCharacters) {
         setCharacters(JSON.parse(savedCharacters));
@@ -59,6 +64,10 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       
       if (savedModelConfig) {
         setModelConfig(JSON.parse(savedModelConfig));
+      }
+      
+      if (savedCardSize) {
+        setCardSize(Number(JSON.parse(savedCardSize)));
       }
     } catch (e) {
       console.error('Error loading data from localStorage', e);
@@ -78,10 +87,14 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     localStorage.setItem('aiModelConfig', JSON.stringify(modelConfig));
   }, [modelConfig]);
   
+  useEffect(() => {
+    localStorage.setItem('aiCardSize', JSON.stringify(cardSize));
+  }, [cardSize]);
+  
   const createCharacter = (character: Omit<Character, 'id'>) => {
     const newCharacter = { ...character, id: uuidv4() };
     setCharacters((prev) => [...prev, newCharacter]);
-    toast.success(`Created character: ${character.name}`);
+    toast.success(`Created character: ${character.name}`, { duration: 1000 });
     return newCharacter;
   };
   
@@ -94,7 +107,7 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       setActiveCharacter((prev) => prev ? { ...prev, ...updates } : null);
     }
     
-    toast.success(`Updated character: ${updates.name || 'Character'}`);
+    toast.success(`Updated character: ${updates.name || 'Character'}`, { duration: 1000 });
   };
   
   const deleteCharacter = (id: string) => {
@@ -112,7 +125,7 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       return newConversations;
     });
     
-    toast.success(`Deleted character: ${character?.name || 'Character'}`);
+    toast.success(`Deleted character: ${character?.name || 'Character'}`, { duration: 1000 });
   };
   
   const setActiveCharacterById = (id: string) => {
@@ -120,7 +133,7 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     if (character) {
       setActiveCharacter(character);
     } else {
-      toast.error(`Character not found`);
+      toast.error(`Character not found`, { duration: 1000 });
     }
   };
   
@@ -148,7 +161,27 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       },
     }));
     
-    toast.success(`Updated ${type === 'llm' ? 'language model' : 'image generation'} settings`);
+    toast.success(`Updated ${type === 'llm' ? 'language model' : 'image generation'} settings`, { duration: 1000 });
+  };
+  
+  const toggleFavorite = (id: string) => {
+    setCharacters(prev => 
+      prev.map(char => 
+        char.id === id 
+          ? { ...char, isFavorite: !char.isFavorite } 
+          : char
+      )
+    );
+    
+    const character = characters.find(c => c.id === id);
+    if (character) {
+      const action = character.isFavorite ? 'Removed from' : 'Added to';
+      toast.success(`${action} favorites`, { duration: 1000 });
+    }
+  };
+  
+  const updateCardSize = (size: number) => {
+    setCardSize(size);
   };
   
   return (
@@ -157,6 +190,7 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         characters,
         activeCharacter,
         conversations,
+        cardSize,
         modelConfig,
         createCharacter,
         updateCharacter,
@@ -164,6 +198,8 @@ export const CharacterProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         setActiveCharacter: setActiveCharacterById,
         addMessage,
         updateModelConfig,
+        toggleFavorite,
+        updateCardSize,
       }}
     >
       {children}

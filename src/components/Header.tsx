@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { MessageSquare, Settings } from 'lucide-react';
+import { Settings, ArrowLeft, MessageSquare } from 'lucide-react';
 import { Character } from '@/types';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
@@ -39,13 +39,8 @@ const Header: React.FC<HeaderProps> = ({ activeCharacter, onReturnHome, onSettin
             onClick={onReturnHome}
             className="mr-2 h-9 w-9 rounded-full"
           >
-            <Settings className="h-5 w-5" />
+            <ArrowLeft className="h-5 w-5" />
           </Button>
-        )}
-        {!isChatPage && (
-          <h1 className="text-xl font-bold text-gradient">
-            AI Haven
-          </h1>
         )}
       </div>
       <div className="flex items-center gap-2">

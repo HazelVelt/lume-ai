@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -80,11 +81,12 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
   };
   
   const getCardSizeLabel = (size: number) => {
-    if (size <= 20) return 'Tiny';
-    if (size <= 35) return 'Compact';
-    if (size <= 50) return 'Regular';
-    if (size <= 70) return 'Large';
-    if (size <= 85) return 'Extra Large';
+    if (size <= 15) return 'Tiny';
+    if (size <= 30) return 'Compact';
+    if (size <= 45) return 'Small';
+    if (size <= 60) return 'Medium';
+    if (size <= 75) return 'Large';
+    if (size <= 90) return 'Extra Large';
     return 'Massive';
   };
   
@@ -312,8 +314,8 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
               />
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>Tiny</span>
-                <span>Compact</span>
-                <span>Regular</span>
+                <span>Small</span>
+                <span>Medium</span>
                 <span>Large</span>
                 <span>Massive</span>
               </div>
