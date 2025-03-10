@@ -52,16 +52,17 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
       >
         {/* Message shine effect */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent pointer-events-none opacity-70
-                       animate-[shine_3s_ease-in-out_infinite] -translate-x-full" style={{
-          animation: 'shine 3s ease-in-out infinite'
-        }}></div>
-        <style jsx>{`
-          @keyframes shine {
-            0% { transform: translateX(-100%); }
-            50% { transform: translateX(100%); }
-            100% { transform: translateX(100%); }
-          }
-        `}</style>
+                       animate-[shine_3s_ease-in-out_infinite] -translate-x-full"></div>
+                       
+        <style>
+          {`
+            @keyframes shine {
+              0% { transform: translateX(-100%); }
+              50% { transform: translateX(100%); }
+              100% { transform: translateX(100%); }
+            }
+          `}
+        </style>
         
         {/* Decorative corner elements for character messages */}
         {!message.isUser && (

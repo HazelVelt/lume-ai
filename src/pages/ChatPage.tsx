@@ -119,7 +119,7 @@ const ChatPage: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col md:flex-row h-screen overflow-hidden relative">
+    <div className="flex h-screen overflow-hidden relative">
       {decorativeElements}
       
       <Sidebar 
@@ -134,7 +134,7 @@ const ChatPage: React.FC = () => {
         onReturnHome={handleReturnToLanding}
       />
 
-      <div className="flex-1 flex flex-col h-full bg-background relative z-10">
+      <div className={`flex-1 h-screen overflow-hidden bg-background relative z-10 ${!isSidebarCollapsed ? 'md:ml-[320px] md:w-[calc(100%-320px)]' : ''}`}>
         {activeCharacter ? (
           doesCharacterMatchTags(activeCharacter) ? (
             <ChatInterface 

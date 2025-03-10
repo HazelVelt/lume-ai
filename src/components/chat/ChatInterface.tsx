@@ -31,8 +31,18 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Initial scroll to bottom
   useEffect(() => {
     scrollToBottom();
+  }, []);
+
+  // Handle scrolling when messages change
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      scrollToBottom();
+    }, 100); // Small delay to ensure DOM is updated
+    
+    return () => clearTimeout(timer);
   }, [messages, typingMessage, errorMessage]);
 
   const generateSystemPrompt = () => {
@@ -204,46 +214,48 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
       {/* Character info bar */}
       <ChatHeader character={character} />
       
-      {/* Messages container - adjust the padding-bottom to create space for the fixed input */}
+      {/* Messages container with adjusted padding to prevent overlap with fixed input */}
       <div 
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto styled-scrollbar scrollbar-none z-10 bg-gradient-to-b from-background/70 to-background/40 pb-[80px]"
+        className="flex-1 overflow-y-auto styled-scrollbar z-10 bg-gradient-to-b from-background/70 to-background/40 pb-[90px]"
       >
-        {messages.length === 0 ? (
-          <WelcomeMessage character={character} />
-        ) : (
-          <div className="px-4 py-2 space-y-1 max-w-5xl mx-auto">
-            {messages.map((msg) => (
-              <ChatMessage 
-                key={msg.id}
-                message={msg}
-                character={character}
-                formatTime={formatTime}
-                isError={msg.content.includes("I apologize, but I'm having trouble connecting")}
-              />
-            ))}
-            
-            {isTyping && (
-              <ChatMessage 
-                message={{
-                  id: 'typing',
-                  senderId: character.id,
-                  content: typingMessage,
-                  timestamp: Date.now(),
-                  isUser: false
-                }}
-                character={character}
-                formatTime={formatTime}
-                isTyping={true}
-              />
-            )}
+        <div className="px-4 py-2 space-y-1 max-w-5xl mx-auto">
+          {messages.length === 0 ? (
+            <WelcomeMessage character={character} />
+          ) : (
+            <>
+              {messages.map((msg) => (
+                <ChatMessage 
+                  key={msg.id}
+                  message={msg}
+                  character={character}
+                  formatTime={formatTime}
+                  isError={msg.content.includes("I apologize, but I'm having trouble connecting")}
+                />
+              ))}
+              
+              {isTyping && (
+                <ChatMessage 
+                  message={{
+                    id: 'typing',
+                    senderId: character.id,
+                    content: typingMessage,
+                    timestamp: Date.now(),
+                    isUser: false
+                  }}
+                  character={character}
+                  formatTime={formatTime}
+                  isTyping={true}
+                />
+              )}
+            </>
+          )}
 
-            <div ref={messagesEndRef} />
-          </div>
-        )}
+          <div ref={messagesEndRef} />
+        </div>
       </div>
 
-      {/* Input area - now positioned fixed at bottom */}
+      {/* Input area - fixed at bottom with proper offset for sidebar */}
       <ChatInput 
         message={message}
         setMessage={setMessage}

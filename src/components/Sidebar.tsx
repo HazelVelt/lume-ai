@@ -82,9 +82,9 @@ const Sidebar: React.FC<SidebarProps> = ({
   }, [favoriteCharacters, otherCharacters, showOnlyFavorites, selectedTags]);
 
   return (
-    <div className={`${isSidebarCollapsed ? 'w-0 md:w-16 overflow-hidden' : 'w-full md:w-[320px]'} relative border-r border-border paper-texture transition-all duration-300 z-20`}>
-      {/* Handcrafted Sidebar Header */}
-      <div className="p-4 border-b border-dashed border-border/70 bg-background/70 backdrop-blur-sm flex items-center">
+    <div className={`${isSidebarCollapsed ? 'w-0 md:w-16 overflow-hidden' : 'w-full md:w-[320px]'} h-screen relative border-r border-border paper-texture transition-all duration-300 z-20 flex flex-col`}>
+      {/* Handcrafted Sidebar Header - fixed at top */}
+      <div className="sticky top-0 p-4 border-b border-dashed border-border/70 bg-background/70 backdrop-blur-sm flex items-center z-10">
         {!isLandingPage && !isSidebarCollapsed && (
           <Button
             variant="ghost"
@@ -116,60 +116,64 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       {!isSidebarCollapsed && (
         <>
-          <div className="flex justify-between items-center p-4 bg-background/40">
-            <h2 className="text-sm font-semibold wavy-decoration">Your Characters</h2>
-            <Button 
-              variant="ghost"
-              size="sm"
-              onClick={onCreateCharacter}
-              className="hand-drawn-button shadow-foreground/20 hover:bg-background/70 text-xs h-8"
-            >
-              <Plus className="h-4 w-4 mr-1" />
-              Create New
-            </Button>
-          </div>
-
-          {allTags.length > 0 && (
-            <div className="px-4 pb-2 bg-secondary/10">
-              <div className="flex items-center mb-2">
-                <Tags className="h-4 w-4 mr-2 text-muted-foreground" />
-                <h3 className="text-xs font-medium text-muted-foreground">Filter by Tags</h3>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-3">
-                {allTags.map(tag => (
-                  <Badge 
-                    key={tag} 
-                    variant={selectedTags.includes(tag) ? "default" : "outline"}
-                    className="cursor-pointer transition-all hover:scale-105 rounded-md"
-                    onClick={() => toggleTag(tag)}
-                  >
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="px-4 py-2 space-y-2 bg-background/60">
-            <div className="flex items-center">
-              <Button
+          {/* Controls section - sticky below header */}
+          <div className="sticky top-[65px] bg-background/90 z-10 backdrop-blur-sm">
+            <div className="flex justify-between items-center p-4 bg-background/40">
+              <h2 className="text-sm font-semibold wavy-decoration">Your Characters</h2>
+              <Button 
                 variant="ghost"
                 size="sm"
-                onClick={() => setShowOnlyFavorites(!showOnlyFavorites)}
-                className={`text-xs h-7 flex items-center gap-1 rounded-full ${showOnlyFavorites ? 'bg-accent1/20' : ''}`}
+                onClick={onCreateCharacter}
+                className="hand-drawn-button shadow-foreground/20 hover:bg-background/70 text-xs h-8"
               >
-                <Heart className={`h-3 w-3 ${showOnlyFavorites ? 'text-red-500 fill-red-500' : ''}`} />
-                {showOnlyFavorites ? 'Showing favorites' : 'Show all'}
+                <Plus className="h-4 w-4 mr-1" />
+                Create New
               </Button>
-              {favoriteCharacters.length > 0 && (
-                <span className="ml-1 text-xs text-muted-foreground">
-                  ({favoriteCharacters.length} favorite{favoriteCharacters.length > 1 ? 's' : ''})
-                </span>
-              )}
+            </div>
+
+            {allTags.length > 0 && (
+              <div className="px-4 pb-2 bg-secondary/10">
+                <div className="flex items-center mb-2">
+                  <Tags className="h-4 w-4 mr-2 text-muted-foreground" />
+                  <h3 className="text-xs font-medium text-muted-foreground">Filter by Tags</h3>
+                </div>
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {allTags.map(tag => (
+                    <Badge 
+                      key={tag} 
+                      variant={selectedTags.includes(tag) ? "default" : "outline"}
+                      className="cursor-pointer transition-all hover:scale-105 rounded-md"
+                      onClick={() => toggleTag(tag)}
+                    >
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="px-4 py-2 space-y-2 bg-background/60 border-b border-border/30">
+              <div className="flex items-center">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowOnlyFavorites(!showOnlyFavorites)}
+                  className={`text-xs h-7 flex items-center gap-1 rounded-full ${showOnlyFavorites ? 'bg-accent1/20' : ''}`}
+                >
+                  <Heart className={`h-3 w-3 ${showOnlyFavorites ? 'text-red-500 fill-red-500' : ''}`} />
+                  {showOnlyFavorites ? 'Showing favorites' : 'Show all'}
+                </Button>
+                {favoriteCharacters.length > 0 && (
+                  <span className="ml-1 text-xs text-muted-foreground">
+                    ({favoriteCharacters.length} favorite{favoriteCharacters.length > 1 ? 's' : ''})
+                  </span>
+                )}
+              </div>
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-3 scrollbar-none bg-gradient-to-b from-background/40 to-background/20">
+          {/* Character cards - scrollable section */}
+          <div className="flex-1 overflow-y-auto styled-scrollbar p-3 bg-gradient-to-b from-background/40 to-background/20">
             {characters.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full p-4 text-center">
                 <div className="glass-morphism p-6 rounded-lg max-w-[240px] shadow-md transform rotate-1">
@@ -195,7 +199,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-1 gap-4 pb-4">
                 {displayCharacters.map((character) => (
                   <CharacterCard
                     key={character.id}
@@ -216,7 +220,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         </>
       )}
 
-      {/* Fixed z-index issue with the toggle button */}
+      {/* Fixed toggle button */}
       <Button
         variant="ghost"
         size="icon"
