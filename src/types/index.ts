@@ -36,4 +36,4 @@ export interface ModelConfig {
   apiKey?: string;
 }
 
-export type ThemeType = 'dark' | 'light' | 'purple' | 'ocean' | 'sunset';
+export type ThemeType = 'dark' | 'light' | 'purple' | 'ocean' | 'sunset' | 'emerald' | 'cherry' | 'midnight';

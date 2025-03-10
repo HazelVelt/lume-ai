@@ -9,7 +9,10 @@ import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ollamaService from '@/services/ollamaService';
 import stabilityAIService from '@/services/stabilityAIService';
-import { Loader2, Moon, Sun, Palette, CreditCard, Droplets, Sunset, Gem, Heart, ScrollText } from 'lucide-react';
+import { 
+  Loader2, Moon, Sun, Palette, CreditCard, 
+  Droplets, Sunset, Gem, Heart, ScrollText, Settings2
+} from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { ThemeType } from '@/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -123,27 +126,45 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
   
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[500px] animate-scale-in">
+      <DialogContent className="sm:max-w-[500px] animate-scale-in paper-texture rounded-lg">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold">Settings</DialogTitle>
+          <DialogTitle className="text-xl font-bold sketch-underline">
+            <Settings2 className="inline-block mr-2 h-5 w-5" />
+            Settings
+          </DialogTitle>
         </DialogHeader>
         
-        <Tabs defaultValue="llm" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="llm">Language Model</TabsTrigger>
-            <TabsTrigger value="image">Image Generation</TabsTrigger>
-            <TabsTrigger value="appearance">Appearance</TabsTrigger>
+        <Tabs defaultValue="appearance" className="w-full">
+          <TabsList className="grid w-full grid-cols-3 handcrafted-border rounded-md p-1 bg-background/50">
+            <TabsTrigger 
+              value="llm" 
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hand-drawn-button shadow-primary/20"
+            >
+              Language Model
+            </TabsTrigger>
+            <TabsTrigger 
+              value="image" 
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hand-drawn-button shadow-primary/20"
+            >
+              Image Generation
+            </TabsTrigger>
+            <TabsTrigger 
+              value="appearance" 
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground hand-drawn-button shadow-primary/20"
+            >
+              Appearance
+            </TabsTrigger>
           </TabsList>
           
           <TabsContent value="llm" className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="ollamaEndpoint">Ollama API Endpoint</Label>
+              <Label htmlFor="ollamaEndpoint" className="wavy-decoration">Ollama API Endpoint</Label>
               <Input
                 id="ollamaEndpoint"
                 value={ollamaEndpoint}
                 onChange={(e) => setOllamaEndpoint(e.target.value)}
                 placeholder="http://localhost:11434/api"
-                className="glass-morphism"
+                className="handcrafted-input"
               />
               <p className="text-xs text-muted-foreground">
                 Default: http://localhost:11434/api
@@ -151,7 +172,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="ollamaModel">Ollama Model</Label>
+              <Label htmlFor="ollamaModel" className="wavy-decoration">Ollama Model</Label>
               <div className="grid grid-cols-2 gap-2">
                 <div className="relative">
                   <Input
@@ -159,7 +180,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
                     value={ollamaModel}
                     onChange={(e) => setOllamaModel(e.target.value)}
                     placeholder="mistral"
-                    className="glass-morphism"
+                    className="handcrafted-input"
                   />
                 </div>
                 
@@ -167,7 +188,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
                   onClick={loadOllamaModels} 
                   variant="outline" 
                   disabled={isLoadingOllamaModels}
-                  className="glass-morphism"
+                  className="hand-drawn-button shadow-primary/20"
                 >
                   {isLoadingOllamaModels ? (
                     <>
@@ -181,8 +202,8 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
               </div>
               
               {availableOllamaModels.length > 0 && (
-                <div className="mt-2">
-                  <Label className="text-xs text-muted-foreground">Available Models:</Label>
+                <div className="mt-2 p-3 bg-background/30 rounded-lg border border-dashed border-border/60">
+                  <Label className="text-xs text-muted-foreground wavy-decoration">Available Models:</Label>
                   <div className="flex flex-wrap gap-2 mt-1">
                     {availableOllamaModels.map((model) => (
                       <Button
@@ -191,9 +212,9 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
                         size="sm"
                         className={`text-xs py-1 px-2 h-auto ${
                           ollamaModel === model
-                            ? 'bg-accent1/30 text-white'
+                            ? 'bg-accent1/30 text-foreground font-bold'
                             : 'bg-secondary/50 text-muted-foreground'
-                        }`}
+                        } hand-drawn-button shadow-accent1/10`}
                         onClick={() => setOllamaModel(model)}
                       >
                         {model}
@@ -220,14 +241,14 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
           
           <TabsContent value="image" className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="stabilityApiKey">Stability AI API Key</Label>
+              <Label htmlFor="stabilityApiKey" className="wavy-decoration">Stability AI API Key</Label>
               <Input
                 id="stabilityApiKey"
                 value={stabilityApiKey}
                 onChange={(e) => setStabilityApiKey(e.target.value)}
                 type="password"
                 placeholder="Enter your Stability AI API key"
-                className="glass-morphism"
+                className="handcrafted-input"
               />
               <p className="text-xs text-muted-foreground">
                 Get your API key from{' '}
@@ -243,16 +264,16 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="stabilityModel">Stability AI Model</Label>
+              <Label htmlFor="stabilityModel" className="wavy-decoration">Stability AI Model</Label>
               <div className="grid grid-cols-2 gap-2">
                 <Select 
                   value={stabilityModel} 
                   onValueChange={setStabilityModel}
                 >
-                  <SelectTrigger className="glass-morphism">
+                  <SelectTrigger className="handcrafted-input">
                     <SelectValue placeholder="Select a model" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="paper-texture border-2 border-dashed border-border/60">
                     {availableStabilityModels.map((model) => (
                       <SelectItem key={model} value={model}>
                         {model}
@@ -265,7 +286,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
                   onClick={loadStabilityModels} 
                   variant="outline" 
                   disabled={isLoadingStabilityModels || !stabilityApiKey}
-                  className="glass-morphism"
+                  className="hand-drawn-button shadow-primary/20"
                 >
                   {isLoadingStabilityModels ? (
                     <>
@@ -286,15 +307,38 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
           
           <TabsContent value="appearance" className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>Theme</Label>
-              <div className="grid grid-cols-4 gap-3">
+              <Label className="wavy-decoration">Theme</Label>
+              
+              <Select value={theme} onValueChange={(value: ThemeType) => setTheme(value)}>
+                <SelectTrigger className="handcrafted-input">
+                  <SelectValue placeholder="Select a theme">
+                    <div className="flex items-center gap-2">
+                      {themeOptions.find(option => option.value === theme)?.icon}
+                      <span>{themeOptions.find(option => option.value === theme)?.label}</span>
+                    </div>
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent className="paper-texture border-2 border-dashed border-border/60">
+                  {themeOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value} className="flex items-center gap-2">
+                      <div className="flex items-center gap-2">
+                        {option.icon}
+                        <span>{option.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              
+              <div className="grid grid-cols-4 gap-3 mt-3">
                 {themeOptions.map((option) => (
                   <Button 
                     key={option.value}
                     variant={theme === option.value ? 'default' : 'outline'}
-                    className={`flex items-center justify-center gap-2 py-4 flex-col ${
-                      theme === option.value ? 'bg-accent1 hover:bg-accent1/80 dark:text-black' : ''
-                    }`}
+                    className={`flex items-center justify-center gap-2 py-4 flex-col 
+                      ${theme === option.value ? 'bg-accent1 hover:bg-accent1/80 dark:text-black' : ''}
+                      hand-drawn-button shadow-primary/20
+                    `}
                     onClick={() => setTheme(option.value)}
                   >
                     {option.icon}
@@ -304,22 +348,28 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
               </div>
             </div>
             
-            <div className="space-y-2 pt-2">
+            <div className="space-y-2 pt-4 mt-2 border-t border-dashed border-border/40">
               <div className="flex items-center justify-between">
-                <Label className="flex items-center">
+                <Label className="flex items-center wavy-decoration">
                   <CreditCard className="h-4 w-4 mr-2" />
                   Card Size
                 </Label>
-                <span className="text-sm font-medium">{getCardSizeLabel(cardSizeValue)}</span>
+                <span className="text-sm font-medium bg-primary/10 px-2 py-1 rounded-md">
+                  {getCardSizeLabel(cardSizeValue)}
+                </span>
               </div>
-              <Slider 
-                value={[cardSizeValue]} 
-                onValueChange={(value) => setCardSizeValue(value[0])}
-                min={10}
-                max={100}
-                step={5}
-                className="my-4"
-              />
+              
+              <div className="handcrafted-slider">
+                <Slider 
+                  value={[cardSizeValue]} 
+                  onValueChange={(value) => setCardSizeValue(value[0])}
+                  min={10}
+                  max={100}
+                  step={5}
+                  className="my-4"
+                />
+              </div>
+              
               <div className="flex justify-between text-xs text-muted-foreground">
                 <span>Tiny</span>
                 <span>Small</span>
@@ -334,11 +384,11 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ isOpen, onClose }) => {
           </TabsContent>
         </Tabs>
         
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
+        <DialogFooter className="pt-2 border-t border-dashed border-border/40">
+          <Button variant="outline" onClick={onClose} className="hand-drawn-button shadow-primary/20">
             Cancel
           </Button>
-          <Button onClick={handleSave} className="bg-accent1 hover:bg-accent1/80 dark:text-black">
+          <Button onClick={handleSave} className="bg-accent1 hover:bg-accent1/80 dark:text-black hand-drawn-button shadow-accent1/30">
             Save Changes
           </Button>
         </DialogFooter>
