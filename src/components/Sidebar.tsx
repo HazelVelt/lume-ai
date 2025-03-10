@@ -80,21 +80,22 @@ const Sidebar: React.FC<SidebarProps> = ({
   }, [favoriteCharacters, otherCharacters, showOnlyFavorites, selectedTags]);
 
   return (
-    <div className={`${isSidebarCollapsed ? 'w-0 md:w-16 overflow-hidden' : 'w-full md:w-[320px]'} border-r border-border bg-background/95 backdrop-blur-sm flex flex-col h-full transition-all duration-300 relative z-10`}>
-      <div className="p-4 border-b flex items-center">
+    <div className={`${isSidebarCollapsed ? 'w-0 md:w-16 overflow-hidden' : 'w-full md:w-[320px]'} relative border-r border-border paper-texture transition-all duration-300 z-20`}>
+      {/* Handcrafted Sidebar Header */}
+      <div className="p-4 border-b border-dashed border-border/70 bg-background/70 backdrop-blur-sm flex items-center">
         {!isLandingPage && !isSidebarCollapsed && (
           <Button
             variant="ghost"
             size="icon"
             onClick={onReturnHome}
-            className="mr-2 h-8 w-8 rounded-full"
+            className="mr-2 h-8 w-8 rounded-full hover:bg-secondary/50"
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
         )}
         
         {!isSidebarCollapsed && (
-          <h1 className="text-xl font-bold text-gradient">
+          <h1 className="text-xl font-bold sketch-underline">
             LumeAI
           </h1>
         )}
@@ -104,7 +105,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             variant="ghost" 
             size="icon"
             onClick={onSettingsOpen}
-            className="h-8 w-8 rounded-full"
+            className="h-8 w-8 rounded-full hover:bg-secondary/50"
           >
             <Settings className="h-4 w-4" />
           </Button>
@@ -113,13 +114,13 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       {!isSidebarCollapsed && (
         <>
-          <div className="flex justify-between items-center p-4">
-            <h2 className="text-sm font-semibold text-foreground/70">Your Characters</h2>
+          <div className="flex justify-between items-center p-4 bg-background/40">
+            <h2 className="text-sm font-semibold wavy-decoration">Your Characters</h2>
             <Button 
               variant="ghost"
               size="sm"
               onClick={onCreateCharacter}
-              className="flex items-center text-xs h-8"
+              className="hand-drawn-button shadow-foreground/20 hover:bg-background/70 text-xs h-8"
             >
               <Plus className="h-4 w-4 mr-1" />
               Create New
@@ -127,7 +128,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           </div>
 
           {allTags.length > 0 && (
-            <div className="px-4 pb-2">
+            <div className="px-4 pb-2 bg-secondary/10">
               <div className="flex items-center mb-2">
                 <Tags className="h-4 w-4 mr-2 text-muted-foreground" />
                 <h3 className="text-xs font-medium text-muted-foreground">Filter by Tags</h3>
@@ -137,7 +138,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                   <Badge 
                     key={tag} 
                     variant={selectedTags.includes(tag) ? "default" : "outline"}
-                    className="cursor-pointer transition-all hover:scale-105"
+                    className="cursor-pointer transition-all hover:scale-105 rounded-md"
                     onClick={() => toggleTag(tag)}
                   >
                     {tag}
@@ -147,13 +148,13 @@ const Sidebar: React.FC<SidebarProps> = ({
             </div>
           )}
 
-          <div className="px-4 pb-2 space-y-2">
+          <div className="px-4 py-2 space-y-2 bg-background/60">
             <div className="flex items-center">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowOnlyFavorites(!showOnlyFavorites)}
-                className={`text-xs h-7 flex items-center gap-1 ${showOnlyFavorites ? 'bg-accent1/20' : ''}`}
+                className={`text-xs h-7 flex items-center gap-1 rounded-full ${showOnlyFavorites ? 'bg-accent1/20' : ''}`}
               >
                 <Heart className={`h-3 w-3 ${showOnlyFavorites ? 'text-red-500 fill-red-500' : ''}`} />
                 {showOnlyFavorites ? 'Showing favorites' : 'Show all'}
@@ -166,17 +167,17 @@ const Sidebar: React.FC<SidebarProps> = ({
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-3 scrollbar-none">
+          <div className="flex-1 overflow-y-auto p-3 scrollbar-none bg-gradient-to-b from-background/40 to-background/20">
             {characters.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full p-4 text-center">
-                <div className="glass-morphism p-6 rounded-lg max-w-[240px] shadow-md">
-                  <h3 className="text-lg font-semibold mb-2">No Characters Yet</h3>
+                <div className="glass-morphism p-6 rounded-lg max-w-[240px] shadow-md transform rotate-1">
+                  <h3 className="text-lg font-semibold mb-2 sketch-underline">No Characters Yet</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Create your first AI character to start chatting
                   </p>
                   <Button 
                     onClick={onCreateCharacter}
-                    className="w-full bg-accent1 hover:bg-accent1/80"
+                    className="hand-drawn-button shadow-foreground/20 w-full bg-accent1 hover:bg-accent1/80"
                   >
                     <Plus className="h-4 w-4 mr-2" />
                     Create Character
@@ -213,6 +214,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         </>
       )}
 
+      {/* Fixed z-index issue with the toggle button */}
       <Button
         variant="ghost"
         size="icon"

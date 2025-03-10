@@ -110,7 +110,7 @@ const ChatPage: React.FC = () => {
       />
 
       {/* Main content area */}
-      <div className="flex-1 flex flex-col h-full bg-background relative">
+      <div className="flex-1 flex flex-col h-full bg-background relative z-10">
         {activeCharacter ? (
           doesCharacterMatchTags(activeCharacter) ? (
             <>
