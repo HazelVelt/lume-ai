@@ -5,7 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Character, ChatMessage } from '@/types';
 import { useCharacter } from '@/contexts/CharacterContext';
 import { Card, CardContent } from '@/components/ui/card';
-import { Loader2, ArrowUp } from 'lucide-react';
+import { Loader2, ArrowUp, Star } from 'lucide-react';
 import ollamaService from '@/services/ollamaService';
 import { toast } from 'sonner';
 
@@ -15,7 +15,7 @@ interface ChatInterfaceProps {
 }
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReturn }) => {
-  const { conversations, addMessage, modelConfig } = useCharacter();
+  const { conversations, addMessage, modelConfig, updateCharacter } = useCharacter();
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [typingMessage, setTypingMessage] = useState('');
@@ -148,15 +148,27 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
     });
   };
 
+  const toggleFavorite = () => {
+    updateCharacter(character.id, {
+      ...character,
+      isFavorite: !character.isFavorite
+    });
+    
+    toast.success(`${character.isFavorite ? 'Removed from' : 'Added to'} favorites`);
+  };
+
   return (
-    <div className="flex flex-col h-full overflow-hidden">
+    <div className="flex flex-col h-full overflow-hidden relative">
+      {/* Handcrafted paper background */}
+      <div className="absolute inset-0 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmZmZmMDkiPjwvcmVjdD4KPHBhdGggZD0iTTAgNUw1IDBaTTYgNEw0IDZaTS0xIDFMMSAtMVoiIHN0cm9rZT0iI2ZmZmZmZjEwIiBzdHJva2Utd2lkdGg9IjAuNSI+PC9wYXRoPgo8L3N2Zz4=')] opacity-30 z-0"></div>
+      
       <div 
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto p-4 scrollbar-none"
+        className="flex-1 overflow-y-auto p-4 scrollbar-none z-10"
       >
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center p-4">
-            <div className="mb-4 glass-morphism p-4 rounded-full relative avatar-container">
+            <div className="mb-4 p-4 rounded-full relative avatar-container border-2 border-accent1/50 shadow-lg">
               <img 
                 src={character.imageUrl || '/character-placeholder.jpg'} 
                 alt={character.name} 
@@ -173,7 +185,18 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
             </div>
             <h3 className="text-xl font-semibold text-gradient">{character.name}</h3>
             <p className="text-muted-foreground mt-2">{character.description}</p>
-            <p className="text-sm text-muted-foreground mt-4 glass-morphism p-4 rounded-lg">
+            <div className="flex items-center mt-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleFavorite}
+                className="h-8 w-8"
+              >
+                <Star className={`h-4 w-4 ${character.isFavorite ? 'text-yellow-400 fill-yellow-400' : ''}`} />
+              </Button>
+              {character.isFavorite ? 'Favorited' : 'Add to favorites'}
+            </div>
+            <p className="text-sm text-muted-foreground mt-4 p-4 rounded-lg border border-accent1/20 shadow-md bg-background/60">
               Send a message to start chatting with {character.name}
             </p>
           </div>
@@ -191,7 +214,7 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
                     <img 
                       src={character.imageUrl || '/placeholder.svg'} 
                       alt={character.name}
-                      className="h-8 w-8 rounded-full object-cover mb-1"
+                      className="h-8 w-8 rounded-full object-cover mb-1 border border-accent1/30 shadow-md"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = '/placeholder.svg';
                       }}
@@ -201,20 +224,23 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
                 <div
                   className={`max-w-[80%] ${
                     msg.isUser
-                      ? 'bg-accent1/30 glass-morphism rounded-2xl rounded-tr-sm'
-                      : 'bg-secondary glass-morphism rounded-2xl rounded-tl-sm'
+                      ? 'bg-accent1/20 border border-accent1/30 rounded-2xl rounded-tr-sm shadow-md'
+                      : 'bg-background/80 border border-border rounded-2xl rounded-tl-sm shadow-md'
                   }`}
                 >
                   {!msg.isUser && (
-                    <div className="px-3 pt-2 text-sm font-medium">
+                    <div className="px-3 pt-2 text-sm font-medium flex items-center">
                       {character.name}
+                      {character.isFavorite && (
+                        <Star className="h-3 w-3 ml-1 text-yellow-400 fill-yellow-400" />
+                      )}
                     </div>
                   )}
                   <div className="p-3">
                     <div className="text-sm whitespace-pre-wrap">{msg.content}</div>
                   </div>
                   <div
-                    className={`px-3 pb-1 text-xs text-white/50 flex ${
+                    className={`px-3 pb-1 text-xs text-muted-foreground flex ${
                       msg.isUser ? 'justify-end' : 'justify-start'
                     }`}
                   >
@@ -230,20 +256,23 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
                   <img 
                     src={character.imageUrl || '/placeholder.svg'} 
                     alt={character.name}
-                    className="h-8 w-8 rounded-full object-cover mb-1"
+                    className="h-8 w-8 rounded-full object-cover mb-1 border border-accent1/30 shadow-md"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = '/placeholder.svg';
                     }}
                   />
                 </div>
-                <div className="max-w-[80%] bg-secondary glass-morphism rounded-2xl rounded-tl-sm">
-                  <div className="px-3 pt-2 text-sm font-medium">
+                <div className="max-w-[80%] bg-background/80 border border-border rounded-2xl rounded-tl-sm shadow-md">
+                  <div className="px-3 pt-2 text-sm font-medium flex items-center">
                     {character.name}
+                    {character.isFavorite && (
+                      <Star className="h-3 w-3 ml-1 text-yellow-400 fill-yellow-400" />
+                    )}
                   </div>
                   <div className="p-3">
                     <div className="text-sm whitespace-pre-wrap">{typingMessage}<span className="animate-pulse">▋</span></div>
                   </div>
-                  <div className="px-3 pb-1 text-xs text-white/50 flex justify-start">
+                  <div className="px-3 pb-1 text-xs text-muted-foreground flex justify-start">
                     {formatTime(Date.now())}
                   </div>
                 </div>
@@ -255,7 +284,7 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
         )}
       </div>
 
-      <Card className="border-t glass-morphism sticky bottom-0 z-10">
+      <Card className="border-t border-accent1/20 bg-background/70 backdrop-blur-sm sticky bottom-0 z-10 shadow-md">
         <CardContent className="p-4">
           <div className="flex items-end gap-2">
             <Textarea
@@ -264,14 +293,14 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={`Message ${character.name}...`}
-              className="flex-1 min-h-[50px] max-h-[150px] glass-morphism resize-none"
+              className="flex-1 min-h-[50px] max-h-[150px] bg-background/70 border-accent1/30 resize-none"
               disabled={isLoading || isTyping}
             />
             <Button
               className={`rounded-full h-10 w-10 p-0 shrink-0 ${
                 isLoading || isTyping || !message.trim()
                   ? 'bg-muted text-muted-foreground'
-                  : 'bg-accent1 hover:bg-accent1/80'
+                  : 'bg-accent1 hover:bg-accent1/80 shadow-md'
               }`}
               disabled={isLoading || isTyping || !message.trim()}
               onClick={handleSendMessage}

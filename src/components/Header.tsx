@@ -1,9 +1,10 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Home } from 'lucide-react';
+import { Home, MessageSquare, Star, StarOff } from 'lucide-react';
 import { Character } from '@/types';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useCharacter } from '@/contexts/CharacterContext';
 
 interface HeaderProps {
   activeCharacter: Character | null;
@@ -11,6 +12,20 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ activeCharacter, onReturnHome }) => {
+  const navigate = useNavigate();
+  const { updateCharacter } = useCharacter();
+  
+  const handleToggleFavorite = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (activeCharacter) {
+      updateCharacter(activeCharacter.id, {
+        ...activeCharacter,
+        isFavorite: !activeCharacter.isFavorite
+      });
+    }
+  };
+  
   return (
     <div className="p-4 border-b flex items-center justify-between sticky top-0 z-20 bg-background/90 backdrop-blur-sm">
       <div className="flex items-center">
@@ -26,11 +41,36 @@ const Header: React.FC<HeaderProps> = ({ activeCharacter, onReturnHome }) => {
           AI Haven
         </h1>
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
         {activeCharacter && (
-          <span className="text-sm text-muted-foreground">
-            Chatting with {activeCharacter.name}
-          </span>
+          <>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleToggleFavorite}
+              className="mr-1 h-8 w-8 rounded-full"
+            >
+              {activeCharacter.isFavorite ? (
+                <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+              ) : (
+                <StarOff className="h-4 w-4" />
+              )}
+            </Button>
+            <span className="text-sm text-muted-foreground mr-2">
+              Chatting with {activeCharacter.name}
+            </span>
+          </>
+        )}
+        {window.location.pathname !== '/chat' && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate('/chat')}
+            className="flex items-center text-sm"
+          >
+            <MessageSquare className="h-4 w-4 mr-1" />
+            Chat Page
+          </Button>
         )}
       </div>
     </div>

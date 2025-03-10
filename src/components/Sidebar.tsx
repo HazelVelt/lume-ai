@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { Settings, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Settings, Plus, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { useCharacter } from '@/contexts/CharacterContext';
@@ -22,10 +22,27 @@ const Sidebar: React.FC<SidebarProps> = ({
   toggleSidebar,
 }) => {
   const { characters, setActiveCharacter, deleteCharacter, activeCharacter } = useCharacter();
-  const [cardScale, setCardScale] = React.useState(50); // Scale from 0-100
+  const [cardScale, setCardScale] = useState(50); // Scale from 0-100
+  const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
   
   // Calculate if cards should be compact based on scale
   const isCompact = cardScale < 40;
+
+  // Filter and group characters
+  const { favoriteCharacters, otherCharacters } = useMemo(() => {
+    const favorites = characters.filter(c => c.isFavorite);
+    const others = characters.filter(c => !c.isFavorite);
+    
+    return {
+      favoriteCharacters: favorites,
+      otherCharacters: others
+    };
+  }, [characters]);
+  
+  // Characters to display based on filter
+  const displayCharacters = showOnlyFavorites 
+    ? favoriteCharacters 
+    : [...favoriteCharacters, ...otherCharacters];
 
   return (
     <div className={`${isSidebarCollapsed ? 'w-0 md:w-16 overflow-hidden' : 'w-full md:w-[320px]'} border-r border-border bg-background/95 backdrop-blur-sm flex flex-col h-full transition-all duration-300 relative z-30`}>
@@ -62,26 +79,47 @@ const Sidebar: React.FC<SidebarProps> = ({
             </Button>
           </div>
 
-          {/* Card Scale Slider */}
-          <div className="px-4 pb-2">
-            <div className="flex justify-between items-center mb-1">
-              <span className="text-xs text-muted-foreground">Card Size</span>
-              <span className="text-xs text-muted-foreground">{isCompact ? 'Compact' : 'Normal'}</span>
+          {/* Filters & Settings */}
+          <div className="px-4 pb-2 space-y-2">
+            {/* Favorites filter */}
+            <div className="flex items-center">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowOnlyFavorites(!showOnlyFavorites)}
+                className={`text-xs h-7 flex items-center gap-1 ${showOnlyFavorites ? 'bg-accent1/20' : ''}`}
+              >
+                <Star className={`h-3 w-3 ${showOnlyFavorites ? 'text-yellow-400 fill-yellow-400' : ''}`} />
+                {showOnlyFavorites ? 'Showing favorites' : 'Show all'}
+              </Button>
+              {favoriteCharacters.length > 0 && (
+                <span className="ml-1 text-xs text-muted-foreground">
+                  ({favoriteCharacters.length} favorite{favoriteCharacters.length > 1 ? 's' : ''})
+                </span>
+              )}
             </div>
-            <Slider 
-              value={[cardScale]} 
-              onValueChange={(value) => setCardScale(value[0])}
-              min={20}
-              max={80}
-              step={1}
-              className="my-2"
-            />
+            
+            {/* Card Scale Slider */}
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-xs text-muted-foreground">Card Size</span>
+                <span className="text-xs text-muted-foreground">{isCompact ? 'Compact' : 'Normal'}</span>
+              </div>
+              <Slider 
+                value={[cardScale]} 
+                onValueChange={(value) => setCardScale(value[0])}
+                min={20}
+                max={80}
+                step={1}
+                className="my-2"
+              />
+            </div>
           </div>
 
           <div className="flex-1 overflow-y-auto p-3 scrollbar-none">
             {characters.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full p-4 text-center">
-                <div className="glass-morphism p-6 rounded-lg max-w-[240px]">
+                <div className="border border-accent1/20 p-6 rounded-lg max-w-[240px] shadow-md bg-background/60">
                   <h3 className="text-lg font-semibold mb-2">No Characters Yet</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Create your first AI character to start chatting
@@ -95,20 +133,76 @@ const Sidebar: React.FC<SidebarProps> = ({
                   </Button>
                 </div>
               </div>
+            ) : displayCharacters.length === 0 ? (
+              <div className="text-center p-4">
+                <p className="text-sm text-muted-foreground">
+                  No favorites yet. Add characters to favorites to see them here.
+                </p>
+              </div>
             ) : (
               <div className="grid grid-cols-1 gap-4">
-                {characters.map((character) => (
-                  <CharacterCard
-                    key={character.id}
-                    character={character}
-                    onSelect={setActiveCharacter}
-                    onEdit={onEditCharacter}
-                    onDelete={deleteCharacter}
-                    isActive={activeCharacter?.id === character.id}
-                    showPersonalityValues={false}
-                    compact={isCompact}
-                  />
-                ))}
+                {favoriteCharacters.length > 0 && !showOnlyFavorites && (
+                  <div className="col-span-1 mb-1">
+                    <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wider pl-2 mb-2">
+                      Favorites
+                    </h3>
+                    <div className="space-y-3">
+                      {favoriteCharacters.map((character) => (
+                        <CharacterCard
+                          key={character.id}
+                          character={character}
+                          onSelect={setActiveCharacter}
+                          onEdit={onEditCharacter}
+                          onDelete={deleteCharacter}
+                          isActive={activeCharacter?.id === character.id}
+                          showPersonalityValues={false}
+                          compact={isCompact}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {otherCharacters.length > 0 && !showOnlyFavorites && (
+                  <div className="col-span-1">
+                    {favoriteCharacters.length > 0 && (
+                      <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wider pl-2 mb-2">
+                        Others
+                      </h3>
+                    )}
+                    <div className="space-y-3">
+                      {otherCharacters.map((character) => (
+                        <CharacterCard
+                          key={character.id}
+                          character={character}
+                          onSelect={setActiveCharacter}
+                          onEdit={onEditCharacter}
+                          onDelete={deleteCharacter}
+                          isActive={activeCharacter?.id === character.id}
+                          showPersonalityValues={false}
+                          compact={isCompact}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {showOnlyFavorites && (
+                  <div className="space-y-3">
+                    {favoriteCharacters.map((character) => (
+                      <CharacterCard
+                        key={character.id}
+                        character={character}
+                        onSelect={setActiveCharacter}
+                        onEdit={onEditCharacter}
+                        onDelete={deleteCharacter}
+                        isActive={activeCharacter?.id === character.id}
+                        showPersonalityValues={false}
+                        compact={isCompact}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>

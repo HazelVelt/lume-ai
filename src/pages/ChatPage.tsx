@@ -23,7 +23,7 @@ const ChatPage: React.FC = () => {
     if (id && id !== 'new') {
       const character = characters.find(c => c.id === id);
       if (character) {
-        setActiveCharacter(character);
+        setActiveCharacter(character.id);
       } else {
         // If character not found, go to main chat page
         navigate('/chat');
@@ -32,7 +32,7 @@ const ChatPage: React.FC = () => {
       handleCreateCharacter();
     } else if (characters.length > 0 && !activeCharacter) {
       // Default to first character if none is active
-      setActiveCharacter(characters[0]);
+      setActiveCharacter(characters[0].id);
     }
   }, [id, characters]);
 
