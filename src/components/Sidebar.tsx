@@ -208,7 +208,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         </>
       )}
 
-      {/* Sidebar toggle button - improved positioning */}
+      {/* Sidebar toggle button - fixed z-index issue */}
       <Button
         variant="ghost"
         size="icon"

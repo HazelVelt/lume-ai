@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Character } from '@/types';
 import { Heart } from 'lucide-react';
@@ -11,25 +11,35 @@ interface ChatHeaderProps {
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({ character }) => {
   const { toggleFavorite } = useCharacter();
+  const [imgError, setImgError] = useState(false);
+  
+  // Use state to track favorite status for immediate UI updates
+  const [isFavorite, setIsFavorite] = useState(character.isFavorite);
+  
+  const handleFavoriteToggle = () => {
+    // Update local state immediately for responsive UI
+    setIsFavorite(!isFavorite);
+    // Then update the actual data
+    toggleFavorite(character.id);
+  };
 
   return (
     <div className="p-3 bg-background/40 backdrop-blur-sm border-b flex items-center justify-between">
       <div className="flex items-center">
         <div className="relative mr-3">
           <img 
-            src={character.imageUrl || '/character-placeholder.jpg'} 
+            src={(!imgError && character.imageUrl) || '/character-placeholder.jpg'} 
             alt={character.name} 
             className="h-12 w-12 rounded-full object-cover border-2 border-accent1/30 shadow-md"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = '/character-placeholder.jpg';
-            }}
+            onError={() => setImgError(true)}
           />
           <button
-            onClick={() => toggleFavorite(character.id)}
+            onClick={handleFavoriteToggle}
             className="absolute -bottom-1 -right-1 bg-background rounded-full p-1 border border-border hover:bg-accent1/10 transition-colors"
+            aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
           >
             <Heart 
-              className={`h-4 w-4 ${character.isFavorite ? 'text-red-500 fill-red-500' : 'text-muted-foreground'}`} 
+              className={`h-4 w-4 ${isFavorite ? 'text-red-500 fill-red-500' : 'text-muted-foreground'}`} 
             />
           </button>
         </div>
