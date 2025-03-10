@@ -8,7 +8,7 @@ files:
   - "dist/**/*"
   - "electron.js"
   - "package.json"
-electronVersion: "${version}" 
+electronVersion: "35.0.0"  # Explicitly setting the Electron version to match the installed version
 buildDependenciesFromSource: true
 nodeGypRebuild: false
 npmRebuild: false
