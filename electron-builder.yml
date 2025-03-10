@@ -8,6 +8,10 @@ files:
   - "dist/**/*"
   - "electron.js"
   - "package.json"
+electronVersion: "${version}" 
+buildDependenciesFromSource: true
+nodeGypRebuild: false
+npmRebuild: false
 mac:
   category: "public.app-category.entertainment"
   icon: "public/favicon.ico"
