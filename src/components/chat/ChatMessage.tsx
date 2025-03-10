@@ -43,7 +43,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
       )}
       
       <div
-        className={`max-w-[85%] ${
+        className={`max-w-[90%] sm:max-w-[85%] ${
           message.isUser
             ? 'bg-accent1/10 border-2 border-accent1/20 rounded-2xl rounded-tr-sm text-foreground transform rotate-0.5deg shadow-accent1/5'
             : 'bg-background/90 border-2 border-border/70 rounded-2xl rounded-tl-sm transform -rotate-0.5deg shadow-border/5'
@@ -70,8 +70,8 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
         )}
         
         {!message.isUser && (
-          <div className="px-4 pt-2 text-sm font-medium flex items-center brush-stroke">
-            <span className="text-accent1">{character.name}</span>
+          <div className="px-4 pt-2 text-sm font-medium flex items-center">
+            <span className="text-accent1 wavy-decoration">{character.name}</span>
           </div>
         )}
         
@@ -111,7 +111,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
         {isError && (
           <div className="mx-4 mb-2 px-2 py-1 bg-amber-500/10 border border-amber-500/20 rounded text-xs text-amber-500 flex items-center">
             <AlertTriangleIcon className="h-3 w-3 mr-1" />
-            <span>Connection trouble - Check if Ollama is running</span>
+            <span>Check if Ollama is running</span>
           </div>
         )}
       </div>

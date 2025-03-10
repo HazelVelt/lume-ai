@@ -114,7 +114,7 @@
 .wavy-decoration::after {
   content: '';
   position: absolute;
-  bottom: -4px;
+  bottom: -3px;
   left: 0;
   width: 100%;
   height: 2px;
@@ -128,6 +128,7 @@
     transparent 4px
   );
   opacity: 0.4;
+  transform: translateY(1px);
 }
 
 /* Avatar container with badge */
@@ -135,4 +136,5 @@
   position: relative;
   display: inline-block;
 }
+
 

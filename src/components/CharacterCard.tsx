@@ -41,6 +41,8 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
   sizeClass = 'normal',
 }) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  // Use state to track favorite status for immediate UI updates
+  const [localIsFavorite, setLocalIsFavorite] = useState(character.isFavorite);
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -55,6 +57,8 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
   const handleToggleFavorite = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onToggleFavorite) {
+      // Update local state immediately for responsive UI
+      setLocalIsFavorite(!localIsFavorite);
       onToggleFavorite(character.id);
     }
   };
@@ -169,12 +173,12 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
           border border-accent1/10 backdrop-blur-sm
           before:absolute before:inset-0 before:z-0 before:bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmZmZmMDUiPjwvcmVjdD4KPHBhdGggZD0iTTAgNUw1IDBaTTYgNEw0IDZaTS0xIDFMMSAtMVoiIHN0cm9rZT0iI2ZmZmZmZjA4IiBzdHJva2Utd2lkdGg9IjAuNSI+PC9wYXRoPgo8L3N2Zz4=')] before:opacity-30`}
       >
-        <div className="relative">
+        <div className="relative overflow-hidden">
           {/* Pattern overlay */}
           <div className="absolute inset-0 mix-blend-overlay opacity-30 z-10 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:10px_10px]"></div>
           
-          {/* Image gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/30 to-background/90 z-10" />
+          {/* Image gradient overlay - fixed to stay in position during hover */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/30 to-background/90 z-10 pointer-events-none" />
           
           <img
             src={character.imageUrl || '/character-placeholder.jpg'}
@@ -199,7 +203,7 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
                          hover:scale-110 hover:bg-background/60 hover:shadow-accent1/20"
             >
               <Heart 
-                className={`${style.iconSize} ${character.isFavorite 
+                className={`${style.iconSize} ${localIsFavorite 
                   ? 'text-red-500 fill-red-500' 
                   : 'text-white/70 group-hover:text-white'}`} 
               />

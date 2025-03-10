@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Character } from '@/types';
 import { Heart } from 'lucide-react';
@@ -15,6 +15,11 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ character }) => {
   
   // Use state to track favorite status for immediate UI updates
   const [isFavorite, setIsFavorite] = useState(character.isFavorite);
+  
+  // Update local state when character prop changes
+  useEffect(() => {
+    setIsFavorite(character.isFavorite);
+  }, [character.isFavorite]);
   
   const handleFavoriteToggle = () => {
     // Update local state immediately for responsive UI
@@ -44,7 +49,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ character }) => {
           </button>
         </div>
         <div>
-          <h3 className="font-medium text-md">{character.name}</h3>
+          <h3 className="font-medium text-md wavy-decoration">{character.name}</h3>
           <div className="flex flex-wrap gap-1 mt-0.5">
             {character.tags?.map(tag => (
               <Badge key={tag} variant="outline" className="text-xs py-0 px-2">
