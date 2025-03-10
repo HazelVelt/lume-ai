@@ -2,7 +2,7 @@
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Character } from '@/types';
-import { Star } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { useCharacter } from '@/contexts/CharacterContext';
 
 interface ChatHeaderProps {
@@ -28,8 +28,8 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ character }) => {
             onClick={() => toggleFavorite(character.id)}
             className="absolute -bottom-1 -right-1 bg-background rounded-full p-1 border border-border hover:bg-accent1/10 transition-colors"
           >
-            <Star 
-              className={`h-4 w-4 ${character.isFavorite ? 'text-yellow-400 fill-yellow-400' : 'text-muted-foreground'}`} 
+            <Heart 
+              className={`h-4 w-4 ${character.isFavorite ? 'text-red-500 fill-red-500' : 'text-muted-foreground'}`} 
             />
           </button>
         </div>

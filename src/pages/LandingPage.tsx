@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -114,7 +113,7 @@ const LandingPage: React.FC = () => {
       </main>
       
       <footer className="py-4 text-center text-sm text-muted-foreground">
-        <p>AI Haven - Your Personal AI Companion Space</p>
+        <p>LumeAI - Your Personal AI Companion Space</p>
       </footer>
       
       <SettingsPanel 
@@ -125,7 +124,6 @@ const LandingPage: React.FC = () => {
   );
 };
 
-// Feature Card Component
 const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
   <div className="glass-morphism p-5 rounded-lg border border-white/10 hover:border-accent1/20 transition-all">
     <div className="w-12 h-12 bg-accent1/10 rounded-full flex items-center justify-center mb-4">

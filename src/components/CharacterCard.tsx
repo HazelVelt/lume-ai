@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Character } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
@@ -59,7 +58,6 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
     }
   };
 
-  // Define styles based on size class
   const getStyles = () => {
     switch (sizeClass) {
       case 'super-compact':
@@ -177,7 +175,6 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
             }}
           />
           
-          {/* Favorite button */}
           {onToggleFavorite && (
             <button 
               onClick={handleToggleFavorite}
@@ -201,7 +198,6 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
             </p>
           )}
           
-          {/* Tags */}
           {style.showTags && character.tags && character.tags.length > 0 && (
             <div className="flex flex-wrap gap-1 my-1">
               {character.tags.slice(0, 3).map(tag => (

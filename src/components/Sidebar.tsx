@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
-import { Settings, Plus, ChevronLeft, ChevronRight, Star, Tags } from 'lucide-react';
+import { Settings, Plus, ChevronLeft, ChevronRight, Heart, Tags } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCharacter } from '@/contexts/CharacterContext';
 import CharacterCard from '@/components/CharacterCard';
@@ -147,7 +147,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 onClick={() => setShowOnlyFavorites(!showOnlyFavorites)}
                 className={`text-xs h-7 flex items-center gap-1 ${showOnlyFavorites ? 'bg-accent1/20' : ''}`}
               >
-                <Star className={`h-3 w-3 ${showOnlyFavorites ? 'text-yellow-400 fill-yellow-400' : ''}`} />
+                <Heart className={`h-3 w-3 ${showOnlyFavorites ? 'text-red-500 fill-red-500' : ''}`} />
                 {showOnlyFavorites ? 'Showing favorites' : 'Show all'}
               </Button>
               {favoriteCharacters.length > 0 && (
