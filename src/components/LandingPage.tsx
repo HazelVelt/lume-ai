@@ -1,5 +1,4 @@
-
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Plus, MessageCircle, Pencil, Trash2, Bot, Settings, Stars } from 'lucide-react';
@@ -11,39 +10,28 @@ interface LandingPageProps {
 const LandingPage: React.FC<LandingPageProps> = ({ onCreateCharacter }) => {
   return (
     <div className="flex flex-col h-full overflow-auto scrollbar-none">
-      {/* Full-page Banner Image Section */}
-      <div className="relative w-full h-screen min-h-[600px]">
-        <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/60 to-background/95 z-10"></div>
-        <img 
-          src="/image-banner.jpg"
-          alt="AI Banner"
-          className="w-full h-full object-cover object-center"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = '/placeholder.svg';
-          }}
-        />
-        <div className="absolute inset-0 flex items-center justify-center z-20">
-          <div className="text-center px-4 w-full max-w-4xl mx-auto">
-            <div className="glass-morphism p-8 rounded-xl border border-white/20 shadow-xl">
-              <div className="inline-block p-3 rounded-full bg-accent1/20 mb-4">
-                <Stars className="h-8 w-8 text-accent1" />
-              </div>
-              <h1 className="text-4xl md:text-6xl font-bold text-gradient animate-fade-in mb-4">
-                Welcome to AI Haven
-              </h1>
-              <p className="text-xl md:text-2xl text-muted-foreground animate-fade-in max-w-2xl mx-auto" style={{ animationDelay: "0.1s" }}>
-                Your personal space for creating and chatting with unique AI companions
-              </p>
-              <div className="mt-8 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-                <Button 
-                  onClick={onCreateCharacter}
-                  className="bg-accent1 hover:bg-accent1/80 text-white"
-                  size="lg"
-                >
-                  <Plus className="mr-2 h-5 w-5" />
-                  Create Your First Character
-                </Button>
-              </div>
+      {/* Hero Section (without banner image) */}
+      <div className="w-full py-16 bg-gradient-to-br from-background via-background/95 to-accent1/10">
+        <div className="text-center px-4 w-full max-w-4xl mx-auto">
+          <div className="glass-morphism p-8 rounded-xl border border-white/20 shadow-xl">
+            <div className="inline-block p-3 rounded-full bg-accent1/20 mb-4">
+              <Stars className="h-8 w-8 text-accent1" />
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold text-gradient animate-fade-in mb-4">
+              Welcome to AI Haven
+            </h1>
+            <p className="text-xl md:text-2xl text-muted-foreground animate-fade-in max-w-2xl mx-auto" style={{ animationDelay: "0.1s" }}>
+              Your personal space for creating and chatting with unique AI companions
+            </p>
+            <div className="mt-8 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+              <Button 
+                onClick={onCreateCharacter}
+                className="bg-accent1 hover:bg-accent1/80 text-white"
+                size="lg"
+              >
+                <Plus className="mr-2 h-5 w-5" />
+                Create Your First Character
+              </Button>
             </div>
           </div>
         </div>

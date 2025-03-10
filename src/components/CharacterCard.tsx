@@ -46,7 +46,7 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
   return (
     <>
       <Card 
-        className={`w-full overflow-hidden transition-all duration-300 group hover:translate-y-[-4px] hover:shadow-lg ${
+        className={`w-full overflow-hidden transition-all duration-300 group hover:scale-[1.02] hover:shadow-lg ${
           isActive ? 'ring-2 ring-accent1' : ''
         }`}
       >
@@ -56,25 +56,25 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
           <img
             src={character.imageUrl || '/character-placeholder.jpg'}
             alt={character.name}
-            className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            className="w-full h-36 object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             onError={(e) => {
               (e.target as HTMLImageElement).src = '/character-placeholder.jpg';
             }}
           />
           
-          <div className="absolute bottom-0 left-0 right-0 p-4 z-20">
+          <div className="absolute bottom-0 left-0 right-0 p-3 z-20">
             <h3 className="text-lg font-semibold text-foreground truncate">{character.name}</h3>
           </div>
         </div>
         
-        <CardContent className="p-4 space-y-3">
-          <p className="text-sm text-muted-foreground line-clamp-2 h-10">
+        <CardContent className="p-3 space-y-2">
+          <p className="text-xs text-muted-foreground line-clamp-2 h-8">
             {character.description}
           </p>
           
           {showPersonalityValues && (
-            <div className="space-y-2">
-              <div className="grid grid-cols-3 gap-2 text-xs">
+            <div className="space-y-1">
+              <div className="grid grid-cols-3 gap-1 text-xs">
                 <div className="flex flex-col">
                   <span className="text-foreground/60">Kinkiness</span>
                   <span className="font-medium">{character.personality.kinkiness}%</span>
@@ -91,33 +91,33 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
             </div>
           )}
           
-          <div className="flex justify-between pt-2">
+          <div className="flex justify-between pt-1">
             <Button
               variant="outline"
               size="sm"
-              className="flex-1 mr-1 transition-all hover:bg-accent1/20"
+              className="flex-1 mr-1 transition-all hover:bg-accent1/20 h-7 text-xs"
               onClick={() => onEdit(character.id)}
             >
-              <Pencil className="h-4 w-4 mr-2" /> Edit
+              <Pencil className="h-3 w-3 mr-1" /> Edit
             </Button>
             
             <Button
               variant="default"
               size="sm"
-              className="flex-1 ml-1 bg-accent1 hover:bg-accent1/80"
+              className="flex-1 ml-1 bg-accent1 hover:bg-accent1/80 h-7 text-xs"
               onClick={() => onSelect(character.id)}
             >
-              <MessageCircle className="h-4 w-4 mr-2" /> Chat
+              <MessageCircle className="h-3 w-3 mr-1" /> Chat
             </Button>
           </div>
           
           <Button 
             variant="ghost" 
             size="sm" 
-            className="w-full text-destructive hover:text-destructive hover:bg-destructive/10"
+            className="w-full text-destructive hover:text-destructive hover:bg-destructive/10 h-7 text-xs mt-1"
             onClick={handleDelete}
           >
-            <Trash2 className="h-4 w-4 mr-2" /> Delete
+            <Trash2 className="h-3 w-3 mr-1" /> Delete
           </Button>
         </CardContent>
       </Card>
