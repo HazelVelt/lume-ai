@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -118,6 +117,11 @@ export default {
           "0%": { transform: "rotate(0deg)" },
           "100%": { transform: "rotate(360deg)" },
         },
+        "progress": {
+          "0%": { width: "15%", transform: "translateX(-100%)" },
+          "50%": { width: "40%", transform: "translateX(50%)" },
+          "100%": { width: "15%", transform: "translateX(200%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -134,6 +138,7 @@ export default {
         "pulse-soft": "pulse-soft 3s ease-in-out infinite",
         "bounce-soft": "bounce-soft 3s ease-in-out infinite",
         "spin-slow": "spin-slow 8s linear infinite",
+        "progress": "progress 1.5s ease-in-out infinite",
       },
     },
   },
