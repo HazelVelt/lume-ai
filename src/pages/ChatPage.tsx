@@ -8,6 +8,8 @@ import SettingsPanel from '@/components/SettingsPanel';
 import ChatNavigation from '@/components/ChatNavigation';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
+import { Tag, BookOpen } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 const ChatPage: React.FC = () => {
   const { id } = useParams();
@@ -17,6 +19,7 @@ const ChatPage: React.FC = () => {
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   useEffect(() => {
     // If we have an ID from the route, set that character as active
@@ -36,6 +39,9 @@ const ChatPage: React.FC = () => {
     }
   }, [id, characters]);
 
+  // Get all unique tags from characters
+  const allTags = [...new Set(characters.flatMap(char => char.tags || []))];
+
   const handleCreateCharacter = () => {
     setEditingCharacter(null);
     setIsEditorOpen(true);
@@ -51,6 +57,14 @@ const ChatPage: React.FC = () => {
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
+  };
+
+  const toggleTag = (tag: string) => {
+    setSelectedTags(prev => 
+      prev.includes(tag) 
+        ? prev.filter(t => t !== tag) 
+        : [...prev, tag]
+    );
   };
 
   const handleReturnToLanding = () => {
@@ -75,6 +89,25 @@ const ChatPage: React.FC = () => {
           activeCharacter={activeCharacter} 
           onReturnHome={handleReturnToLanding} 
         />
+        
+        {/* Tags bar */}
+        {allTags.length > 0 && (
+          <div className="px-4 py-2 border-b flex items-center overflow-x-auto scrollbar-none bg-background/70 backdrop-blur-sm">
+            <BookOpen className="h-4 w-4 mr-2 text-muted-foreground" />
+            <div className="flex gap-2 flex-wrap">
+              {allTags.map(tag => (
+                <Badge 
+                  key={tag} 
+                  variant={selectedTags.includes(tag) ? "default" : "outline"}
+                  className="cursor-pointer transition-all hover:scale-105"
+                  onClick={() => toggleTag(tag)}
+                >
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
         
         {activeCharacter ? (
           <>

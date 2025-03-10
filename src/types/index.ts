@@ -15,6 +15,7 @@ export interface Character {
   imageUrl: string;
   defaultPrompt: string;
   isFavorite?: boolean;
+  tags?: string[];
 }
 
 export interface ChatMessage {

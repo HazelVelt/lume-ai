@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Home, MessageSquare, Star, StarOff } from 'lucide-react';
 import { Character } from '@/types';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCharacter } from '@/contexts/CharacterContext';
 
 interface HeaderProps {
@@ -13,6 +13,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ activeCharacter, onReturnHome }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { updateCharacter } = useCharacter();
   
   const handleToggleFavorite = (e: React.MouseEvent) => {
@@ -26,6 +27,8 @@ const Header: React.FC<HeaderProps> = ({ activeCharacter, onReturnHome }) => {
     }
   };
   
+  const isChatPage = location.pathname.includes('/chat');
+  
   return (
     <div className="p-4 border-b flex items-center justify-between sticky top-0 z-20 bg-background/90 backdrop-blur-sm">
       <div className="flex items-center">
@@ -37,9 +40,11 @@ const Header: React.FC<HeaderProps> = ({ activeCharacter, onReturnHome }) => {
         >
           <Home className="h-5 w-5" />
         </Button>
-        <h1 className="text-xl font-bold text-gradient">
-          AI Haven
-        </h1>
+        {!isChatPage && (
+          <h1 className="text-xl font-bold text-gradient">
+            AI Haven
+          </h1>
+        )}
       </div>
       <div className="flex items-center gap-2">
         {activeCharacter && (

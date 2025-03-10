@@ -5,7 +5,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Character, ChatMessage } from '@/types';
 import { useCharacter } from '@/contexts/CharacterContext';
 import { Card, CardContent } from '@/components/ui/card';
-import { Loader2, ArrowUp, Star } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Loader2, ArrowUp, Star, Tag } from 'lucide-react';
 import ollamaService from '@/services/ollamaService';
 import { toast } from 'sonner';
 
@@ -159,12 +160,48 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
 
   return (
     <div className="flex flex-col h-full overflow-hidden relative">
-      {/* Handcrafted paper background */}
+      {/* Paper texture background */}
       <div className="absolute inset-0 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmZmZmMDkiPjwvcmVjdD4KPHBhdGggZD0iTTAgNUw1IDBaTTYgNEw0IDZaTS0xIDFMMSAtMVoiIHN0cm9rZT0iI2ZmZmZmZjEwIiBzdHJva2Utd2lkdGg9IjAuNSI+PC9wYXRoPgo8L3N2Zz4=')] opacity-30 z-0"></div>
+      
+      {/* Character info bar */}
+      <div className="px-4 py-2 bg-background/40 backdrop-blur-sm border-b flex items-center justify-between">
+        <div className="flex items-center">
+          <div className="relative mr-3">
+            <img 
+              src={character.imageUrl || '/character-placeholder.jpg'} 
+              alt={character.name} 
+              className="h-10 w-10 rounded-full object-cover border-2 border-accent1/30 shadow-md"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = '/character-placeholder.jpg';
+              }}
+            />
+            <div className="absolute -bottom-1 -right-1 bg-background rounded-full p-0.5 border border-border">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleFavorite}
+                className="h-5 w-5 p-0"
+              >
+                <Star className={`h-3 w-3 ${character.isFavorite ? 'text-yellow-400 fill-yellow-400' : ''}`} />
+              </Button>
+            </div>
+          </div>
+          <div>
+            <h3 className="font-medium text-sm">{character.name}</h3>
+            <div className="flex flex-wrap gap-1 mt-0.5">
+              {character.tags?.map(tag => (
+                <Badge key={tag} variant="outline" className="text-xs py-0 px-1">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
       
       <div 
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto p-4 scrollbar-none z-10"
+        className="flex-1 overflow-y-auto p-4 scrollbar-none z-10 bg-gradient-to-b from-background/50 to-background/30"
       >
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center p-4">
@@ -184,24 +221,24 @@ Stay in character at all times. Keep your responses relatively concise. Be creat
               </div>
             </div>
             <h3 className="text-xl font-semibold text-gradient">{character.name}</h3>
-            <p className="text-muted-foreground mt-2">{character.description}</p>
-            <div className="flex items-center mt-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleFavorite}
-                className="h-8 w-8"
-              >
-                <Star className={`h-4 w-4 ${character.isFavorite ? 'text-yellow-400 fill-yellow-400' : ''}`} />
-              </Button>
-              {character.isFavorite ? 'Favorited' : 'Add to favorites'}
-            </div>
-            <p className="text-sm text-muted-foreground mt-4 p-4 rounded-lg border border-accent1/20 shadow-md bg-background/60">
+            <p className="text-muted-foreground mt-2 max-w-md">{character.description}</p>
+            
+            {character.tags && character.tags.length > 0 && (
+              <div className="flex flex-wrap justify-center gap-1 mt-3 max-w-xs">
+                {character.tags.map(tag => (
+                  <Badge key={tag} variant="secondary" className="text-xs">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            )}
+            
+            <p className="text-sm text-muted-foreground mt-4 p-4 rounded-lg border border-accent1/20 shadow-md bg-background/60 max-w-md">
               Send a message to start chatting with {character.name}
             </p>
           </div>
         ) : (
-          <div className="space-y-4 pb-2">
+          <div className="space-y-4 pb-2 max-w-3xl mx-auto">
             {messages.map((msg) => (
               <div
                 key={msg.id}
